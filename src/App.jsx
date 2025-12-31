@@ -5,11 +5,11 @@ function App() {
   return (
     <div className="app-root">
       {/* Desktop Message */}
-      <div className="container"> 
+      <div className="desktop-message" >
+        <div className="container"> 
          <div style={{ maxWidth: "200px" }}>
           <img src={logo} alt="logo" /></div>
-      </div>
-      <div className="desktop-message" >
+        </div>
         <p>This app is designed for mobile devices.</p>
         <p>Please open this link on your phone 📱</p>
       </div>
