@@ -15,13 +15,10 @@ function App() {
 
       {/* Mobile App */}
       <div className="mobile-app">
+        <div className="page-wrapper">
         {/* TOP BAR */}
         <header className="top-bar">
         </header>
-        {/* Page Content */}
-      <div className="page-wrapper">
-        <p>Your app content goes here.</p>
-      </div>
 
         {/* MAIN CONTENT */}
         <main className="app-content">
@@ -30,6 +27,7 @@ function App() {
         </main>
       </div>
 
+    </div>
     </div>
   );
 }
