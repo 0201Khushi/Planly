@@ -45,9 +45,9 @@
 
 /* Logo styling */
 .logo {
- max-width: 200px;
-  width: 100%;
-  height: auto;
+ max-width:10px;
+  width: 10px;
+  height:10px;
   display: block;
 }
 
