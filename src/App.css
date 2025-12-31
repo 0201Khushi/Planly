@@ -40,3 +40,15 @@
 .read-the-docs {
   color: #888;
 }
+.list {
+  margin-top: 20px;
+  padding: 0;
+  list-style: none;
+}
+
+.list li {
+  background: #f1f3ff;
+  padding: 10px;
+  margin-bottom: 8px;
+  border-radius: 8px;
+}
