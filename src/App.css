@@ -22,6 +22,11 @@
 .desktop-message {
   text-align: center;
 }
+.logo {
+  width: 120px;
+  height: auto;
+  margin-bottom: 16px;
+}
 .desktop-message h1 {
   color: #5B6CFF;
   font-size: 2.2rem;
