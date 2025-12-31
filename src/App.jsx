@@ -1,49 +1,37 @@
-import { useState, useEffect } from "react";
 import "./App.css";
+import { FiHome, FiCheckSquare, FiCalendar, FiSettings } from "react-icons/fi";
 
 function App() {
-  const [tasks, setTasks] = useState([]);
-  const [input, setInput] = useState("");
-
-  // Load data from localStorage
-  useEffect(() => {
-    const saved = localStorage.getItem("tasks");
-    if (saved) {
-      setTasks(JSON.parse(saved));
-    }
-  }, []);
-
-  // Save data to localStorage
-  useEffect(() => {
-    localStorage.setItem("tasks", JSON.stringify(tasks));
-  }, [tasks]);
-
-  const addTask = () => {
-    if (!input.trim()) return;
-    setTasks([...tasks, input]);
-    setInput("");
-  };
-
   return (
-    <div className="container">
-      <h1 className="logo">Planly</h1>
+    <div className="app">
 
-      <input
-        className="input"
-        placeholder="What do you want to plan?"
-        value={input}
-        onChange={(e) => setInput(e.target.value)}
-      />
+      {/* Top Bar */}
+      <header className="top-bar">
+        <h1 className="logo">PLANLY</h1>
+        <FiSettings className="settings-icon" />
+      </header>
 
-      <button className="btn" onClick={addTask}>
-        Add
-      </button>
+      {/* Main Screen */}
+      <main className="content">
+        {/* Future content goes here */}
+      </main>
 
-      <ul className="list">
-        {tasks.map((task, i) => (
-          <li key={i}>{task}</li>
-        ))}
-      </ul>
+      {/* Bottom Navigation */}
+      <nav className="bottom-nav">
+        <NavItem icon={<FiHome />} label="Home" active />
+        <NavItem icon={<FiCheckSquare />} label="Attendance" />
+        <NavItem icon={<FiCalendar />} label="Planner" />
+        <NavItem icon={<FiCalendar />} label="Timetable" />
+      </nav>
+    </div>
+  );
+}
+
+function NavItem({ icon, label, active }) {
+  return (
+    <div className={`nav-item ${active ? "active" : ""}`}>
+      {icon}
+      <span>{label}</span>
     </div>
   );
 }
