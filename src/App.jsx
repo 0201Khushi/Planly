@@ -17,7 +17,6 @@ function App() {
       <div className="mobile-app">
         {/* TOP BAR */}
         <header className="top-bar">
-          <img src={logo} alt="Planly" className="logo" />
         </header>
 
         {/* MAIN CONTENT */}
