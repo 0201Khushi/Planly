@@ -4,7 +4,7 @@ import logo from './assets/logo.png';
 function App() {
   return (
     <div className="app-root">
-      <div className="logo">
+      <div className="container">
        <img src={logo} alt="logo" />
       </div>
       {/* Desktop Message */}

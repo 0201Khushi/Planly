@@ -33,9 +33,22 @@
   color: #555;
   font-size: 1rem;
 }
+.container {
+  width: 100vw;
+  height: 100vh;
+  background-color: #F4F6FA;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+/* Logo styling */
 .logo {
-  width: 40px;      /* change this to make smaller/bigger */
+  width: 180px;        /* CONTROL SIZE HERE */
+  max-width: 80%;
   height: auto;
+  display: block;
 }
 
 /* Mobile App Hidden by Default */
