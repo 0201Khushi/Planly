@@ -49,10 +49,8 @@
   display: block;
 }
 
-/* Mobile App Hidden by Default */
-.mobile-app {
-  display: none;
-}
+
+
 
 /* Show app only on small screens */
 @media (max-width: 768px) {
