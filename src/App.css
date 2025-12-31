@@ -46,7 +46,6 @@
 /* Logo styling */
 .logo {
   width: 18px;        /* CONTROL SIZE HERE */
-  max-width: 80%;
   height: auto;
   display: block;
 }
