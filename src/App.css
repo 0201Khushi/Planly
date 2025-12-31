@@ -43,6 +43,9 @@
   align-items: center;
   flex-direction: column;
 }
+.mobile-app {
+    display:none;
+  }
 
 /* Logo styling */
 .logo {
