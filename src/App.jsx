@@ -9,7 +9,7 @@ function App() {
         <div className="container"> 
           <img src={logo} alt="logo" />
         </div>
-        <p>This app is designed for mobile devices.</p>
+        <p>This app is designed for <b>mobile devices</b></p>
         <p>Please open this link on your phone 📱</p>
       </div>
 
