@@ -4,7 +4,9 @@ import logo from './assets/logo.png';
 function App() {
   return (
     <div className="app-root">
-      <img src={logo} alt="logo" />
+      <div className="logo">
+       <img src={logo} alt="logo" />
+      </div>
       {/* Desktop Message */}
       <div className="desktop-message" >
         <p>This app is designed for mobile devices.</p>
