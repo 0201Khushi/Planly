@@ -4,8 +4,9 @@ import logo from './assets/logo.png';
 function App() {
   return (
     <div className="app-root">
-      <div className="container">
-       <img src={logo} alt="logo" />
+      <div className="container"> 
+         <div style={{ maxWidth: "200px" }}>
+       <img src={logo} alt="logo" /></div>
       </div>
       {/* Desktop Message */}
       <div className="desktop-message" >
