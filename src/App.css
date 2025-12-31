@@ -67,6 +67,10 @@
     align-items: center;
     min-height: 100vh;
   }
+  .page-wrapper {
+  padding: 0 16px;   /* 👈 left & right margin for ALL pages */
+  margin-top: 16px;
+}
   .top-bar {
   position: fixed;        /* stick to top */
   top: 0;
