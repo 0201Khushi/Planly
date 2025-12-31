@@ -18,6 +18,7 @@ function App() {
         <div className="page-wrapper">
         {/* TOP BAR */}
         <header className="top-bar">
+          <img src={logo} alt="Planly" className="logo" />
         </header>
 
         {/* MAIN CONTENT */}
