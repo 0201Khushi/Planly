@@ -7,7 +7,6 @@ function App() {
       <img src={logo} alt="logo" />
       {/* Desktop Message */}
       <div className="desktop-message" >
-        <h1>Planly</h1>
         <p>This app is designed for mobile devices.</p>
         <p>Please open this link on your phone 📱</p>
       </div>
