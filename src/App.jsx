@@ -7,8 +7,7 @@ function App() {
       {/* Desktop Message */}
       <div className="desktop-message" >
         <div className="container"> 
-         <div style={{ maxWidth: "10px" }}>
-          <img src={logo} alt="logo" /></div>
+          <img src={logo} alt="logo" />
         </div>
         <p>This app is designed for mobile devices.</p>
         <p>Please open this link on your phone 📱</p>
