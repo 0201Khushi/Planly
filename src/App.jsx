@@ -1,9 +1,10 @@
 import './App.css';
+import logo from './assets/logo.png';
 
 function App() {
   return (
     <div className="app-root">
-      
+      <img src={logo} alt="logo">
       {/* Desktop Message */}
       <div className="desktop-message">
         <h1>Planly</h1>
