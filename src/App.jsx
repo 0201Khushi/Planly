@@ -14,20 +14,10 @@ function App() {
       </div>
 
       {/* Mobile App */}
-       <div className="app-container">
-      
-      {/* TOP BAR */}
-      <header className="top-bar">
-        <img src={logo} alt="Planly" className="top-logo" />
-        <FiSettings className="settings-icon" />
-      </header>
-
-      {/* MAIN CONTENT */}
-      <main className="main-content">
-        <p>Your content will go here</p>
-      </main>
-
-    </div>
+      <div className="mobile-app">
+        <h1>Planly</h1>
+        <p>Your smart planning companion.</p>
+      </div>
 
     </div>
   );
