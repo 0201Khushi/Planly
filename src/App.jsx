@@ -31,6 +31,27 @@ function App() {
           <p>Your smart planning companion.</p>
         </main>
       </div>
+        <footer className="bottom-nav">
+         <div className="nav-item active">
+         <span>🏠</span>
+         <p>Home</p>
+         </div>
+
+         <div className="nav-item">
+         <span>✔️</span>
+         <p>Attendance</p>
+         </div>
+
+         <div className="nav-item">
+         <span>📝</span>
+         <p>Planner</p>
+         </div>
+
+         <div className="nav-item">
+         <span>📅</span>
+         <p>Timetable</p>
+         </div>
+       </footer>
 
     </div>
     </div>
