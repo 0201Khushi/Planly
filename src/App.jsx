@@ -1,8 +1,11 @@
 import './App.css';
 import logo from './assets/logo.png';
 import { FiSettings } from "react-icons/fi";
+import { useState } from "react";
 
 function App() {
+  const [activeTab, setActiveTab] = useState("home");
+
   return (
     <div className="app-root">
       {/* Desktop Message */}
@@ -32,22 +35,28 @@ function App() {
         </main>
       </div>
         <footer className="bottom-nav">
-         <div className="nav-item active">
-         <span>🏠</span>
-         <p>Home</p>
+         <div
+          className={`nav-item ${activeTab === "home" ? "active" : ""}`}
+          onClick={() => setActiveTab("home")}
+         >
+          <span>🏠</span>
+          <p>Home</p>
          </div>
 
-         <div className="nav-item">
-         <span>✔️</span>
-         <p>Attendance</p>
+         <div
+          className={`nav-item ${activeTab === "attendance" ? "active" : ""}`}
+          onClick={() => setActiveTab("attendance")}
+         >
+          <span>✔️</span>
+          <p>Attendance</p>
          </div>
 
-         <div className="nav-item">
+        <div className={`nav-item ${activeTab === "planner" ? "active" : ""}`} onClick={() => setActiveTab("planner")}>
          <span>📝</span>
          <p>Planner</p>
-         </div>
+        </div>
 
-         <div className="nav-item">
+        <div className={`nav-item ${activeTab === "timetable" ? "active" : ""}`} onClick={() => setActiveTab("timetable")}>
          <span>📅</span>
          <p>Timetable</p>
          </div>
