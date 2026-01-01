@@ -9,8 +9,6 @@ function App() {
       <div className="desktop-message" >
         <div className="container"> 
           <img src={logo} alt="logo" />
-          {/* Settings icon */}
-          <FiSettings className="settings-icon" />
 
         </div>
         <p>This app is designed for <b>mobile devices</b></p>
@@ -23,6 +21,8 @@ function App() {
         {/* TOP BAR */}
         <header className="top-bar">
           <img src={logo} alt="Planly" className="logo" />
+          {/* Settings icon */}
+          <FiSettings className="settings-icon" />
         </header>
 
         {/* MAIN CONTENT */}
