@@ -1,5 +1,6 @@
 import './App.css';
 import logo from './assets/logo.png';
+import { FiSettings } from "react-icons/fi";
 
 function App() {
   return (
@@ -8,6 +9,8 @@ function App() {
       <div className="desktop-message" >
         <div className="container"> 
           <img src={logo} alt="logo" />
+          <FiSettings className="settings-icon" />
+
         </div>
         <p>This app is designed for <b>mobile devices</b></p>
         <p>Please open this link on your <b>phone</b>📱</p>
