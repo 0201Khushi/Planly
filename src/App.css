@@ -95,7 +95,8 @@
   font-size: 22px;
   color: #333;
   cursor: pointer;
-  margin-right: auto;  
+  margin-left: auto; 
+  margin-right: 6px; 
 }
 }
 
