@@ -2,6 +2,11 @@ import './App.css';
 import logo from './assets/logo.png';
 import { FiSettings } from "react-icons/fi";
 import { useState } from "react";
+import Home from "./components/Home";
+import Attendance from "./components/Attendance";
+import Planner from "./components/Planner";
+import Timetable from "./components/Timetable";
+
 
 function App() {
   const [activeTab, setActiveTab] = useState("home");
@@ -31,10 +36,10 @@ function App() {
 
         {/* MAIN CONTENT */}
         <main className="app-content">
-          {activeTab === "home" && <h2>Home Screen</h2>}
-          {activeTab === "attendance" && <h2>Attendance Screen</h2>}
-          {activeTab === "planner" && <h2>Planner Screen</h2>}
-          {activeTab === "timetable" && <h2>Timetable Screen</h2>}
+          {activeTab === "home" && <Home />}
+          {activeTab === "attendance" && <Attendance />}
+          {activeTab === "planner" && <Attendance />}
+          {activeTab === "timetable" && <Timetable />}
         </main>
       </div>
         <footer className="bottom-nav">
