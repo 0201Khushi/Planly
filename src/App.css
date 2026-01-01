@@ -91,6 +91,11 @@
   height: 22px;     /* small & clean */
   width: auto;
 }
+  .settings-icon {
+  font-size: 22px;
+  color: #333;
+  cursor: pointer;
+}
 }
 
   

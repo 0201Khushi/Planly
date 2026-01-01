@@ -9,6 +9,7 @@ function App() {
       <div className="desktop-message" >
         <div className="container"> 
           <img src={logo} alt="logo" />
+          {/* Settings icon */}
           <FiSettings className="settings-icon" />
 
         </div>
