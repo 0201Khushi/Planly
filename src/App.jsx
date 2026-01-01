@@ -38,7 +38,7 @@ function App() {
         <main className="app-content">
           {activeTab === "home" && <Home />}
           {activeTab === "attendance" && <Attendance />}
-          {activeTab === "planner" && <Attendance />}
+          {activeTab === "planner" && <Planner />}
           {activeTab === "timetable" && <Timetable />}
         </main>
       </div>
