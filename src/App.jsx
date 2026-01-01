@@ -22,11 +22,12 @@ function App() {
       <div className="mobile-app">
         <div className="page-wrapper">
         {/* TOP BAR */}
+        {activeTab === "home" && (
         <header className="top-bar">
           <img src={logo} alt="Planly" className="logo" />
           {/* Settings icon */}
           <FiSettings className="settings-icon" />
-        </header>
+        </header>)}
 
         {/* MAIN CONTENT */}
         <main className="app-content">
