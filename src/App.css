@@ -98,6 +98,41 @@
   margin-left: auto; 
   margin-right: 24px; 
 }
+  .bottom-nav {
+  position: fixed;
+  bottom: 12px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 90%;
+  max-width: 420px;
+
+  background: #ffffff;
+  border-radius: 16px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+
+  padding: 10px 0;
+  z-index: 100;
+}
+
+ .nav-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  font-size: 12px;
+  color: #888;
+}
+
+ .nav-item span {
+  font-size: 20px;
+}
+
+ .nav-item.active {
+  color: #4f6df5;
+}
 }
 
   
