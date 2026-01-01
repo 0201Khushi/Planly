@@ -30,8 +30,10 @@ function App() {
 
         {/* MAIN CONTENT */}
         <main className="app-content">
-          <h2>Planly</h2>
-          <p>Your smart planning companion.</p>
+          {activeTab === "home" && <h2>Home Screen</h2>}
+          {activeTab === "attendance" && <h2>Attendance Screen</h2>}
+          {activeTab === "planner" && <h2>Planner Screen</h2>}
+          {activeTab === "timetable" && <h2>Timetable Screen</h2>}
         </main>
       </div>
         <footer className="bottom-nav">
