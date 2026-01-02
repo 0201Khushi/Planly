@@ -5,7 +5,9 @@ function Planner() {
     <div className="planner-page">
 
       {/* Header */}
-      <h2 className="planner-title">Planner</h2>
+      <header className="top-bar">
+      <h2>Planner</h2>
+      </header>
 
       {/* Input Box */}
       <div className="planner-input-box">
