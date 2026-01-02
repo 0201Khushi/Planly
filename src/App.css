@@ -1,4 +1,10 @@
+/* Force light mode always */
+:root {
+  color-scheme: light;
+}
+
 /* Full background */
+
 .app-root {
   width: 100vw;
   height: 100vh;
