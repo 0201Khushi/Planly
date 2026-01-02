@@ -122,8 +122,9 @@
 }
 
 .paste-title {
+  font-family: 'Inter', sans-serif;
   font-size: 15px ;
-  font-weight: 1000 !important;
+  font-weight: 700 !important;
   color: #333;
 }
 
