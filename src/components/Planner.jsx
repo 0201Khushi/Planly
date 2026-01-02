@@ -29,7 +29,7 @@ function Planner() {
    />
   </div>
 
-
+  <p><b>Your Schedule</b></p>
       {/* Category Tabs */}
       <div className="planner-tabs">
         <span className="tab active">All</span>
