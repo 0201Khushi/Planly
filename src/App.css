@@ -75,7 +75,7 @@
     padding-top: 64px;
   }
   .page-wrapper {
-  padding: 0 16px;   /* 👈 left & right margin for ALL pages */
+  padding: 0 8px;   /* 👈 left & right margin for ALL pages */
   margin-top: 16px;
 }
   .top-bar {
