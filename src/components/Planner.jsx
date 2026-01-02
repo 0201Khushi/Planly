@@ -18,7 +18,7 @@ function Planner() {
       {/* Input Box */}
       <div className="paste-box">
       <div className="paste-header">
-      <span className="paste-title"><strong>Paste messages</strong></span>
+      <span className="paste-title">Paste messages</span>
       <button className="add-btn">Add</button>
       </div>
 
