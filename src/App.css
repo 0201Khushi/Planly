@@ -80,8 +80,9 @@ html, body, #root {
     flex-direction: column;
   }
   .page-wrapper {
-  padding: 0 8px;   /* 👈 left & right margin for ALL pages */
-  margin-top: 16px;
+  padding-top:72px;   /* 👈 left & right margin for ALL pages */
+  padding-left: 16px;
+  padding-right: 16px;
 }
   .top-bar {
   position: fixed;        /* stick to top */
