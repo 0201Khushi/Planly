@@ -151,4 +151,11 @@
   padding: 10px;
   border-radius: 12px;
 }
+.text1{
+  font-family: 'Inter', sans-serif;
+  font-size: 15px ;
+  font-weight: 700 !important;
+  color: #333;
+  margin-top: 10px;
+}
 
