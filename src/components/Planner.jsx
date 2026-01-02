@@ -1,7 +1,6 @@
 import "./Planner.css";
 import { BsChatDots } from "react-icons/bs";
-import { useState } from "react";
-const [activeTab, setActiveTab] = useState("All");
+
 
 
 function Planner() {
