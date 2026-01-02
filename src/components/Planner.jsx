@@ -32,23 +32,24 @@ function Planner() {
   <div className="text1">Your Schedule</div>
       {/* Category Tabs */}
       <div className="filter-tabs">
-  {[
-    "All",
-    "Events",
-    "Academic Deadlines",
-    "Exams/Quizzes",
-    "Classes",
-    "Clubs/Committees"
-  ].map((item, index) => (
+         {[
+          "All",
+          "Events",
+          "Academic Deadlines",
+          "Exams/Quizzes",
+          "Classes",
+          "Clubs/Committees"
+         ].map((item, index) => (
     <button
       key={index}
       className={`tab-btn ${activeTab === item ? "active" : ""}`}
       onClick={() => setActiveTab(item)}
     >
-      {item}
+    {item}
     </button>
-  ))}
-</div>
+      ))}
+    </div>
+
 
       {/* Filter Pills */}
       <div className="filter-row">
