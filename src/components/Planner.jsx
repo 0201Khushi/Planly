@@ -44,9 +44,10 @@ function Planner() {
 
       {/* Filter Pills */}
       <div className="filter-row">
-        <span className="filter active">Past</span>
-        <span className="filter">Upcoming</span>
-        <span className="filter">Today</span>
+        <div className="filter-pill active">Past</div>
+        <div className="filter-pill">Upcoming</div>
+        <div className="filter-pill">Today</div>
+        <div className="filter-pill">Tomorrow</div>
       </div>
 
       {/* Sample Card */}
