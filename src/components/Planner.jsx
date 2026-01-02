@@ -33,7 +33,14 @@ function Planner() {
 
   <div className="text1">Your Schedule</div>
       {/* Category Tabs */}
-      
+      <div className="tab-container">
+       <div className="tab active">All</div>
+       <div className="tab">Events</div>
+       <div className="tab">Academic</div>
+       <div className="tab">Exams</div>
+       <div className="tab">Clubs</div>
+      </div>
+
 
       {/* Filter Pills */}
       <div className="filter-row">
