@@ -14,7 +14,7 @@ function Planner() {
 async function handleAdd() {
   if (!input.trim()) return;
 
-  const response = await fetch("http://localhost:5000/parse", {
+  const res = await fetch("http://localhost:5000/parse", {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
@@ -22,16 +22,19 @@ async function handleAdd() {
     body: JSON.stringify({ text: input }),
   });
 
-  const parsed = await response.json();
+  const parsed = await res.json();
 
-  const newTask = {
-    id: Date.now(),
-    ...parsed,
-  };
+  setTasks((prev) => [
+    {
+      id: Date.now(),
+      ...parsed,
+    },
+    ...prev,
+  ]);
 
-  setTasks((prev) => [newTask, ...prev]);
   setInput("");
 }
+
 
   return (
     <div className="planner-page">
@@ -51,7 +54,7 @@ async function handleAdd() {
       <div className="paste-box">
       <div className="paste-header">
       <span className="paste-title">< BsChatDots style={{ marginRight: "8px" }} />Paste messages</span>
-      <button className="add-btn" onClick={handleAdd}>
+      <button className="add-btn" onClick= {handleAdd}>
       Add</button>
       </div>
 
