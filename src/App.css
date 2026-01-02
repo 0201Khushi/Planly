@@ -80,7 +80,7 @@ html, body, #root {
     flex-direction: column;
   }
   .page-wrapper {
-  padding-top:72px;   /* 👈 left & right margin for ALL pages */
+  padding-top:52px;   /* 👈 left & right margin for ALL pages */
   padding-left: 16px;
   padding-right: 16px;
 }
