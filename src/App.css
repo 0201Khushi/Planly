@@ -18,7 +18,6 @@ html, body, #root {
 /* Full background */
 
 .app-root {
-  width: 100vw;
   height: 100vh;
   background-color: #F4F6FA;
   overflow-x: hidden;}
@@ -49,7 +48,6 @@ html, body, #root {
   font-size: 1rem;
 }
 .container {
-  width: 100vw;
   height: 100vh;
   background-color: #F4F6FA;
 
@@ -78,8 +76,6 @@ html, body, #root {
 
   .mobile-app {
     display: flex;
-    flex-direction: column;
-    align-items: center;
     min-height: 100vh;
     padding-top: 64px;
   }
