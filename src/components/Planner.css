@@ -1,3 +1,7 @@
+.planner-page{
+  padding: 16px;
+}
+
 .top-bar {
   position: fixed;        /* stick to top */
   top: 0;
