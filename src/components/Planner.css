@@ -191,7 +191,7 @@
 .filter-row {
   display: flex;
   gap: 10px;
-  margin-top: 6px;
+  margin-top: 0px;
   overflow-x: auto;
   padding-bottom: 6px;
 }
