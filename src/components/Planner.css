@@ -212,7 +212,9 @@
 }
 
 .filter-pill.active {
-  background: #5b6cff;
+  background: #000000;
   color: #fff;
-  font-weight: 600;
+  font-weight: 700;
+  font-family: 'Inter', sans-serif;
+  
 }
