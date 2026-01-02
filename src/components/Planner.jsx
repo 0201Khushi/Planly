@@ -2,6 +2,7 @@ import "./Planner.css";
 import { BsChatDots } from "react-icons/bs";
 import { useState } from "react";
 import { classifyText } from "../utils/classifyText";
+import { parseMessage } from "../utils/parseMessage";
 
 
 function Planner() {
@@ -33,11 +34,13 @@ function Planner() {
       <button className="add-btn" onClick={() => {
     if (!input.trim()) return;
 
+    const parsed = parseMessage(input);
+
     const newTask = {
-      id: Date.now(),
-      text: input,
-      category: classifyText(input), // 👈 THIS IS WHERE IT’S USED
-    };
+    id: Date.now(),
+    ...parsed,
+    category: classifyText(input),
+};
 
     setTasks([newTask, ...tasks]);
     setInput("");
@@ -79,7 +82,10 @@ function Planner() {
       {/* Sample Card */}
       {visibleTasks.map((task) => (
   <div className="task-card" key={task.id}>
-    <h4 className="task-text">{task.text}</h4>
+    <h4 className="task-text">{task.title}</h4>
+      {task.date && <p>📅 {task.date}</p>}
+      {task.time && <p>⏰ {task.time}</p>}
+      {task.venue && <p>📍 {task.venue}</p>}
     <span className="tag">{task.category}</span>
   </div>
 ))}
