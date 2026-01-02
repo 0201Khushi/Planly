@@ -30,8 +30,18 @@ app.post("/parse", async (req, res) => {
       ],
     });
 
-    const result = completion.choices[0].message.content;
-    res.json(JSON.parse(result));
+    let parsed;
+
+try {
+  parsed = JSON.parse(completion.choices[0].message.content);
+} catch (err) {
+  return res.status(500).json({
+    error: "AI returned invalid JSON",
+    raw: completion.choices[0].message.content,
+  });
+}
+
+res.json(parsed);
   } catch (err) {
     console.error(err);
     res.status(500).json({ error: "AI parsing failed" });
