@@ -16,12 +16,18 @@ function Planner() {
       </header>
 
       {/* Input Box */}
-      <div className="planner-input-box">
-        <textarea
-          placeholder="Paste messages in Hindi, English or Hinglish"
-        />
-        <button className="add-btn">Add</button>
+      <div className="paste-box">
+      <div className="paste-header">
+      <span className="paste-title">Paste messages</span>
+      <button className="paste-btn">Add</button>
       </div>
+
+   <textarea
+    className="paste-input"
+    placeholder="Paste messages in Hindi, English, or Hinglish"
+   />
+  </div>
+
 
       {/* Category Tabs */}
       <div className="planner-tabs">
