@@ -19,7 +19,7 @@ function Planner() {
       <div className="paste-box">
       <div className="paste-header">
       <span className="paste-title">Paste messages</span>
-      <button className="paste-btn">Add</button>
+      <button className="add-btn">Add</button>
       </div>
 
    <textarea
