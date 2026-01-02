@@ -1,9 +1,17 @@
 import "./Planner.css";
 import { BsChatDots } from "react-icons/bs";
-
+import { useState } from "react";
+import { classifyText } from "../utils/classifyText";
 
 
 function Planner() {
+  const [input, setInput] = useState("");
+  const [tasks, setTasks] = useState([]);
+  const [activeTab, setActiveTab] = useState("All");
+  const visibleTasks =
+    activeTab === "All"
+      ? tasks
+      : tasks.filter((t) => t.category === activeTab);
   return (
     <div className="planner-page">
 
@@ -22,25 +30,43 @@ function Planner() {
       <div className="paste-box">
       <div className="paste-header">
       <span className="paste-title">< BsChatDots style={{ marginRight: "8px" }} />Paste messages</span>
-      <button className="add-btn">Add</button>
+      <button className="add-btn" onClick={() => {
+    if (!input.trim()) return;
+
+    const newTask = {
+      id: Date.now(),
+      text: input,
+      category: classifyText(input), // 👈 THIS IS WHERE IT’S USED
+    };
+
+    setTasks([newTask, ...tasks]);
+    setInput("");
+  }}
+>Add</button>
       </div>
 
    <textarea
     className="paste-input"
     placeholder="Paste messages in Hindi, English, or Hinglish"
+    value={input}
+    onChange={(e) => setInput(e.target.value)}
    />
+    
   </div>
 
   <div className="text1">Your Schedule</div>
       {/* Category Tabs */}
       <div className="tab-container">
-       <div className="tab active">All</div>
-       <div className="tab">Events</div>
-       <div className="tab">Academic</div>
-       <div className="tab">Exams</div>
-       <div className="tab">Clubs</div>
-      </div>
-
+  {["All", "Events", "Academic", "Exams", "Clubs"].map((tab) => (
+    <div
+      key={tab}
+      className={`tab ${activeTab === tab ? "active" : ""}`}
+      onClick={() => setActiveTab(tab)}
+    >
+      {tab}
+    </div>
+  ))}
+</div>
 
       {/* Filter Pills */}
       <div className="filter-row">
@@ -51,11 +77,13 @@ function Planner() {
       </div>
 
       {/* Sample Card */}
-      <div className="task-card">
-        <h4>Energy Conversion Technology Lab</h4>
-        <p>Friday, Nov 7 • 1:00 PM</p>
-        <span className="tag">Exam</span>
-      </div>
+      {visibleTasks.map((task) => (
+  <div className="task-card" key={task.id}>
+    <h4>{task.text}</h4>
+    <span className="tag">{task.category}</span>
+  </div>
+))}
+
 
     </div>
   );
