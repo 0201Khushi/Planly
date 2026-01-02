@@ -24,7 +24,7 @@ html, body, #root {
   display: flex;
   align-items: center;
   justify-content: center;
-  overflow-x: hidden;
+  overflow-x: hidden;}
 
 
 /* Desktop Message */
@@ -201,4 +201,3 @@ html, body, #root {
 
   
 
-}
