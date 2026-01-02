@@ -1,8 +1,6 @@
 import "./Planner.css";
 import { BsChatDots } from "react-icons/bs";
 import { useState } from "react";
-import { classifyText } from "../utils/classifyText";
-import { parseMessage } from "../utils/parseMessage";
 
 
 function Planner() {
@@ -13,6 +11,28 @@ function Planner() {
     activeTab === "All"
       ? tasks
       : tasks.filter((t) => t.category === activeTab);
+async function handleAdd() {
+  if (!input.trim()) return;
+
+  const response = await fetch("http://localhost:5000/parse", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({ text: input }),
+  });
+
+  const parsed = await response.json();
+
+  const newTask = {
+    id: Date.now(),
+    ...parsed,
+  };
+
+  setTasks((prev) => [newTask, ...prev]);
+  setInput("");
+}
+
   return (
     <div className="planner-page">
 
@@ -31,21 +51,8 @@ function Planner() {
       <div className="paste-box">
       <div className="paste-header">
       <span className="paste-title">< BsChatDots style={{ marginRight: "8px" }} />Paste messages</span>
-      <button className="add-btn" onClick={() => {
-    if (!input.trim()) return;
-
-    const parsed = parseMessage(input);
-
-    const newTask = {
-    id: Date.now(),
-    ...parsed,
-    category: classifyText(input),
-};
-
-    setTasks([newTask, ...tasks]);
-    setInput("");
-  }}
->Add</button>
+      <button className="add-btn" onClick={handleAdd}>
+      Add</button>
       </div>
 
    <textarea
