@@ -1,5 +1,8 @@
 import "./Planner.css";
 import { BsChatDots } from "react-icons/bs";
+import { useState } from "react";
+const [activeTab, setActiveTab] = useState("All");
+
 
 function Planner() {
   return (
@@ -32,23 +35,23 @@ function Planner() {
   <div className="text1">Your Schedule</div>
       {/* Category Tabs */}
       <div className="filter-tabs">
-         {[
-          "All",
-          "Events",
-          "Academic Deadlines",
-          "Exams/Quizzes",
-          "Classes",
-          "Clubs/Committees"
-         ].map((item, index) => (
+  {[
+    "All",
+    "Events",
+    "Academic Deadlines",
+    "Exams/Quizzes",
+    "Classes",
+    "Clubs/Committees",
+  ].map((item) => (
     <button
-      key={index}
+      key={item}
       className={`tab-btn ${activeTab === item ? "active" : ""}`}
       onClick={() => setActiveTab(item)}
     >
-    {item}
+      {item}
     </button>
-      ))}
-    </div>
+  ))}
+</div>
 
 
       {/* Filter Pills */}

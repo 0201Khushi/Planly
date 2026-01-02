@@ -162,7 +162,8 @@
   display: flex;
   gap: 10px;
   overflow-x: auto;
-  padding: 10px 4px;
+  padding: 8px 4px;
+  margin-bottom: 12px;
   scrollbar-width: none;
 }
 
@@ -172,7 +173,7 @@
 
 .tab-btn {
   padding: 8px 14px;
-  border-radius: 20px;
+  border-radius: 18px;
   border: none;
   background: #f1f3f5;
   color: #6b7280;
@@ -185,8 +186,9 @@
 
 .tab-btn.active {
   background: #5b6cff;
-  color: #ffffff;
-  font-weight: 600;
+  color: white;
 }
 
-
+.tab-btn:active {
+  transform: scale(0.96);
+}
