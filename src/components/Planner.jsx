@@ -19,7 +19,7 @@ function Planner() {
       {/* Input Box */}
       <div className="paste-box">
       <div className="paste-header">
-      <span className="paste-title"><FiMessageSquare style={{ marginRight: "6px" }} />Paste messages</span>
+      <span className="paste-title"><FiMessageSquare style={{ marginRight: "8px" }} />Paste messages</span>
       <button className="add-btn">Add</button>
       </div>
 
