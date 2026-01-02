@@ -31,12 +31,24 @@ function Planner() {
 
   <div className="text1">Your Schedule</div>
       {/* Category Tabs */}
-      <div className="planner-tabs">
-        <span className="tab active">All</span>
-        <span className="tab">Events</span>
-        <span className="tab">Academic</span>
-        <span className="tab">Exams</span>
-      </div>
+      <div className="filter-tabs">
+  {[
+    "All",
+    "Events",
+    "Academic Deadlines",
+    "Exams/Quizzes",
+    "Classes",
+    "Clubs/Committees"
+  ].map((item, index) => (
+    <button
+      key={index}
+      className={`tab-btn ${activeTab === item ? "active" : ""}`}
+      onClick={() => setActiveTab(item)}
+    >
+      {item}
+    </button>
+  ))}
+</div>
 
       {/* Filter Pills */}
       <div className="filter-row">
