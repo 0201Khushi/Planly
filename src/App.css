@@ -21,9 +21,6 @@ html, body, #root {
   width: 100vw;
   height: 100vh;
   background-color: #F4F6FA;
-  display: flex;
-  align-items: center;
-  justify-content: center;
   overflow-x: hidden;}
 
 
