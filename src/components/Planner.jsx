@@ -6,7 +6,13 @@ function Planner() {
 
       {/* Header */}
       <header className="top-bar">
-      <h2>Planner</h2>
+      <h2 style={{
+      fontFamily: "Jura, sans-serif",
+      fontSize: "22px",
+      fontWeight: "600",
+      color: "#000",
+      margin: 0,
+    }}>Planner</h2>
       </header>
 
       {/* Input Box */}
