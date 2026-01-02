@@ -79,7 +79,7 @@ function Planner() {
       {/* Sample Card */}
       {visibleTasks.map((task) => (
   <div className="task-card" key={task.id}>
-    <h4>{task.text}</h4>
+    <h4 className="task-text">{task.text}</h4>
     <span className="tag">{task.category}</span>
   </div>
 ))}

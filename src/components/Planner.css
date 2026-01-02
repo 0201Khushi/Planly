@@ -219,3 +219,7 @@
   font-family: 'Inter', sans-serif;
   
 }
+.task-text {
+  color: #000; /* pure black */
+  font-weight: 500;
+}
