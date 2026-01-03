@@ -14,7 +14,7 @@ function Planner() {
 async function handleAdd() {
   if (!input.trim()) return;
 
-  const res = await fetch("http://localhost:5000/parse", {
+  const res = await fetch("/api/parse", {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
