@@ -45,7 +45,12 @@ function extractDates(text) {
     ) || []
   );
 }
-
+function isSyllabusEvent(text) {
+  return (
+    /quiz|exam|test/i.test(text) &&
+    /syllabus|unit|upto|portion|chapters?/i.test(text)
+  );
+}
 // Decide if text is a REAL planner event
 function isPrimaryEvent(text) {
   const hasDate =
@@ -58,6 +63,11 @@ function isPrimaryEvent(text) {
   const hasKeyword = EVENT_KEYWORDS.some(k =>
     text.toLowerCase().includes(k)
   );
+
+  // ✅ Allow syllabus-only quiz/exam items
+  if (isSyllabusEvent(text)) {
+    return true;
+  }
 
   return (hasDate || hasTime) && hasKeyword;
 }
