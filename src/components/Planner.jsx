@@ -149,10 +149,7 @@ async function handleAdd() {
     )}
   </div>
 ))}
-
-     <div classname='box'>
-      
-    </div>
+    <div classname='bottom-spacer'/>
     </div>
     
   );
