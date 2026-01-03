@@ -14,11 +14,25 @@ export default async function handler(req, res) {
   try {
     const completion = await groq.chat.completions.create({
       model: "llama3-8b-8192",
+      temperature: 0,
       messages: [
         {
           role: "system",
-          content:
-            "Extract structured data from the message. Return JSON with keys: title, date, time, venue, notes.",
+          content: `
+You are a strict JSON generator.
+
+Return ONLY valid JSON.
+Do NOT include explanations, markdown, or extra text.
+
+Schema:
+{
+  "title": string,
+  "date": string | "",
+  "time": string | "",
+  "venue": string | "",
+  "notes": string | ""
+}
+          `.trim(),
         },
         {
           role: "user",
@@ -27,10 +41,19 @@ export default async function handler(req, res) {
       ],
     });
 
-    return res.status(200).json(
-      JSON.parse(completion.choices[0].message.content)
-    );
+    const raw = completion.choices[0].message.content.trim();
+
+    const parsed = JSON.parse(raw);
+
+    return res.status(200).json(parsed);
   } catch (err) {
-    return res.status(500).json({ error: "AI parsing failed" });
+    console.error("AI ERROR:", err);
+    return res.status(200).json({
+      title: text.slice(0, 40),
+      date: "",
+      time: "",
+      venue: "",
+      notes: text,
+    });
   }
 }
