@@ -7,11 +7,18 @@ export default async function handler(req, res) {
 
   const { text } = req.body;
 
+  if (!text || typeof text !== "string") {
+    return res.status(400).json({ error: "Invalid input" });
+  }
+
   const groq = new Groq({
     apiKey: process.env.GROQ_API_KEY,
   });
 
   try {
+    // ================================
+    // STEP 1: AI EXTRACTION
+    // ================================
     const completion = await groq.chat.completions.create({
       model: "llama3-8b-8192",
       temperature: 0,
@@ -22,11 +29,11 @@ export default async function handler(req, res) {
 You are a strict JSON generator.
 
 Rules:
-- Always infer date if present
-- Always infer time if present
-- Always infer venue if present
-- Generate a short clean title
-- Return ONLY valid JSON
+- Extract academic or event-related information
+- Infer date, time, and venue if clearly present
+- Generate a short, clean title (≤ 7 words)
+- Move all extra details into notes
+- Return ONLY valid JSON (no markdown, no text)
 
 Schema:
 {
@@ -45,64 +52,65 @@ Schema:
       ],
     });
 
-    // ✅ STEP 1: Parse AI output
     const raw = completion.choices[0].message.content.trim();
-    const parsed = JSON.parse(raw);
+    let parsed = JSON.parse(raw);
 
-    // =================================================
-    // ✅ STEP 2: RULE-BASED FALLBACK EXTRACTION (HERE)
-    // =================================================
+    // ================================
+    // STEP 2: RULE-BASED FALLBACKS
+    // ================================
 
-   // ---------- RULE-BASED FALLBACK EXTRACTION ----------
+    // DATE: 07.11.25 or 07-11-2025
+    const dateMatch = text.match(/\b\d{2}[.\-]\d{2}[.\-]\d{2,4}\b/);
+    if ((!parsed.date || parsed.date.trim() === "") && dateMatch) {
+      parsed.date = dateMatch[0].replace(/\./g, "-");
+    }
 
-const dateMatch = text.match(/\b\d{2}[.\-]\d{2}[.\-]\d{2,4}\b/);
-if ((!parsed.date || parsed.date.trim() === "") && dateMatch) {
-  parsed.date = dateMatch[0].replace(/\./g, "-");
-}
+    // TIME: 1:00 PM / 13:00
+    const timeMatch = text.match(/\b\d{1,2}:\d{2}(?:\s?(?:AM|PM))?\b/i);
+    if ((!parsed.time || parsed.time.trim() === "") && timeMatch) {
+      parsed.time = timeMatch[0].toUpperCase();
+    }
 
-// TIME
-const timeMatch = text.match(/\b\d{1,2}:\d{2}(?:\s?(?:AM|PM))?\b/i);
-if ((!parsed.time || parsed.time.trim() === "") && timeMatch) {
-  parsed.time = timeMatch[0].toUpperCase();
-}
+    // VENUE: FN-1, FN-3 etc.
+    const venueMatches = text.match(/\b[A-Z]{1,3}-\d\b/g);
+    if ((!parsed.venue || parsed.venue.trim() === "") && venueMatches) {
+      parsed.venue = venueMatches.join(", ");
+    }
 
-// VENUE (FN-1, FN-3 and FN-4)
-const venueMatches = text.match(/\b[A-Z]{1,3}-\d\b/g);
-if ((!parsed.venue || parsed.venue.trim() === "") && venueMatches) {
-  parsed.venue = venueMatches.join(", ");
-}
-// ---------- TITLE NORMALIZATION ----------
+    // ================================
+    // STEP 3: TITLE NORMALIZATION
+    // ================================
+    if (!parsed.title || parsed.title.length > 60) {
+      let clean = text
+        .replace(/\b\d{2}[.\-]\d{2}[.\-]\d{2,4}\b/g, "")
+        .replace(/\b\d{1,2}:\d{2}\s?(AM|PM)?\b/gi, "")
+        .replace(/\b[A-Z]{1,3}-\d\b/g, "")
+        .replace(/\s+/g, " ")
+        .trim();
 
-// If AI title is missing or too long, generate one from text
-if (!parsed.title || parsed.title.length > 60) {
-  // Remove dates, times, venues
-  let clean = text
-    .replace(/\b\d{2}[.\-]\d{2}[.\-]\d{2,4}\b/g, "")
-    .replace(/\b\d{1,2}:\d{2}\s?(AM|PM)?\b/gi, "")
-    .replace(/\b[A-Z]{1,3}-\d\b/g, "")
-    .replace(/\s+/g, " ")
-    .trim();
+      parsed.title = clean
+        .split(" ")
+        .slice(0, 7)
+        .join(" ");
+    }
 
-  // Take first meaningful 5–7 words
-  parsed.title = clean
-    .split(" ")
-    .slice(0, 7)
-    .join(" ");
-}
-
-
-    // =================================================
-    // ✅ STEP 3: Return final cleaned object
-    // =================================================
-
-    return res.status(200).json(parsed);
+    // ================================
+    // STEP 4: FINAL GUARANTEE
+    // ================================
+    return res.status(200).json({
+      title: parsed.title || text.slice(0, 50),
+      date: parsed.date || "",
+      time: parsed.time || "",
+      venue: parsed.venue || "",
+      notes: parsed.notes || text,
+    });
 
   } catch (err) {
     console.error("Parsing error:", err);
 
-    // Absolute fallback (never break frontend)
+    // Absolute fallback — frontend NEVER breaks
     return res.status(200).json({
-      title: text.slice(0, 60),
+      title: text.slice(0, 50),
       date: "",
       time: "",
       venue: "",
@@ -110,4 +118,3 @@ if (!parsed.title || parsed.title.length > 60) {
     });
   }
 }
-
