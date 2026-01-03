@@ -8,7 +8,6 @@ export function classifyCategory(text) {
     t.includes("test") ||
     t.includes("midsem") ||
     t.includes("endsem") ||
-    t.includes("evaluation")
   ) {
     return "Exams";
   }
