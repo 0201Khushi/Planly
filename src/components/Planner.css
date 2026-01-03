@@ -265,4 +265,16 @@
   font-weight: 600;
   color: #3f5cff; /* blue like screenshot */
 }
+.event-date {
+  font-size: 14px;
+  font-weight: 600;
+  color: #444;
+  margin-bottom: 4px;
+}
+.event-notes {
+  font-size: 14px;
+  color: #444;
+  margin-bottom: 4px;
+  font-style: italic;
+}
 
