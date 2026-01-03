@@ -55,24 +55,22 @@ Schema:
 
    // ---------- RULE-BASED FALLBACK EXTRACTION ----------
 
-// DATE: 07.11.25 / 07-11-25
 const dateMatch = text.match(/\b\d{2}[.\-]\d{2}[.\-]\d{2,4}\b/);
-if (!parsed.date && dateMatch) {
+if ((!parsed.date || parsed.date.trim() === "") && dateMatch) {
   parsed.date = dateMatch[0].replace(/\./g, "-");
 }
 
-// TIME: 1:00 PM / 13:00
+// TIME
 const timeMatch = text.match(/\b\d{1,2}:\d{2}(?:\s?(?:AM|PM))?\b/i);
-if (!parsed.time && timeMatch) {
+if ((!parsed.time || parsed.time.trim() === "") && timeMatch) {
   parsed.time = timeMatch[0].toUpperCase();
 }
 
-// VENUE: FN-1, FN-3 and FN-4
+// VENUE (FN-1, FN-3 and FN-4)
 const venueMatches = text.match(/\b[A-Z]{1,3}-\d\b/g);
-if (!parsed.venue && venueMatches) {
+if ((!parsed.venue || parsed.venue.trim() === "") && venueMatches) {
   parsed.venue = venueMatches.join(", ");
 }
-
 // ---------- TITLE NORMALIZATION ----------
 
 // If AI title is missing or too long, generate one from text
