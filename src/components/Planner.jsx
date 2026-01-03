@@ -138,6 +138,11 @@ async function handleAdd() {
         {task.venue}
       </div>
     )}
+    {task.notes && (
+      <div className="event-notes">
+        {task.notes}
+      </div>
+    )}
   </div>
 ))}
 
