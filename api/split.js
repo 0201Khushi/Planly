@@ -11,6 +11,18 @@ export default async function handler(req, res) {
     return res.status(400).json({ error: "Invalid input" });
   }
 
+  // 🔹 First: cheap deterministic split (newline-based)
+  const lines = text
+    .split(/\n+/)
+    .map(l => l.trim())
+    .filter(Boolean);
+
+  // If clearly multiple lines → treat as separate events
+  if (lines.length > 1) {
+    return res.status(200).json(lines);
+  }
+
+  // 🔹 Fallback: ask LLM only if not obvious
   const groq = new Groq({
     apiKey: process.env.GROQ_API_KEY,
   });
@@ -23,13 +35,13 @@ export default async function handler(req, res) {
         {
           role: "system",
           content: `
-You split WhatsApp messages into individual events.
+Split the message into individual academic events.
 
 Rules:
-- If the message contains multiple distinct events, split them.
-- Each split must contain text for ONE event only.
-- Preserve original wording.
-- Return ONLY valid JSON.
+- Each quiz, test, syllabus, deadline, or meeting is a separate event
+- If there is only one event, return a single-item array
+- Preserve original wording
+- Return ONLY valid JSON
 
 Schema:
 {
@@ -51,8 +63,6 @@ Schema:
 
   } catch (err) {
     console.error("Split error:", err);
-
-    // Fallback: treat entire text as single event
     return res.status(200).json([text]);
   }
 }
