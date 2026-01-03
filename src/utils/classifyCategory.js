@@ -32,6 +32,8 @@ export function classifyCategory(text) {
     t.includes("cc") ||
     t.includes("cell") ||
     t.includes("committee") ||
+    t.includes("meeting") ||
+    t.includes("briefing") ||
     t.includes("kaggle") 
   ) {
     return "Clubs";
