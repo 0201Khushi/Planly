@@ -6,13 +6,28 @@ import Home from "./components/Home";
 import Attendance from "./components/Attendance";
 import Planner from "./components/Planner";
 import Timetable from "./components/Timetable";
-
-
-
+const STORAGE_KEY = "planly_app_state";
 
 
 function App() {
-  const [activeTab, setActiveTab] = useState("home");
+  const [activeTab, setActiveTab] = useState(() => {
+  const saved = localStorage.getItem(STORAGE_KEY);
+  if (saved) {
+    try {
+      const parsed = JSON.parse(saved);
+      return parsed.activeTab || "home";
+    } catch {
+      return "home";
+    }
+  }
+  return "home";
+});
+  useEffect(() => {
+  localStorage.setItem(
+    STORAGE_KEY,
+    JSON.stringify({ activeTab })
+  );
+}, [activeTab]);
    
   return (
     <div className="app-root">
