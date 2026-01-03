@@ -1,14 +1,32 @@
 import "./Planner.css";
 import { BsChatDots } from "react-icons/bs";
-import { useState } from "react";
+import { useState,useEffect} from "react";
 import { classifyCategory } from "../utils/classifyCategory";
+
+
+const PLANNER_KEY = "planly_planner_data";
 
 
 
 function Planner() {
   const [input, setInput] = useState("");
   const [tasks, setTasks] = useState([]);
-  const [activeTab, setActiveTab] = useState("All");
+  const [activeTab, setActiveTab] = useState(() => {
+  const saved = localStorage.getItem(PLANNER_KEY);
+  if (saved) {
+    try {
+      return JSON.parse(saved);
+    } catch (e) {
+      console.error("Failed to parse planner data", e);
+      return [];
+    }
+  }
+  return [];
+});
+useEffect(() => {
+    localStorage.setItem(PLANNER_KEY, JSON.stringify(tasks));
+  }, [tasks]);
+
   const visibleTasks =
     activeTab === "All"
       ? tasks
