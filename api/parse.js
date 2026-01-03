@@ -53,28 +53,45 @@ Schema:
     // ✅ STEP 2: RULE-BASED FALLBACK EXTRACTION (HERE)
     // =================================================
 
-    // Date: 07.11.25 or 07-11-25
-    const dateMatch = text.match(/\b\d{2}[.\-]\d{2}[.\-]\d{2,4}\b/);
-    if (!parsed.date && dateMatch) {
-      parsed.date = dateMatch[0].replace(/\./g, "-");
-    }
+   // ---------- RULE-BASED FALLBACK EXTRACTION ----------
 
-    // Time: 1:00 PM, 13:00
-    const timeMatch = text.match(/\b\d{1,2}:\d{2}\s?(AM|PM)?\b/i);
-    if (!parsed.time && timeMatch) {
-      parsed.time = timeMatch[0];
-    }
+// DATE: 07.11.25 / 07-11-25
+const dateMatch = text.match(/\b\d{2}[.\-]\d{2}[.\-]\d{2,4}\b/);
+if (!parsed.date && dateMatch) {
+  parsed.date = dateMatch[0].replace(/\./g, "-");
+}
 
-    // Venue: FN-1, FN-3, FN-4
-    const venueMatch = text.match(/\b[A-Z]{1,3}-\d(\s*,\s*[A-Z]{1,3}-\d)*\b/);
-    if (!parsed.venue && venueMatch) {
-      parsed.venue = venueMatch[0];
-    }
+// TIME: 1:00 PM / 13:00
+const timeMatch = text.match(/\b\d{1,2}:\d{2}(?:\s?(?:AM|PM))?\b/i);
+if (!parsed.time && timeMatch) {
+  parsed.time = timeMatch[0].toUpperCase();
+}
 
-    // Title fallback
-    if (!parsed.title || parsed.title.length > 60) {
-      parsed.title = "Energy Conversion Technology Lab Quiz";
-    }
+// VENUE: FN-1, FN-3 and FN-4
+const venueMatches = text.match(/\b[A-Z]{1,3}-\d\b/g);
+if (!parsed.venue && venueMatches) {
+  parsed.venue = venueMatches.join(", ");
+}
+
+// ---------- TITLE NORMALIZATION ----------
+
+// If AI title is missing or too long, generate one from text
+if (!parsed.title || parsed.title.length > 60) {
+  // Remove dates, times, venues
+  let clean = text
+    .replace(/\b\d{2}[.\-]\d{2}[.\-]\d{2,4}\b/g, "")
+    .replace(/\b\d{1,2}:\d{2}\s?(AM|PM)?\b/gi, "")
+    .replace(/\b[A-Z]{1,3}-\d\b/g, "")
+    .replace(/\s+/g, " ")
+    .trim();
+
+  // Take first meaningful 5–7 words
+  parsed.title = clean
+    .split(" ")
+    .slice(0, 7)
+    .join(" ");
+}
+
 
     // =================================================
     // ✅ STEP 3: Return final cleaned object
