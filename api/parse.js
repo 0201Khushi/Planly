@@ -88,7 +88,7 @@ Schema:
         .replace(/\s+/g, " ")
         .trim();
 
-      parsed.title = clean
+      parsed.title = clen
         .split(" ")
         .slice(0, 7)
         .join(" ");
