@@ -223,3 +223,46 @@
   color: #000; /* pure black */
   font-weight: 500;
 }
+.event-card {
+  background: #ffffff;
+  border-radius: 14px;
+  padding: 14px 16px;
+  margin-bottom: 14px;
+  box-shadow: 0 6px 18px rgba(0,0,0,0.06);
+  border-left: 4px solid #ff7a00; /* category accent */
+}
+
+.event-type {
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 1px;
+  color: #8b8b8b;
+  margin-bottom: 6px;
+}
+
+.event-title {
+  font-size: 17px;
+  font-weight: 700;
+  color: #111;
+  margin-bottom: 6px;
+}
+
+.event-date {
+  font-size: 14px;
+  font-weight: 600;
+  color: #444;
+  margin-bottom: 4px;
+}
+
+.event-time {
+  font-size: 14px;
+  color: #444;
+  margin-bottom: 4px;
+}
+
+.event-venue {
+  font-size: 14px;
+  font-weight: 600;
+  color: #3f5cff; /* blue like screenshot */
+}
+

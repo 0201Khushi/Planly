@@ -121,12 +121,32 @@ async function handleAdd() {
 </pre>
 
       {visibleTasks.map((task) => (
-  <div className="task-card" key={task.id}>
-    <h4 className="task-text">{task.title}</h4>
-      {task.date && <p>📅 {task.date}</p>}
-      {task.time && <p>⏰ {task.time}</p>}
-      {task.venue && <p>📍 {task.venue}</p>}
-    <span className="tag">{task.category}</span>
+  <div className="event-card" key={task.id}>
+    <div className="event-type">
+      {task.category?.toUpperCase() || "EVENT"}
+    </div>
+
+    <div className="event-title">
+      {task.title}
+    </div>
+
+    {task.date && (
+      <div className="event-date">
+        {task.date}
+      </div>
+    )}
+
+    {task.time && (
+      <div className="event-time">
+        {task.time}
+      </div>
+    )}
+
+    {task.venue && (
+      <div className="event-venue">
+        {task.venue}
+      </div>
+    )}
   </div>
 ))}
 
