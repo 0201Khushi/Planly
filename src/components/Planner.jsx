@@ -10,8 +10,10 @@ const PLANNER_KEY = "planly_planner_data";
 
 function Planner() {
   const [input, setInput] = useState("");
-  const [tasks, setTasks] = useState([]);
-  const [activeTab, setActiveTab] = useState(() => {
+  const [input, setInput] = useState("");
+
+// ✅ LOAD TASKS FROM STORAGE
+const [tasks, setTasks] = useState(() => {
   const saved = localStorage.getItem(PLANNER_KEY);
   if (saved) {
     try {
@@ -23,6 +25,9 @@ function Planner() {
   }
   return [];
 });
+
+// ✅ activeTab stays simple
+const [activeTab, setActiveTab] = useState("All");
 useEffect(() => {
     localStorage.setItem(PLANNER_KEY, JSON.stringify(tasks));
   }, [tasks]);
