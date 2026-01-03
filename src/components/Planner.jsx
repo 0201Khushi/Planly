@@ -1,6 +1,8 @@
 import "./Planner.css";
 import { BsChatDots } from "react-icons/bs";
 import { useState } from "react";
+import { classifyCategory } from "../utils/classifyCategory";
+
 
 
 function Planner() {
@@ -41,7 +43,9 @@ async function handleAdd() {
 
         return {
           id: Date.now() + Math.random(), // unique id
-          ...parsed,
+          ...parsed,category: classifyCategory(
+      `${event.title} ${event.notes || ""}`
+    ),
         };
       })
     );
