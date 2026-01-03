@@ -9,7 +9,7 @@ const PLANNER_KEY = "planly_planner_data";
 
 
 function Planner() {
-  const [input, setInput] = useState("");
+  
   const [input, setInput] = useState("");
 
 // ✅ LOAD TASKS FROM STORAGE
