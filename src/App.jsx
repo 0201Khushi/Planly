@@ -1,7 +1,7 @@
 import './App.css';
 import logo from './assets/logo.png';
 import { FiSettings } from "react-icons/fi";
-import { useState } from "react";
+import { useState,useEffect } from "react";
 import Home from "./components/Home";
 import Attendance from "./components/Attendance";
 import Planner from "./components/Planner";
