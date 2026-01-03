@@ -7,7 +7,7 @@ export function classifyCategory(text) {
     t.includes("exam") ||
     t.includes("test") ||
     t.includes("midsem") ||
-    t.includes("endsem") ||
+    t.includes("endsem") 
   ) {
     return "Exams";
   }
@@ -32,7 +32,7 @@ export function classifyCategory(text) {
     t.includes("cc") ||
     t.includes("cell") ||
     t.includes("committee") ||
-    t.includes("kaggle") ||
+    t.includes("kaggle") 
   ) {
     return "Clubs";
   }
