@@ -232,8 +232,8 @@
   border-left: 4px solid  #ff4d4f;
    /* category accent */
 }
-.event-cardexams {
-  border-left-color: #ff4d4f;
+.event-card.exams {
+  border-left-color: #4dcaff;
 }
 .event-card.academic {
   border-left: 4px solid #ff7a00;
