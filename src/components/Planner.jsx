@@ -110,15 +110,6 @@ async function handleAdd() {
       </div>
 
       {/* Sample Card */}
-      <pre style={{
-  fontSize: "12px",
-  background: "#f5f5f5",
-  padding: "10px",
-  borderRadius: "8px",
-  overflowX: "auto",
-}}>
-  {JSON.stringify(tasks, null, 2)}
-</pre>
 
       {visibleTasks.map((task) => (
   <div className="event-card" key={task.id}>
