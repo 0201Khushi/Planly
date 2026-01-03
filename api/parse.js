@@ -22,14 +22,11 @@ export default async function handler(req, res) {
 You are a strict JSON generator.
 
 Rules:
-- Always infer date if present (including formats like 07.11.25)
-- Always infer time if present (e.g. 1:00 PM)
-- If multiple venues are present, join them with commas
-- Generate a short, clean title (≤ 7 words)
-- Move extra instructions into notes
-- Never leave a field empty if information is present
+- Always infer date if present
+- Always infer time if present
+- Always infer venue if present
+- Generate a short clean title
 - Return ONLY valid JSON
-- No explanations, no markdown
 
 Schema:
 {
@@ -48,18 +45,47 @@ Schema:
       ],
     });
 
+    // ✅ STEP 1: Parse AI output
     const raw = completion.choices[0].message.content.trim();
     const parsed = JSON.parse(raw);
 
-    // light normalization
-    parsed.date = parsed.date.replace(/\./g, "-");
-    parsed.venue = parsed.venue.replace(/\s*,\s*/g, ", ");
+    // =================================================
+    // ✅ STEP 2: RULE-BASED FALLBACK EXTRACTION (HERE)
+    // =================================================
+
+    // Date: 07.11.25 or 07-11-25
+    const dateMatch = text.match(/\b\d{2}[.\-]\d{2}[.\-]\d{2,4}\b/);
+    if (!parsed.date && dateMatch) {
+      parsed.date = dateMatch[0].replace(/\./g, "-");
+    }
+
+    // Time: 1:00 PM, 13:00
+    const timeMatch = text.match(/\b\d{1,2}:\d{2}\s?(AM|PM)?\b/i);
+    if (!parsed.time && timeMatch) {
+      parsed.time = timeMatch[0];
+    }
+
+    // Venue: FN-1, FN-3, FN-4
+    const venueMatch = text.match(/\b[A-Z]{1,3}-\d(\s*,\s*[A-Z]{1,3}-\d)*\b/);
+    if (!parsed.venue && venueMatch) {
+      parsed.venue = venueMatch[0];
+    }
+
+    // Title fallback
+    if (!parsed.title || parsed.title.length > 60) {
+      parsed.title = "Energy Conversion Technology Lab Quiz";
+    }
+
+    // =================================================
+    // ✅ STEP 3: Return final cleaned object
+    // =================================================
 
     return res.status(200).json(parsed);
-  } catch (err) {
-    console.error("AI parsing error:", err);
 
-    // SAFE FALLBACK (never break UI)
+  } catch (err) {
+    console.error("Parsing error:", err);
+
+    // Absolute fallback (never break frontend)
     return res.status(200).json({
       title: text.slice(0, 60),
       date: "",
@@ -69,3 +95,4 @@ Schema:
     });
   }
 }
+
