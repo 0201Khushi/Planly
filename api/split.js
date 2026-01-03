@@ -1,6 +1,25 @@
 import Groq from "groq-sdk";
 
-// Utility: clean lines
+/* =========================
+   CONFIG
+========================= */
+
+const EVENT_KEYWORDS = [
+  "quiz",
+  "exam",
+  "evaluation",
+  "deadline",
+  "submission",
+  "test",
+  "meeting",
+  "presentation",
+];
+
+/* =========================
+   HELPERS
+========================= */
+
+// Normalize lines
 function normalizeLines(text) {
   return text
     .split(/\n+/)
@@ -8,24 +27,44 @@ function normalizeLines(text) {
     .filter(Boolean);
 }
 
-// Utility: detect "respectively" cases
+// Detect "respectively"
 function hasRespectively(text) {
   return /\brespectively\b/i.test(text);
 }
 
-// Utility: extract subjects (customize later)
+// Extract subjects like BEE, ECT
 function extractSubjects(text) {
   return text.match(/\b[A-Z]{2,}\b/g) || [];
 }
 
-// Utility: extract dates like "15th Jan", "14 Jan"
+// Extract dates like 15th Jan, 11 October
 function extractDates(text) {
   return (
     text.match(
-      /\b\d{1,2}(st|nd|rd|th)?\s+(Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec)\b/gi
+      /\b\d{1,2}(st|nd|rd|th)?\s+(Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec|January|February|March|April|May|June|July|August|September|October|November|December)\b/gi
     ) || []
   );
 }
+
+// Decide if text is a REAL planner event
+function isPrimaryEvent(text) {
+  const hasDate =
+    /\b\d{1,2}(st|nd|rd|th)?\s+(Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec|October|November|December)\b/i.test(text) ||
+    /\btoday|tomorrow\b/i.test(text);
+
+  const hasTime =
+    /\b\d{1,2}:\d{2}\s?(AM|PM)\b/i.test(text);
+
+  const hasKeyword = EVENT_KEYWORDS.some(k =>
+    text.toLowerCase().includes(k)
+  );
+
+  return (hasDate || hasTime) && hasKeyword;
+}
+
+/* =========================
+   HANDLER
+========================= */
 
 export default async function handler(req, res) {
   if (req.method !== "POST") {
@@ -38,22 +77,30 @@ export default async function handler(req, res) {
     return res.status(400).json({ error: "Invalid input" });
   }
 
-  // ===============================
-  // 1️⃣ NEWLINE / LIST SPLITTING
-  // ===============================
+  /* =========================
+     1️⃣ NEWLINE / LIST SPLIT
+  ========================= */
   const lines = normalizeLines(text);
+
   if (lines.length > 1) {
-    return res.status(200).json(lines);
+    const primary = lines.filter(isPrimaryEvent);
+
+    // If at least one real event exists, return only those
+    if (primary.length > 0) {
+      return res.status(200).json(primary);
+    }
+
+    // Else treat entire message as ONE event
+    return res.status(200).json([text]);
   }
 
-  // ===============================
-  // 2️⃣ "RESPECTIVELY" LOGIC
-  // ===============================
+  /* =========================
+     2️⃣ RESPECTIVELY LOGIC
+  ========================= */
   if (hasRespectively(text)) {
     const subjects = extractSubjects(text);
     const dates = extractDates(text);
 
-    // positional alignment
     if (subjects.length > 0 && subjects.length === dates.length) {
       const events = subjects.map((subj, i) => {
         return `${subj} quiz on ${dates[i]}`;
@@ -61,12 +108,11 @@ export default async function handler(req, res) {
 
       return res.status(200).json(events);
     }
-    // if mismatch → fall through to LLM
   }
 
-  // ===============================
-  // 3️⃣ LLM FALLBACK (DENSE TEXT)
-  // ===============================
+  /* =========================
+     3️⃣ LLM FALLBACK (DENSE TEXT)
+  ========================= */
   const groq = new Groq({
     apiKey: process.env.GROQ_API_KEY,
   });
@@ -79,12 +125,12 @@ export default async function handler(req, res) {
         {
           role: "system",
           content: `
-Split the message into individual academic events.
+Split the message into individual academic EVENTS only.
 
 Rules:
-- Each quiz, test, syllabus, assignment, or deadline is a separate event
-- Preserve original wording
-- If only one event exists, return a single-item array
+- Only return quizzes, exams, evaluations, deadlines, submissions
+- Ignore rules, policies, notes, warnings, links
+- If only one real event exists, return a single-item array
 - Return ONLY valid JSON
 
 Schema:
@@ -103,11 +149,12 @@ Schema:
     const raw = completion.choices[0].message.content.trim();
     const parsed = JSON.parse(raw);
 
-    if (Array.isArray(parsed.events) && parsed.events.length > 0) {
-      return res.status(200).json(parsed.events);
+    const filtered = (parsed.events || []).filter(isPrimaryEvent);
+
+    if (filtered.length > 0) {
+      return res.status(200).json(filtered);
     }
 
-    // fallback
     return res.status(200).json([text]);
 
   } catch (err) {
