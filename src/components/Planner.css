@@ -232,7 +232,7 @@
    /* category accent */
 }
 .event-card.exams {
-  border-left: 4px solid #ff7a00;
+  border-left-color: #ff4d4f;
 }
 .event-card.academic {
   border-left: 4px solid #ff7a00;
