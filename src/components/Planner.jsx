@@ -17,7 +17,7 @@ async function handleAdd() {
   if (!input.trim()) return;
 
   try {
-    // 1️⃣ Split message into event texts
+    // 1️⃣ Ask backend to split message into event texts
     const splitRes = await fetch("/api/split", {
       method: "POST",
       headers: {
@@ -43,23 +43,12 @@ async function handleAdd() {
 
         return {
           id: Date.now() + Math.random(), // unique id
-          ...parsed,
-          category: classifyCategory(
+          ...parsed,category: classifyCategory(
             `${parsed.title || ""} ${parsed.notes || ""}`
           ),
         };
       })
     );
-
-    // 3️⃣ Add all events to state
-    setTasks((prev) => [...parsedEvents, ...prev]);
-    setInput("");
-
-  } catch (err) {
-    console.error("Add failed:", err);
-  }
-}
-
 
     // 3️⃣ Add all parsed events to tasks
     setTasks((prev) => [...parsedEvents, ...prev]);
