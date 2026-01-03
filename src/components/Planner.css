@@ -229,23 +229,19 @@
   padding: 14px 16px;
   margin-bottom: 14px;
   box-shadow: 0 6px 18px rgba(0,0,0,0.06);
-  border-left: 4px solid solid transparent; /* category accent */
+ /* category accent */
 }
 .event-card.exams {
-  border-left-color: #ff4d4f;
-  background: #fff5f5;
+  border-left: 4px solid #ff7a00;
 }
 .event-card.academic {
-  border-left-color: #3f5cff;
-  background: #f5f8ff;
+  border-left: 4px solid #64ea49;
 }
 .event-card.clubs {
-  border-left-color: #7c3aed;
-  background: #f7f3ff;
-}
-.event-card.clubs {
-  border-left-color: #7c3aed;
-  background: #f7f3ff;
+  border-left: 4px solid #7755aa;
+
+.event-card.events {
+  border-left: 4px solid #2a2ace;
 }
 
 .event-type {
