@@ -33,7 +33,6 @@ export function classifyCategory(text) {
     t.includes("cell") ||
     t.includes("committee") ||
     t.includes("kaggle") ||
-    t.includes("hackathon")
   ) {
     return "Clubs";
   }
