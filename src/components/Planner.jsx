@@ -14,27 +14,47 @@ function Planner() {
 async function handleAdd() {
   if (!input.trim()) return;
 
-  const res = await fetch("/api/parse", {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify({ text: input }),
-  });
+  try {
+    // 1️⃣ Ask backend to split message into event texts
+    const splitRes = await fetch("/api/split", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ text: input }),
+    });
 
-  const parsed = await res.json();
+    const eventTexts = await splitRes.json(); // array of strings
 
-  setTasks((prev) => [
-    {
-      id: Date.now(),
-      ...parsed,
-    },
-    ...prev,
-  ]);
+    // 2️⃣ Parse EACH event separately
+    const parsedEvents = await Promise.all(
+      eventTexts.map(async (eventText) => {
+        const res = await fetch("/api/parse", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ text: eventText }),
+        });
 
-  setInput("");
+        const parsed = await res.json();
+
+        return {
+          id: Date.now() + Math.random(), // unique id
+          ...parsed,
+        };
+      })
+    );
+
+    // 3️⃣ Add all parsed events to tasks
+    setTasks((prev) => [...parsedEvents, ...prev]);
+
+    // 4️⃣ Clear input
+    setInput("");
+  } catch (err) {
+    console.error("Add failed:", err);
+  }
 }
-
 
   return (
     <div className="planner-page">
