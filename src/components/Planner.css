@@ -233,16 +233,16 @@
    /* category accent */
 }
 .event-card.exams {
-  border-left-color: #4dcaff;
+  border-left-color: #d72828;
 }
 .event-card.academic {
   border-left: 4px solid #ff7a00;
 }
 .event-card.clubs {
-  border-left: 4px solid #ff7a00;
+  border-left: 4px solid #00aaff;
 }
 .event-card.events {
-  border-left: 4px solid #ff7a00;
+  border-left: 4px solid #32d63d;
 }
 
 
