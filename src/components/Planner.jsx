@@ -13,24 +13,42 @@ function Planner() {
   const [input, setInput] = useState("");
 
 // ✅ LOAD TASKS FROM STORAGE
-const [tasks, setTasks] = useState(() => {
-  const saved = localStorage.getItem(PLANNER_KEY);
-  if (saved) {
-    try {
-      return JSON.parse(saved);
-    } catch (e) {
-      console.error("Failed to parse planner data", e);
-      return [];
-    }
-  }
-  return [];
-});
+const [tasks, setTasks] = useState([]);
+const [loading, setLoading] = useState(true);
 
 // ✅ activeTab stays simple
 const [activeTab, setActiveTab] = useState("All");
 useEffect(() => {
+  const saved = localStorage.getItem(PLANNER_KEY);
+  if (saved) {
+    try {
+      setTasks(JSON.parse(saved));
+    } catch (e) {
+      console.error("Failed to parse planner data", e);
+      setTasks([]);
+    }
+  }
+  setLoading(false);
+}, []);
+
+useEffect(() => {
+  if (!loading) {
     localStorage.setItem(PLANNER_KEY, JSON.stringify(tasks));
-  }, [tasks]);
+  }
+}, [tasks, loading]);
+
+if (loading) {
+  return (
+    <div className="planner-page">
+      <header className="top-bar">
+        <h2>Planner</h2>
+      </header>
+      <p style={{ padding: "16px", opacity: 0.6 }}>
+        Loading your schedule…
+      </p>
+    </div>
+  );
+}
 
   const visibleTasks =
     activeTab === "All"
@@ -172,7 +190,6 @@ async function handleAdd() {
     )}
   </div>
 ))}
-    <div classname='bottom-spacer'/>
     </div>
     
   );
