@@ -117,7 +117,7 @@ async function handleAdd() {
 
       {visibleTasks.map((task) => (
   <div className="event-card" key={task.id}>
-    <div className={`event-card ${task.category?.toLowerCase()}`}>
+    <div className="event-type">
       {task.category?.toUpperCase() || "EVENT"}
     </div>
 
