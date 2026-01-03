@@ -229,7 +229,7 @@
   padding: 14px 16px;
   margin-bottom: 14px;
   box-shadow: 0 6px 18px rgba(0,0,0,0.06);
-  border-left: 4px;
+  border-left: 4px solid  #ff4d4f;
    /* category accent */
 }
 .event-card.exams {
