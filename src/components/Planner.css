@@ -229,8 +229,22 @@
   padding: 14px 16px;
   margin-bottom: 14px;
   box-shadow: 0 6px 18px rgba(0,0,0,0.06);
-  border-left: 4px solid #ff7a00; /* category accent */
+   /* category accent */
 }
+.event-card.exams {
+  border-left: 4px solid #ff7a00;
+}
+.event-card.academic {
+  border-left: 4px solid #ff7a00;
+}
+.event-card.clubs {
+  border-left: 4px solid #ff7a00;
+}
+.event-card.events {
+  border-left: 4px solid #ff7a00;
+}
+
+
 
 .event-type {
   font-size: 11px;
