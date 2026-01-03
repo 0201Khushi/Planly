@@ -293,4 +293,6 @@
   margin-bottom: 4px;
   font-style: italic;
 }
-
+.box {
+  height: 80px;
+}
