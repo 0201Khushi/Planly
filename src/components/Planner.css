@@ -310,3 +310,11 @@
 .delete-btn:hover {
   opacity: 1;
 }
+.edit-btn {
+  background: transparent;
+  border: none;
+  font-size: 18px;
+  cursor: pointer;
+  padding: 4px;
+  opacity: 0.6;
+}
