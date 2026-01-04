@@ -100,6 +100,10 @@ async function handleAdd() {
     console.error("Add failed:", err);
   }
 }
+function handleDelete(id) {
+    setTasks((prev) => prev.filter((task) => task.id !== id));
+  }
+
 
   return (
     <div className="planner-page">
@@ -165,8 +169,7 @@ async function handleAdd() {
     <button
     className="delete-btn"
     onClick={() => handleDelete(task.id)}
-  >
-    🗑️
+  >🗑️
   </button>
 </div>
 
