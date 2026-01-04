@@ -54,7 +54,6 @@ if (loading) {
     activeTab === "All"
       ? tasks
       : tasks.filter((t) => t.category === activeTab);
-
 async function handleAdd() {
   if (!input.trim()) return;
 
@@ -101,45 +100,7 @@ async function handleAdd() {
     console.error("Add failed:", err);
   }
 }
-/* =========================
-     DELETE TASK
-     ========================= */
-  function handleDelete(id) {
-    setTasks((prev) => prev.filter((task) => task.id !== id));
-  }
 
-  /* =========================
-     EDIT TASK
-     ========================= */
-  function startEdit(task) {
-    setEditingId(task.id);
-    setEditText(task.title || "");
-  }
-
-  function saveEdit(id) {
-    setTasks((prev) =>
-      prev.map((task) =>
-        task.id === id ? { ...task, title: editText } : task
-      )
-    );
-    setEditingId(null);
-    setEditText("");
-  }
-  /* =========================
-     LOADING STATE
-     ========================= */
-  if (loading) {
-    return (
-      <div className="planner-page">
-        <header className="top-bar">
-          <h2>Planner</h2>
-        </header>
-        <p style={{ padding: "16px", opacity: 0.6 }}>
-          Loading your schedule…
-        </p>
-      </div>
-    );
-  }
   return (
     <div className="planner-page">
 
@@ -197,24 +158,9 @@ async function handleAdd() {
 
       {visibleTasks.map((task) => (
   <div className={`event-card ${(task.category || "events").trim().toLowerCase()}`} key={task.id}>
-    {/* DELETE */}
-          <button
-            className="delete-btn"
-            onClick={() => handleDelete(task.id)}
-          >
-            ✕
-          </button>
-    {/* EDIT */}
-          <button
-            className="edit-btn"
-            onClick={() => startEdit(task)}
-          >
-            ✎
-          </button>
     <div className="event-type">
       {task.category?.toUpperCase() || "EVENT"}
     </div>
-    
 
     <div className="event-title">
       {task.title}
@@ -227,7 +173,9 @@ async function handleAdd() {
     )}
 
     {task.time && (
-      <div className="event-time">{task.time}</div>
+      <div className="event-time">
+        {task.time}
+      </div>
     )}
 
     {task.venue && (
