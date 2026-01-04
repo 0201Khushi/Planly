@@ -232,6 +232,7 @@ function handleDelete(id) {
       onChange={(e) =>
         setEditTask(prev => ({ ...prev, date: e.target.value }))
       }
+      placeholder="Event Date"
     />
 
     {/* TIME */}
@@ -241,6 +242,7 @@ function handleDelete(id) {
       onChange={(e) =>
         setEditTask(prev => ({ ...prev, time: e.target.value }))
       }
+      placeholder="Event Time"
     />
 
     {/* VENUE */}
