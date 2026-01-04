@@ -16,7 +16,7 @@ function Planner() {
 const [tasks, setTasks] = useState([]);
 const [loading, setLoading] = useState(true);
 const [editingId, setEditingId] = useState(null);
-const [editText, setEditText] = useState("");
+const [editTask, setEditTask] = useState(null);
 
 // ✅ activeTab stays simple
 const [activeTab, setActiveTab] = useState("All");
@@ -109,19 +109,19 @@ function handleDelete(id) {
      EDIT TASK
      ========================= */
   function startEdit(task) {
-    setEditingId(task.id);
-    setEditText(task.title || "");
-  }
+  setEditingId(task.id);
+  setEditTask({ ...task }); // clone entire task
+}
 
   function saveEdit(id) {
-    setTasks((prev) =>
-      prev.map((task) =>
-        task.id === id ? { ...task, title: editText } : task
-      )
-    );
-    setEditingId(null);
-    setEditText("");
-  }
+  setTasks(prev =>
+    prev.map(task =>
+      task.id === id ? editTask : task
+    )
+  );
+  setEditingId(null);
+  setEditTask(null);
+}
 
 
   return (
@@ -200,41 +200,79 @@ function handleDelete(id) {
 </div>
 
     {editingId === task.id ? (
-  <input
-    className="event-title-input"
-    value={editText}
-    onChange={(e) => setEditText(e.target.value)}
-    onBlur={() => saveEdit(task.id)}
-    autoFocus
-  />
-) : (
-  <div className="event-title">
-    {task.title}
+  <div className="edit-card">
+
+    {/* EVENT TYPE */}
+    <select
+      value={editTask.category || "Events"}
+      onChange={(e) =>
+        setEditTask(prev => ({ ...prev, category: e.target.value }))
+      }
+    >
+      <option value="Events">Events</option>
+      <option value="Academic">Academic</option>
+      <option value="Exams">Exams</option>
+      <option value="Clubs">Clubs</option>
+    </select>
+
+    {/* TITLE */}
+    <input
+      value={editTask.title || ""}
+      onChange={(e) =>
+        setEditTask(prev => ({ ...prev, title: e.target.value }))
+      }
+      placeholder="Event title"
+      autoFocus
+    />
+
+    {/* DATE */}
+    <input
+      type="date"
+      value={editTask.date || ""}
+      onChange={(e) =>
+        setEditTask(prev => ({ ...prev, date: e.target.value }))
+      }
+    />
+
+    {/* TIME */}
+    <input
+      type="time"
+      value={editTask.time || ""}
+      onChange={(e) =>
+        setEditTask(prev => ({ ...prev, time: e.target.value }))
+      }
+    />
+
+    {/* VENUE */}
+    <input
+      value={editTask.venue || ""}
+      onChange={(e) =>
+        setEditTask(prev => ({ ...prev, venue: e.target.value }))
+      }
+      placeholder="Venue"
+    />
+
+    {/* NOTES */}
+    <textarea
+      value={editTask.notes || ""}
+      onChange={(e) =>
+        setEditTask(prev => ({ ...prev, notes: e.target.value }))
+      }
+      placeholder="Notes"
+    />
+
+    <button onClick={() => saveEdit(task.id)}>Save</button>
+
   </div>
+) : (
+  <>
+    <div className="event-title">{task.title}</div>
+    {task.date && <div className="event-date">{task.date}</div>}
+    {task.time && <div className="event-time">{task.time}</div>}
+    {task.venue && <div className="event-venue">{task.venue}</div>}
+    {task.notes && <div className="event-notes">{task.notes}</div>}
+  </>
 )}
-
-    {task.date && (
-      <div className="event-date">
-        {task.date}
-      </div>
-    )}
-
-    {task.time && (
-      <div className="event-time">
-        {task.time}
-      </div>
-    )}
-
-    {task.venue && (
-      <div className="event-venue">
-        {task.venue}
-      </div>
-    )}
-    {task.notes && (
-      <div className="event-notes">
-        {task.notes}
-      </div>
-    )}
   </div>
 ))}
     </div>
