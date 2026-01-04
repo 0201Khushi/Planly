@@ -215,31 +215,37 @@ async function handleAdd() {
       {task.category?.toUpperCase() || "EVENT"}
     </div>
     
-{editingId === task.id ? (
-            <input
-              className="event-title-input"
-              value={editText}
-              onChange={(e) => setEditText(e.target.value)}
-              onBlur={() => saveEdit(task.id)}
-              autoFocus
-            />
-          ) : (
-            <div
-              className="event-title"
-              onClick={() => startEdit(task)}
-            >
-              {task.title}
-            </div>
-          )}
 
-          {task.date && <div className="event-date">{task.date}</div>}
-          {task.time && <div className="event-time">{task.time}</div>}
-          {task.venue && <div className="event-venue">{task.venue}</div>}
-          {task.notes && <div className="event-notes">{task.notes}</div>}
-        </div>
-      ))}
+    <div className="event-title">
+      {task.title}
     </div>
+
+    {task.date && (
+      <div className="event-date">
+        {task.date}
+      </div>
+    )}
+
+    {task.time && (
+      <div className="event-time">{task.time}</div>
+    )}
+
+    {task.venue && (
+      <div className="event-venue">
+        {task.venue}
+      </div>
+    )}
+    {task.notes && (
+      <div className="event-notes">
+        {task.notes}
+      </div>
+    )}
+  </div>
+))}
+    </div>
+    
   );
 }
 
 export default Planner;
+
