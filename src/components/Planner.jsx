@@ -15,6 +15,8 @@ function Planner() {
 // ✅ LOAD TASKS FROM STORAGE
 const [tasks, setTasks] = useState([]);
 const [loading, setLoading] = useState(true);
+const [editingId, setEditingId] = useState(null);
+const [editText, setEditText] = useState("");
 
 // ✅ activeTab stays simple
 const [activeTab, setActiveTab] = useState("All");
@@ -103,6 +105,23 @@ async function handleAdd() {
 function handleDelete(id) {
     setTasks((prev) => prev.filter((task) => task.id !== id));
   }
+ /* =========================
+     EDIT TASK
+     ========================= */
+  function startEdit(task) {
+    setEditingId(task.id);
+    setEditText(task.title || "");
+  }
+
+  function saveEdit(id) {
+    setTasks((prev) =>
+      prev.map((task) =>
+        task.id === id ? { ...task, title: editText } : task
+      )
+    );
+    setEditingId(null);
+    setEditText("");
+  }
 
 
   return (
@@ -169,7 +188,7 @@ function handleDelete(id) {
     <div className="action-icons">
     <button
     className="edit-btn"
-    onClick={() => handleEdit(task.id)}
+    onClick={() => startEdit(task)}
   >✏️
   </button>
     <button
@@ -180,9 +199,19 @@ function handleDelete(id) {
   </div>
 </div>
 
-    <div className="event-title">
-      {task.title}
-    </div>
+    {editingId === task.id ? (
+  <input
+    className="event-title-input"
+    value={editText}
+    onChange={(e) => setEditText(e.target.value)}
+    onBlur={() => saveEdit(task.id)}
+    autoFocus
+  />
+) : (
+  <div className="event-title">
+    {task.title}
+  </div>
+)}
 
     {task.date && (
       <div className="event-date">
