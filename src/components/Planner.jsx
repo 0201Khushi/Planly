@@ -167,6 +167,11 @@ function handleDelete(id) {
       {task.category?.toUpperCase() || "EVENT"}
     </div>
     <button
+    className="edit-btn"
+    onClick={() => handleEdit(task.id)}
+  >✏️
+  </button>
+    <button
     className="delete-btn"
     onClick={() => handleDelete(task.id)}
   >🗑️
