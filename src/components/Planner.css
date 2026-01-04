@@ -293,3 +293,17 @@
 .bottom-spacer {
   height:150px;
 }
+.event-header-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+.delete-btn {
+  background: transparent;
+  border: none;
+  font-size: 18px;
+  cursor: pointer;
+  padding: 4px;
+  opacity: 0.6;
+}
