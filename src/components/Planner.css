@@ -307,3 +307,6 @@
   padding: 4px;
   opacity: 0.6;
 }
+.delete-btn:hover {
+  opacity: 1;
+}
