@@ -166,6 +166,7 @@ function handleDelete(id) {
     <div className="event-type">
       {task.category?.toUpperCase() || "EVENT"}
     </div>
+    <div className="action-icons">
     <button
     className="edit-btn"
     onClick={() => handleEdit(task.id)}
@@ -176,6 +177,7 @@ function handleDelete(id) {
     onClick={() => handleDelete(task.id)}
   >🗑️
   </button>
+  </div>
 </div>
 
     <div className="event-title">

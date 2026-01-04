@@ -299,6 +299,11 @@
   justify-content: space-between;
   gap: 12px;
 }
+.action-icons {
+  display: flex;
+  align-items: center;
+  gap: 10px; /* space between ✏️ and 🗑️ */
+}
 .delete-btn {
   background: transparent;
   border: none;
