@@ -244,14 +244,6 @@ function formatDateWithDay(timestamp) {
     day: "numeric",
     month: "short",
   });
-function getTodayMidnight() {
-  const now = new Date();
-  return new Date(
-    now.getFullYear(),
-    now.getMonth(),
-    now.getDate()
-  ).getTime();
-}
 
 }
 
