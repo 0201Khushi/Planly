@@ -83,15 +83,17 @@ async function handleAdd() {
         });
 
         const parsed = await res.json();
-        const inferredDate =
-  parsed.date ||
-  inferDateFromText(eventText) ||
-  "";
+        const finalDate = isValidISODate(parsed.date)
+  ? parsed.date
+  : inferDateFromText(eventText) || "";
 
-        return {
-          id: Date.now() + Math.random(), // unique id
-          ...parsed,date: inferredDate,category: classifyCategory(
-            `${parsed.title || ""} ${parsed.notes || ""}`
+return {
+  id: Date.now() + Math.random(),
+  ...parsed,
+  date: finalDate,
+  category: classifyCategory(
+    `${parsed.title || ""} ${parsed.notes || ""}`
+  
           ),
         };
       })
@@ -190,6 +192,11 @@ function inferDateFromText(text) {
   }
 
   return "";
+}
+function isValidISODate(dateString) {
+  if (!dateString) return false;
+  const date = new Date(dateString);
+  return !isNaN(date.getTime());
 }
 
 
