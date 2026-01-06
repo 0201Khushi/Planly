@@ -21,9 +21,6 @@ const [editTask, setEditTask] = useState(null);
 // ✅ activeTab stays simple
 const [activeTab, setActiveTab] = useState("All");
 useEffect(() => {
-    localStorage.removeItem("planly_planner_data");
-  }, []);
-useEffect(() => {
   const saved = localStorage.getItem(PLANNER_KEY);
   if (saved) {
     try {
