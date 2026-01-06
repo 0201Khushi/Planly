@@ -323,3 +323,12 @@
   padding: 4px;
   opacity: 0.6;
 }
+.save{
+  background: #5b6cff;
+  color: white;
+  border: none;
+  border-radius: 10px;
+  padding: 6px 14px;
+  font-size: 14px;
+
+}
