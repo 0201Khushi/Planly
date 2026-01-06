@@ -21,9 +21,6 @@ const [editTask, setEditTask] = useState(null);
 // ✅ activeTab stays simple
 const [activeTab, setActiveTab] = useState("All");
 useEffect(() => {
-    localStorage.removeItem("planly_planner_data");
-  }, []);
-useEffect(() => {
   const saved = localStorage.getItem(PLANNER_KEY);
   if (saved) {
     try {
@@ -87,10 +84,9 @@ async function handleAdd() {
 
         const parsed = await res.json();
         const finalDate =
-  (isValidISODate(parsed.date) && parseLocalDate(parsed.date).getTime()) ||
-  inferOrdinalDate(eventText) ||
-  inferDateFromText(eventText) ||
-  null;
+  parsed.date && parsed.date.includes("-")
+    ? parsed.date
+    : inferDateFromText(eventText);
 
 return {
   id: Date.now() + Math.random(),
@@ -131,18 +127,6 @@ function handleDelete(id) {
   );
   setEditingId(null);
   setEditTask(null);
-}
-function formatDateWithDay(dateString) {
-  if (!dateString) return "";
-
-  const [y, m, d] = dateString.split("-").map(Number);
-  const date = new Date(y, m - 1, d);
-
-  return date.toLocaleDateString("en-US", {
-    weekday: "long",
-    day: "numeric",
-    month: "short",
-  });
 }
 
 function inferDateFromText(text) {
@@ -200,34 +184,6 @@ function inferDateFromText(text) {
   }
 
   return "";
-}
-function inferOrdinalDate(text) {
-  if (!text) return null;
-
-  const match = text.match(
-    /\b(\d{1,2})(st|nd|rd|th)?\s+(january|february|march|april|may|june|july|august|september|october|november|december)\b/i
-  );
-
-  if (!match) return null;
-
-  const day = parseInt(match[1], 10);
-  const monthName = match[3].toLowerCase();
-
-  const monthIndex = [
-    "january","february","march","april","may","june",
-    "july","august","september","october","november","december"
-  ].indexOf(monthName);
-
-  if (monthIndex === -1) return null;
-
-  const now = new Date();
-  let year = now.getFullYear();
-
-  // if date already passed this year → assume next year
-  const candidate = new Date(year, monthIndex, day);
-  if (candidate < now) year += 1;
-
-  return new Date(year, monthIndex, day).getTime();
 }
 
   return (
