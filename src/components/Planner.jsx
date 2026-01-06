@@ -21,6 +21,9 @@ const [editTask, setEditTask] = useState(null);
 // ✅ activeTab stays simple
 const [activeTab, setActiveTab] = useState("All");
 useEffect(() => {
+    localStorage.removeItem("planly_planner_data");
+  }, []);
+useEffect(() => {
   const saved = localStorage.getItem(PLANNER_KEY);
   if (saved) {
     try {
@@ -83,9 +86,10 @@ async function handleAdd() {
         });
 
         const parsed = await res.json();
-        const finalDate = isValidISODate(parsed.date)
-  ? parsed.date
-  : inferDateFromText(eventText) || "";
+        const finalDate =
+  parsed.date && parsed.date.includes("-")
+    ? parsed.date
+    : inferDateFromText(eventText);
 
 return {
   id: Date.now() + Math.random(),
@@ -93,9 +97,8 @@ return {
   date: finalDate,
   category: classifyCategory(
     `${parsed.title || ""} ${parsed.notes || ""}`
-  
-          ),
-        };
+  ),
+};
       })
     );
 
@@ -129,8 +132,10 @@ function handleDelete(id) {
   setEditTask(null);
 }
 function formatDateWithDay(dateString) {
-  const date = parseLocalDate(dateString);
-  if (!date || isNaN(date)) return "";
+  if (!dateString) return "";
+
+  const [y, m, d] = dateString.split("-").map(Number);
+  const date = new Date(y, m - 1, d);
 
   return date.toLocaleDateString("en-US", {
     weekday: "long",
@@ -138,6 +143,7 @@ function formatDateWithDay(dateString) {
     month: "short",
   });
 }
+
 function inferDateFromText(text) {
   if (!text) return "";
 
