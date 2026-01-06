@@ -142,8 +142,13 @@ function inferDateFromText(text) {
   if (!text) return "";
 
   const lower = text.toLowerCase();
+
   const today = new Date();
-  today.setHours(0, 0, 0, 0);
+  const base = new Date(
+    today.getFullYear(),
+    today.getMonth(),
+    today.getDate()
+  ); // LOCAL midnight
 
   const weekdays = [
     "sunday",
@@ -155,52 +160,40 @@ function inferDateFromText(text) {
     "saturday",
   ];
 
-  // today / tomorrow / yesterday
+  const toYMD = (d) => {
+    const y = d.getFullYear();
+    const m = String(d.getMonth() + 1).padStart(2, "0");
+    const day = String(d.getDate()).padStart(2, "0");
+    return `${y}-${m}-${day}`;
+  };
+
   if (lower.includes("today")) {
-    return today.toISOString().split("T")[0];
+    return toYMD(base);
   }
+
   if (lower.includes("tomorrow")) {
-    const d = new Date(today);
-    d.setDate(d.getDate() + 1);
-    return d.toISOString().split("T")[0];
+    base.setDate(base.getDate() + 1);
+    return toYMD(base);
   }
+
   if (lower.includes("yesterday")) {
-    const d = new Date(today);
-    d.setDate(d.getDate() - 1);
-    return d.toISOString().split("T")[0];
+    base.setDate(base.getDate() - 1);
+    return toYMD(base);
   }
 
-  // weekday logic
-const inferredDate = inferDateFromText(eventText);
+  for (let i = 0; i < weekdays.length; i++) {
+    if (lower.includes(weekdays[i])) {
+      let diff = i - base.getDay();
+      if (diff <= 0) diff += 7;
+      if (lower.includes("next")) diff += 7;
 
-return {
-  id: Date.now() + Math.random(),
-  ...parsed,
-  date: inferredDate, // NUMBER
-  category: classifyCategory(
-    `${parsed.title || ""} ${parsed.notes || ""}`
-  ),
-};
+      base.setDate(base.getDate() + diff);
+      return toYMD(base);
+    }
+  }
 
+  return "";
 }
-function isValidISODate(dateString) {
-  if (!dateString) return false;
-  const date = parseLocalDate(dateString);
-  return date instanceof Date && !isNaN(date);
-}
-function getLocalMidnight(date) {
-  return new Date(
-    date.getFullYear(),
-    date.getMonth(),
-    date.getDate()
-  ).getTime();
-}
-function parseLocalDate(dateString) {
-  if (!dateString) return null;
-  const [year, month, day] = dateString.split("-").map(Number);
-  return new Date(year, month - 1, day); // LOCAL date, no timezone shift
-}
-
 
   return (
     <div className="planner-page">
