@@ -17,7 +17,7 @@ const [tasks, setTasks] = useState([]);
 const [loading, setLoading] = useState(true);
 const [editingId, setEditingId] = useState(null);
 const [editTask, setEditTask] = useState(null);
-
+const [timeFilter, setTimeFilter] = useState("Past");
 // ✅ activeTab stays simple
 const [activeTab, setActiveTab] = useState("All");
 useEffect(() => {
@@ -52,10 +52,37 @@ if (loading) {
   );
 }
 
-  const visibleTasks =
-    activeTab === "All"
-      ? tasks
-      : tasks.filter((t) => t.category === activeTab);
+  const today = getTodayMidnight();
+const tomorrow = today + 24 * 60 * 60 * 1000;
+
+const filteredByTime = tasks.filter((task) => {
+  if (!task.date) return timeFilter === "Upcoming";
+
+  switch (timeFilter) {
+    case "Past":
+      return task.date < today;
+
+    case "Today":
+      return task.date === today;
+
+    case "Tomorrow":
+      return task.date === tomorrow;
+
+    case "Upcoming":
+      return task.date > today;
+
+    default:
+      return true;
+  }
+});
+
+const visibleTasks =
+  activeTab === "All"
+    ? filteredByTime
+    : filteredByTime.filter(
+        (t) => t.category === activeTab
+      );
+
 async function handleAdd() {
   if (!input.trim()) return;
 
@@ -128,18 +155,7 @@ function handleDelete(id) {
   setEditingId(null);
   setEditTask(null);
 }
-function formatDateWithDay(dateString) {
-  if (!dateString) return "";
 
-  const [y, m, d] = dateString.split("-").map(Number);
-  const date = new Date(y, m - 1, d);
-
-  return date.toLocaleDateString("en-US", {
-    weekday: "long",
-    day: "numeric",
-    month: "short",
-  });
-}
 
 function inferDateFromText(text) {
   if (!text) return "";
@@ -245,6 +261,14 @@ function formatDateWithDay(timestamp) {
     month: "short",
   });
 }
+function getTodayMidnight() {
+  const now = new Date();
+  return new Date(
+    now.getFullYear(),
+    now.getMonth(),
+    now.getDate()
+  ).getTime();
+}
 
 
 
@@ -295,11 +319,16 @@ function formatDateWithDay(timestamp) {
 
       {/* Filter Pills */}
       <div className="filter-row">
-        <div className="filter-pill active">Past</div>
-        <div className="filter-pill">Upcoming</div>
-        <div className="filter-pill">Today</div>
-        <div className="filter-pill">Tomorrow</div>
-      </div>
+  {["Past", "Upcoming", "Today", "Tomorrow"].map((filter) => (
+    <div
+      key={filter}
+      className={`filter-pill ${timeFilter === filter ? "active" : ""}`}
+      onClick={() => setTimeFilter(filter)}
+    >
+      {filter}
+    </div>
+  ))}
+</div>
 
       {/* Sample Card */}
 
