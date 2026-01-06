@@ -87,9 +87,9 @@ async function handleAdd() {
 
         const parsed = await res.json();
         const finalDate =
-  parsed.date && parsed.date.includes("-")
-    ? parsed.date
-    : inferDateFromText(eventText);
+         inferOrdinalDate(eventText) ||
+         inferDateFromText(eventText) ||
+         null;
 
 return {
   id: Date.now() + Math.random(),
@@ -200,6 +200,56 @@ function inferDateFromText(text) {
 
   return "";
 }
+// convert Date → local timestamp (no timezone bugs)
+function toLocalMidnightTimestamp(date) {
+  return new Date(
+    date.getFullYear(),
+    date.getMonth(),
+    date.getDate()
+  ).getTime();
+}
+
+// infer ordinal dates like "3rd December"
+function inferOrdinalDate(text) {
+  if (!text) return null;
+
+  const match = text.match(
+    /\b(\d{1,2})(st|nd|rd|th)?\s+(january|february|march|april|may|june|july|august|september|october|november|december)\b/i
+  );
+
+  if (!match) return null;
+
+  const day = parseInt(match[1], 10);
+  const monthName = match[3].toLowerCase();
+
+  const monthIndex = [
+    "january","february","march","april","may","june",
+    "july","august","september","october","november","december"
+  ].indexOf(monthName);
+
+  const now = new Date();
+  let year = now.getFullYear();
+
+  // if date already passed → assume next year
+  const candidate = new Date(year, monthIndex, day);
+  if (candidate < now) year += 1;
+
+  return toLocalMidnightTimestamp(
+    new Date(year, monthIndex, day)
+  );
+}
+function formatDateWithDay(timestamp) {
+  if (!timestamp) return "";
+
+  const date = new Date(timestamp);
+  return date.toLocaleDateString("en-US", {
+    weekday: "long",
+    day: "numeric",
+    month: "short",
+  });
+}
+
+
 
   return (
     <div className="planner-page">
