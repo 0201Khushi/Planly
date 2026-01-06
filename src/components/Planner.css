@@ -332,3 +332,9 @@
   font-size: 14px;
 
 }
+.save-row{
+  display:flex;
+  justify-content: flex-end;
+  margin-top:12px
+
+}

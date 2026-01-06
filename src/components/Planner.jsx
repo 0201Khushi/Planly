@@ -270,9 +270,9 @@ function handleDelete(id) {
       }
       placeholder="Notes"
     />
-
+    <div className="save-row">
     <button className="save" onClick={() => saveEdit(task.id)}>Save</button>
-
+    </div>
   </div>
 ) : (
   <>
