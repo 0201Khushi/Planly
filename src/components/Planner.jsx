@@ -83,10 +83,14 @@ async function handleAdd() {
         });
 
         const parsed = await res.json();
+        const inferredDate =
+  parsed.date ||
+  inferDateFromText(eventText) ||
+  "";
 
         return {
           id: Date.now() + Math.random(), // unique id
-          ...parsed,category: classifyCategory(
+          ...parsed,date: inferredDate,category: classifyCategory(
             `${parsed.title || ""} ${parsed.notes || ""}`
           ),
         };
@@ -133,6 +137,61 @@ function formatDateWithDay(dateString) {
     month: "short",
   });
 }
+function inferDateFromText(text) {
+  if (!text) return "";
+
+  const lower = text.toLowerCase();
+  const today = new Date();
+  today.setHours(0, 0, 0, 0);
+
+  const weekdays = [
+    "sunday",
+    "monday",
+    "tuesday",
+    "wednesday",
+    "thursday",
+    "friday",
+    "saturday",
+  ];
+
+  // today / tomorrow / yesterday
+  if (lower.includes("today")) {
+    return today.toISOString().split("T")[0];
+  }
+  if (lower.includes("tomorrow")) {
+    const d = new Date(today);
+    d.setDate(d.getDate() + 1);
+    return d.toISOString().split("T")[0];
+  }
+  if (lower.includes("yesterday")) {
+    const d = new Date(today);
+    d.setDate(d.getDate() - 1);
+    return d.toISOString().split("T")[0];
+  }
+
+  // weekday logic
+  for (let i = 0; i < weekdays.length; i++) {
+    if (lower.includes(weekdays[i])) {
+      const targetDay = i;
+      const currentDay = today.getDay();
+
+      let diff = targetDay - currentDay;
+
+      if (lower.includes("next")) {
+        diff += 7;
+      } else if (diff <= 0) {
+        diff += 7; // coming weekday
+      }
+
+      const result = new Date(today);
+      result.setDate(today.getDate() + diff);
+      return result.toISOString().split("T")[0];
+    }
+  }
+
+  return "";
+}
+
 
 
   return (
