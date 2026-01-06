@@ -122,6 +122,17 @@ function handleDelete(id) {
   setEditingId(null);
   setEditTask(null);
 }
+function formatDateWithDay(dateString) {
+  if (!dateString) return "";
+
+  const date = new Date(dateString);
+
+  return date.toLocaleDateString("en-US", {
+    weekday: "long",
+    day: "numeric",
+    month: "short",
+  });
+}
 
 
   return (
@@ -277,7 +288,11 @@ function handleDelete(id) {
 ) : (
   <>
     <div className="event-title">{task.title}</div>
-    {task.date && <div className="event-date">{task.date}</div>}
+    {task.date && (
+  <div className="event-date">
+    {formatDateWithDay(task.date)}
+  </div>
+)}
     {task.time && <div className="event-time">{task.time}</div>}
     {task.venue && <div className="event-venue">{task.venue}</div>}
     {task.notes && <div className="event-notes">{task.notes}</div>}
