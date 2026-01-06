@@ -171,33 +171,30 @@ function inferDateFromText(text) {
   }
 
   // weekday logic
-  for (let i = 0; i < weekdays.length; i++) {
-    if (lower.includes(weekdays[i])) {
-      const targetDay = i;
-      const currentDay = today.getDay();
+const inferredDate = inferDateFromText(eventText);
 
-      let diff = targetDay - currentDay;
+return {
+  id: Date.now() + Math.random(),
+  ...parsed,
+  date: inferredDate, // NUMBER
+  category: classifyCategory(
+    `${parsed.title || ""} ${parsed.notes || ""}`
+  ),
+};
 
-      if (lower.includes("next")) {
-        diff += 7;
-      } else if (diff <= 0) {
-        diff += 7; // coming weekday
-      }
-
-      const result = new Date(today);
-      result.setDate(today.getDate() + diff);
-      return result.toISOString().split("T")[0];
-    }
-  }
-
-  return "";
 }
 function isValidISODate(dateString) {
   if (!dateString) return false;
   const date = parseLocalDate(dateString);
   return date instanceof Date && !isNaN(date);
 }
-
+function getLocalMidnight(date) {
+  return new Date(
+    date.getFullYear(),
+    date.getMonth(),
+    date.getDate()
+  ).getTime();
+}
 function parseLocalDate(dateString) {
   if (!dateString) return null;
   const [year, month, day] = dateString.split("-").map(Number);
