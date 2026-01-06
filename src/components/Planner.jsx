@@ -21,6 +21,9 @@ const [editTask, setEditTask] = useState(null);
 // ✅ activeTab stays simple
 const [activeTab, setActiveTab] = useState("All");
 useEffect(() => {
+    localStorage.removeItem("planly_planner_data");
+  }, []);
+useEffect(() => {
   const saved = localStorage.getItem(PLANNER_KEY);
   if (saved) {
     try {
@@ -127,6 +130,18 @@ function handleDelete(id) {
   );
   setEditingId(null);
   setEditTask(null);
+}
+function formatDateWithDay(dateString) {
+  if (!dateString) return "";
+
+  const [y, m, d] = dateString.split("-").map(Number);
+  const date = new Date(y, m - 1, d);
+
+  return date.toLocaleDateString("en-US", {
+    weekday: "long",
+    day: "numeric",
+    month: "short",
+  });
 }
 
 function inferDateFromText(text) {
