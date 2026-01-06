@@ -129,9 +129,8 @@ function handleDelete(id) {
   setEditTask(null);
 }
 function formatDateWithDay(dateString) {
-  if (!dateString) return "";
-
-  const date = new Date(dateString);
+  const date = parseLocalDate(dateString);
+  if (!date || isNaN(date)) return "";
 
   return date.toLocaleDateString("en-US", {
     weekday: "long",
@@ -195,10 +194,15 @@ function inferDateFromText(text) {
 }
 function isValidISODate(dateString) {
   if (!dateString) return false;
-  const date = new Date(dateString);
-  return !isNaN(date.getTime());
+  const date = parseLocalDate(dateString);
+  return date instanceof Date && !isNaN(date);
 }
 
+function parseLocalDate(dateString) {
+  if (!dateString) return null;
+  const [year, month, day] = dateString.split("-").map(Number);
+  return new Date(year, month - 1, day); // LOCAL date, no timezone shift
+}
 
 
   return (
