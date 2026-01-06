@@ -31,7 +31,7 @@ Rules:
 - Generate a short, clean title (≤ 7 words)
 - Move extra details into notes
 - Return ONLY valid JSON (no markdown, no explanation)
--Also infer dates in the form of ordinal number ,Month
+-Also infer dates in the form of ordinal number,Month and return in the json date field 
 
 Schema:
 {
