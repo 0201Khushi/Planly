@@ -227,23 +227,31 @@ function handleDelete(id) {
 
     {/* DATE */}
     <input
-      type="date"
-      value={editTask.date || ""}
-      onChange={(e) =>
-        setEditTask(prev => ({ ...prev, date: e.target.value }))
-      }
-      placeholder="Event Date"
-    />
+  type="text"
+  placeholder="Date"
+  value={editTask.date || ""}
+  onFocus={(e) => (e.target.type = "date")}
+  onBlur={(e) => {
+    if (!e.target.value) e.target.type = "text";
+  }}
+  onChange={(e) =>
+    setEditTask(prev => ({ ...prev, date: e.target.value }))
+  }
+/>
 
     {/* TIME */}
     <input
-      type="time"
-      value={editTask.time || ""}
-      onChange={(e) =>
-        setEditTask(prev => ({ ...prev, time: e.target.value }))
-      }
-      placeholder="Event Time"
-    />
+  type="text"
+  placeholder="Time"
+  value={editTask.time || ""}
+  onFocus={(e) => (e.target.type = "time")}
+  onBlur={(e) => {
+    if (!e.target.value) e.target.type = "text";
+  }}
+  onChange={(e) =>
+    setEditTask(prev => ({ ...prev, time: e.target.value }))
+  }
+/>
 
     {/* VENUE */}
     <input
