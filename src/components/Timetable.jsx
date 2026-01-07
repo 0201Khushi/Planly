@@ -203,7 +203,12 @@ export default function Timetable() {
       margin: 0,
     }}>Planner</h2>
       </header>
+         <div className="top-section">
           <h2>Edit {activeDay}</h2>
+          <button className="tt-primary-btn" onClick={saveTimetable}>
+            Save Timetable
+          </button>
+          </div>
 
           <div className="tt-slot-grid">
             {weekSlots[activeDay].map((slot, index) => (
@@ -234,9 +239,7 @@ export default function Timetable() {
           </div>
           </div>
 
-          <button className="tt-primary-btn" onClick={saveTimetable}>
-            Save Timetable
-          </button>
+          
         </>
       )}
     
