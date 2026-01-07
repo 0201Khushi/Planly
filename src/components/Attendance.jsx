@@ -104,25 +104,15 @@ export default
         <div>
           <p className="summary-label">Total Attendance</p>
           <p className="summary-percent">{totalAttendance}%</p>
-        </div>
-        <div className="summary-right">
           <p>Target: 75%</p>
-          <span
-            className={`status-pill ${
-              totalAttendance >= 75 ? "safe" : "danger"
-            }`}
-          >
-            {totalAttendance >= 75 ? "SAFE" : "AT RISK"}
-          </span>
         </div>
-      </div>
-
-      <button
+        <div>
+          <button
         className="add-subject-btn"
         onClick={() => setShowModal(true)}
-      >
-        + Add Subject
-      </button>
+         >+ Add Subject</button>
+        </div>
+      </div>
 
       {/* SUBJECT CARDS */}
       {subjects.map(subject => {
