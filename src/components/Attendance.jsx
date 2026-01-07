@@ -2,21 +2,27 @@ import { useEffect, useState } from "react";
 import "./Attendance.css";
 
 const ATTENDANCE_KEY = "planly_attendance_data";
-const TARGET = 0.75;
 
-export default
- function Attendance() {
+export default function Attendance() {
   const [subjects, setSubjects] = useState([]);
+  const [target, setTarget] = useState(75); // ✅ user-defined target (percentage)
+
   const [showModal, setShowModal] = useState(false);
   const [newSubjectName, setNewSubjectName] = useState("");
 
-  // Load from localStorage
+  const todayDate = new Date().toLocaleDateString("en-US", {
+    weekday: "short",
+    day: "numeric",
+    month: "short",
+  });
+
+  /* LOAD */
   useEffect(() => {
     const stored = JSON.parse(localStorage.getItem(ATTENDANCE_KEY));
     if (stored) setSubjects(stored);
   }, []);
 
-  // Save to localStorage
+  /* SAVE */
   useEffect(() => {
     localStorage.setItem(ATTENDANCE_KEY, JSON.stringify(subjects));
   }, [subjects]);
@@ -62,14 +68,12 @@ export default
   const getStatusText = (attended, total) => {
     if (total === 0) return "No classes yet";
 
-    const p = attended / total;
+    const percentage = (attended / total) * 100;
 
-    if (p >= TARGET) {
-      return "On Track";
-    }
+    if (percentage >= target) return "On Track";
 
     const needed = Math.ceil(
-      (TARGET * total - attended) / (1 - TARGET)
+      ((target / 100) * total - attended) / (1 - target / 100)
     );
 
     return `Attend next ${needed} classes to get back on track`;
@@ -77,41 +81,46 @@ export default
 
   const getStatusClass = (attended, total) => {
     if (total === 0) return "safe";
-    return attended / total >= TARGET ? "safe" : "danger";
+    return (attended / total) * 100 >= target ? "safe" : "danger";
   };
 
   const totalAttendance = (() => {
-    const tAtt = subjects.reduce((s, x) => s + x.attended, 0);
-    const tTot = subjects.reduce((s, x) => s + x.total, 0);
-    if (tTot === 0) return 0;
-    return Math.round((tAtt / tTot) * 100);
+    const attended = subjects.reduce((s, x) => s + x.attended, 0);
+    const total = subjects.reduce((s, x) => s + x.total, 0);
+    if (total === 0) return 0;
+    return Math.round((attended / total) * 100);
   })();
 
   return (
     <div className="attendance-page">
       <header className="top-bar">
-      <h2 style={{
-      fontFamily: "Jura, sans-serif",
-      fontSize: "22px",
-      fontWeight: "600",
-      color: "#000",
-      margin: 0,
-    }}>Attendance</h2>
+        <h2
+          style={{
+            fontFamily: "Jura, sans-serif",
+            fontSize: "22px",
+            fontWeight: "600",
+            color: "#000",
+            margin: 0,
+          }}
+        >
+          Attendance
+        </h2>
       </header>
 
       {/* SUMMARY */}
       <div className="attendance-summary">
         <div>
-          <p className="summary-label">Total Attendance</p>
           <p className="summary-percent">{totalAttendance}%</p>
-          <p>Target: 75%</p>
+          <p>Target: {target}%</p>
+          <p>{todayDate}</p>
         </div>
-        <div>
-          <button
-        className="add-subject-btn"
-        onClick={() => setShowModal(true)}
-         >+ Add Subject</button>
-        </div>
+
+        <button
+          className="add-subject-btn"
+          onClick={() => setShowModal(true)}
+        >
+          + Add Subject
+        </button>
       </div>
 
       {/* SUBJECT CARDS */}
@@ -154,19 +163,9 @@ export default
               <div className="percent-ring">{percent}%</div>
 
               <div className="actions">
-                <button
-                  className="present"
-                  onClick={() => markPresent(subject)}
-                >
-                  ✓
-                </button>
-                <button
-                  className="absent"
-                  onClick={() => markAbsent(subject)}
-                >
-                  ✕
-                </button>
-                <button className="more">⋮</button>
+                <button onClick={() => markPresent(subject)}>✓</button>
+                <button onClick={() => markAbsent(subject)}>✕</button>
+                <button>⋮</button>
               </div>
             </div>
           </div>
