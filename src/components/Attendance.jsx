@@ -88,9 +88,9 @@ export default function Attendance() {
   if (maxLeaves = 0) {
     return "Do NOT leave the next class";
   }
-  if (maxLeaves < 0) {
-    return "";
-  }
+  if ((attended / total) * 100 < target) {
+  return "";
+}
 
   if (maxLeaves === 1) {
     return "You may leave the next class";
