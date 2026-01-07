@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState,useEffect } from "react";
 import "./Timetable.css";
 
 const DAYS = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"];
@@ -36,6 +36,29 @@ export default function Timetable() {
   );
 
   const [savedWeek, setSavedWeek] = useState({});
+  useEffect(() => {
+    const storedWeek = localStorage.getItem("planly_savedWeek");
+    const storedSlots = localStorage.getItem("planly_weekSlots");
+
+    if (storedWeek) setSavedWeek(JSON.parse(storedWeek));
+
+    if (storedSlots) {
+      setWeekSlots(JSON.parse(storedSlots));
+    } else {
+      const fresh = DAYS.reduce((acc, day) => {
+        acc[day] = generateSlots();
+        return acc;
+      }, {});
+      setWeekSlots(fresh);
+    }
+  }, []);
+  useEffect(() => {
+    localStorage.setItem("planly_savedWeek", JSON.stringify(savedWeek));
+  }, [savedWeek]);
+
+  useEffect(() => {
+    localStorage.setItem("planly_weekSlots", JSON.stringify(weekSlots));
+  }, [weekSlots]);
 
   const handleChange = (day, index, field, value) => {
     const updated = { ...weekSlots };
