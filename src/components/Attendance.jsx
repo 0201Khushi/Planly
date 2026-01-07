@@ -9,6 +9,8 @@ export default function Attendance() {
 
   const [showModal, setShowModal] = useState(false);
   const [newSubjectName, setNewSubjectName] = useState("");
+  const [openMenuId, setOpenMenuId] = useState(null);
+
 
   const todayDate = new Date().toLocaleDateString("en-US", {
     weekday: "short",
@@ -111,6 +113,40 @@ export default function Attendance() {
     if (total === 0) return 0;
     return Math.round((attended / total) * 100);
   })();
+  const deleteSubject = (id) => {
+  setSubjects(prev => prev.filter(s => s.id !== id));
+  setOpenMenuId(null);
+};
+
+const resetAttendance = (id) => {
+  setSubjects(prev =>
+    prev.map(s =>
+      s.id === id ? { ...s, attended: 0, total: 0 } : s
+    )
+  );
+  setOpenMenuId(null);
+};
+
+const editAttendance = (subject) => {
+  const attended = prompt("Enter attended classes", subject.attended);
+  const total = prompt("Enter total classes", subject.total);
+
+  if (attended === null || total === null) return;
+
+  setSubjects(prev =>
+    prev.map(s =>
+      s.id === subject.id
+        ? {
+            ...s,
+            attended: Number(attended),
+            total: Number(total),
+          }
+        : s
+    )
+  );
+  setOpenMenuId(null);
+};
+
 const ProgressRing = ({ percentage }) => {
   const radius = 40;
   const stroke = 7;
@@ -238,7 +274,38 @@ const ProgressRing = ({ percentage }) => {
               <div className="actions">
                 <button onClick={() => markPresent(subject)}>✓</button>
                 <button onClick={() => markAbsent(subject)}>✕</button>
-                <button>⋮</button>
+                <div className="menu-wrapper">
+  <button
+    className="more"
+    onClick={() =>
+      setOpenMenuId(
+        openMenuId === subject.id ? null : subject.id
+      )
+    }
+  >
+    ⋮
+  </button>
+
+  {openMenuId === subject.id && (
+    <div className="menu">
+      <button onClick={() => editAttendance(subject)}>
+        Edit attendance
+      </button>
+
+      <button onClick={() => resetAttendance(subject.id)}>
+        Reset attendance
+      </button>
+
+      <button
+        className="danger"
+        onClick={() => deleteSubject(subject.id)}
+      >
+        Delete subject
+      </button>
+    </div>
+  )}
+</div>
+
               </div>
             </div>
           </div>
