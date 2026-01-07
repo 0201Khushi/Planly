@@ -168,7 +168,7 @@ export default function Timetable() {
     }}>Planner</h2>
       </header>
           <div className="tt-header">
-            <h2>{activeDay}</h2>
+            <h2 style={{color: "#000",}}>{activeDay}</h2>
             <button className="tt-secondary-btn" onClick={editTimetable}>
               Edit
             </button>
