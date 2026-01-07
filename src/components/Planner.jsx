@@ -163,7 +163,7 @@ function handleDelete(id) {
 }
 
 function inferDateFromText(text) {
-  if (!text) return "";
+  if (!text) return null;
 
   const lower = text.toLowerCase();
 
@@ -184,25 +184,18 @@ function inferDateFromText(text) {
     "saturday",
   ];
 
-  const toYMD = (d) => {
-    const y = d.getFullYear();
-    const m = String(d.getMonth() + 1).padStart(2, "0");
-    const day = String(d.getDate()).padStart(2, "0");
-    return `${y}-${m}-${day}`;
-  };
-
   if (lower.includes("today")) {
-    return toYMD(base);
+    return toLocalMidnightTimestamp(base);
   }
 
   if (lower.includes("tomorrow")) {
     base.setDate(base.getDate() + 1);
-    return toYMD(base);
+    return toLocalMidnightTimestamp(base);
   }
 
   if (lower.includes("yesterday")) {
     base.setDate(base.getDate() - 1);
-    return toYMD(base);
+    return toLocalMidnightTimestamp(base);
   }
 
   for (let i = 0; i < weekdays.length; i++) {
@@ -212,12 +205,13 @@ function inferDateFromText(text) {
       if (lower.includes("next")) diff += 7;
 
       base.setDate(base.getDate() + diff);
-      return toYMD(base);
+      return toLocalMidnightTimestamp(base);
     }
   }
 
-  return "";
+  return null;
 }
+
 // convert Date → local timestamp (no timezone bugs)
 function toLocalMidnightTimestamp(date) {
   return new Date(
