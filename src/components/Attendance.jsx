@@ -111,6 +111,55 @@ export default function Attendance() {
     if (total === 0) return 0;
     return Math.round((attended / total) * 100);
   })();
+const ProgressRing = ({ percentage }) => {
+  const radius = 22;
+  const stroke = 4;
+  const normalizedRadius = radius - stroke * 2;
+  const circumference = normalizedRadius * 2 * Math.PI;
+
+  const strokeDashoffset =
+    circumference - (percentage / 100) * circumference;
+
+  return (
+    <svg height={radius * 2} width={radius * 2}>
+      {/* background ring */}
+      <circle
+        stroke="#e6e6e6"
+        fill="transparent"
+        strokeWidth={stroke}
+        r={normalizedRadius}
+        cx={radius}
+        cy={radius}
+      />
+
+      {/* progress ring */}
+      <circle
+        stroke="#14b8a6"
+        fill="transparent"
+        strokeWidth={stroke}
+        strokeLinecap="round"
+        strokeDasharray={circumference + " " + circumference}
+        style={{ strokeDashoffset }}
+        r={normalizedRadius}
+        cx={radius}
+        cy={radius}
+      />
+
+      {/* percentage text */}
+      <text
+        x="50%"
+        y="50%"
+        textAnchor="middle"
+        dominantBaseline="middle"
+        fontSize="11"
+        fontWeight="600"
+        fill="#111"
+      >
+        {percentage}%
+      </text>
+    </svg>
+  );
+};
 
   return (
     <div className="attendance-page">
@@ -184,7 +233,7 @@ export default function Attendance() {
             </div>
 
             <div className="right">
-              <div className="percent-ring">{percent}%</div>
+              <ProgressRing percentage={Number(percent)} />
 
               <div className="actions">
                 <button onClick={() => markPresent(subject)}>✓</button>
