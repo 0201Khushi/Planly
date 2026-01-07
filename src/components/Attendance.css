@@ -1,0 +1,191 @@
+.attendance-page {
+  padding: 16px;
+  background: #f6f7fb;
+  min-height: 100vh;
+}
+
+.page-title {
+  margin-bottom: 12px;
+}
+
+/* SUMMARY */
+.attendance-summary {
+  background: #fff;
+  border-radius: 16px;
+  padding: 16px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  box-shadow: 0 8px 20px rgba(0,0,0,0.06);
+}
+
+.summary-label {
+  font-size: 13px;
+  opacity: 0.7;
+}
+
+.summary-percent {
+  font-size: 32px;
+  font-weight: 700;
+}
+
+.summary-right {
+  text-align: right;
+}
+
+.status-pill {
+  display: inline-block;
+  margin-top: 6px;
+  padding: 4px 10px;
+  border-radius: 999px;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.status-pill.safe {
+  background: #e6f7ec;
+  color: #1a7f37;
+}
+
+.status-pill.danger {
+  background: #fdecea;
+  color: #d92d20;
+}
+
+/* ADD SUBJECT BUTTON */
+.add-subject-btn {
+  width: 100%;
+  margin: 14px 0;
+  padding: 12px;
+  border-radius: 14px;
+  border: none;
+  background: #5b5bf0;
+  color: white;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+/* SUBJECT CARD */
+.subject-card {
+  background: #fff;
+  border-radius: 16px;
+  padding: 14px;
+  display: flex;
+  justify-content: space-between;
+  box-shadow: 0 8px 20px rgba(0,0,0,0.06);
+  margin-bottom: 12px;
+}
+
+.subject-card.safe {
+  border-left: 4px solid #22c55e;
+}
+
+.subject-card.danger {
+  border-left: 4px solid #ef4444;
+}
+
+.subject-name {
+  font-size: 16px;
+  font-weight: 600;
+  border: none;
+  outline: none;
+  width: 100%;
+}
+
+.count {
+  font-size: 13px;
+  opacity: 0.7;
+  margin-top: 4px;
+}
+
+.status-text {
+  font-size: 13px;
+  margin-top: 4px;
+}
+
+.right {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.percent-ring {
+  font-size: 16px;
+  font-weight: 700;
+  margin-bottom: 6px;
+}
+
+.actions {
+  display: flex;
+  align-items: center;
+}
+
+.actions button {
+  border: none;
+  background: transparent;
+  font-size: 16px;
+  margin-left: 6px;
+  cursor: pointer;
+}
+
+/* MODAL */
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.35);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+.modal-card {
+  background: #ffffff;
+  width: 85%;
+  max-width: 320px;
+  border-radius: 16px;
+  padding: 18px;
+  box-shadow: 0 12px 30px rgba(0,0,0,0.15);
+}
+
+.modal-card h3 {
+  margin-bottom: 12px;
+  font-size: 18px;
+}
+
+.modal-card input {
+  width: 100%;
+  padding: 10px 12px;
+  border-radius: 10px;
+  border: 1px solid #ddd;
+  outline: none;
+  font-size: 14px;
+  margin-bottom: 14px;
+}
+
+.modal-card input:focus {
+  border-color: #5b5bf0;
+}
+
+.modal-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+}
+
+.cancel-btn {
+  background: transparent;
+  border: none;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.confirm-btn {
+  background: #5b5bf0;
+  color: white;
+  border: none;
+  padding: 8px 14px;
+  border-radius: 10px;
+  font-weight: 600;
+  cursor: pointer;
+}
