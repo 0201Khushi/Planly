@@ -4,6 +4,22 @@ import "./Timetable.css";
 const DAYS = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"];
 const START_HOUR = 8;
 const END_HOUR = 18;
+const getTodayDay = () => {
+  const todayIndex = new Date().getDay(); 
+  // JS: 0 = Sun, 1 = Mon, ... 6 = Sat
+
+  const map = {
+    0: "Sun",
+    1: "Mon",
+    2: "Tue",
+    3: "Wed",
+    4: "Thu",
+    5: "Fri",
+    6: "Sat",
+  };
+
+  return map[todayIndex];
+};
 
 const generateSlots = () => {
   const slots = [];
@@ -72,7 +88,7 @@ const syncSubjectsFromTimetable = (mergedWeek) => {
 
 
 export default function Timetable() {
-  const [activeDay, setActiveDay] = useState("Mon");
+  const [activeDay, setActiveDay] = useState(getTodayDay());
   const [editing, setEditing] = useState(false);
 
   const [weekSlots, setWeekSlots] = useState(
