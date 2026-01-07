@@ -201,3 +201,8 @@
   font-weight: 600;
   cursor: pointer;
 }
+.leave-text {
+  font-size: 12px;
+  margin-top: 4px;
+  color: #555;
+}
