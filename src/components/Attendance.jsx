@@ -10,7 +10,9 @@ export default function Attendance() {
   const [showModal, setShowModal] = useState(false);
   const [newSubjectName, setNewSubjectName] = useState("");
   const [openMenuId, setOpenMenuId] = useState(null);
-
+  const [editSubject, setEditSubject] = useState(null);
+  const [editAttended, setEditAttended] = useState("");
+  const [editTotal, setEditTotal] = useState("");
 
   const todayDate = new Date().toLocaleDateString("en-US", {
     weekday: "short",
@@ -127,25 +129,30 @@ const resetAttendance = (id) => {
   setOpenMenuId(null);
 };
 
-const editAttendance = (subject) => {
-  const attended = prompt("Enter attended classes", subject.attended);
-  const total = prompt("Enter total classes", subject.total);
+const openEditModal = (subject) => {
+  setEditSubject(subject);
+  setEditAttended(subject.attended);
+  setEditTotal(subject.total);
+};
 
-  if (attended === null || total === null) return;
+const saveEditAttendance = () => {
+  if (editAttended === "" || editTotal === "") return;
 
   setSubjects(prev =>
     prev.map(s =>
-      s.id === subject.id
+      s.id === editSubject.id
         ? {
             ...s,
-            attended: Number(attended),
-            total: Number(total),
+            attended: Number(editAttended),
+            total: Number(editTotal),
           }
         : s
     )
   );
-  setOpenMenuId(null);
+
+  setEditSubject(null);
 };
+
 
 const ProgressRing = ({ percentage }) => {
   const radius = 40;
@@ -288,9 +295,10 @@ const ProgressRing = ({ percentage }) => {
 
   {openMenuId === subject.id && (
     <div className="menu">
-      <button onClick={() => editAttendance(subject)}>
-        Edit attendance
+      <button onClick={() => openEditModal(subject)}>
+      Edit attendance
       </button>
+
 
       <button onClick={() => resetAttendance(subject.id)}>
         Reset attendance
@@ -350,6 +358,47 @@ const ProgressRing = ({ percentage }) => {
           </div>
         </div>
       )}
+      {editSubject && (
+  <div className="modal-overlay" onClick={() => setEditSubject(null)}>
+    <div
+      className="modal-card"
+      onClick={e => e.stopPropagation()}
+    >
+      <h3>Edit Attendance</h3>
+
+      <input
+        type="number"
+        placeholder="Classes attended"
+        value={editAttended}
+        onChange={e => setEditAttended(e.target.value)}
+      />
+
+      <input
+        type="number"
+        placeholder="Total classes"
+        value={editTotal}
+        onChange={e => setEditTotal(e.target.value)}
+      />
+
+      <div className="modal-actions">
+        <button
+          className="cancel-btn"
+          onClick={() => setEditSubject(null)}
+        >
+          Cancel
+        </button>
+
+        <button
+          className="confirm-btn"
+          onClick={saveEditAttendance}
+        >
+          Save
+        </button>
+      </div>
+    </div>
+  </div>
+)}
+
     </div>
   );
 }
