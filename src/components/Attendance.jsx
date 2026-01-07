@@ -366,19 +366,23 @@ const ProgressRing = ({ percentage }) => {
     >
       <h3>Edit Attendance</h3>
 
-      <input
-        type="number"
-        placeholder="Classes attended"
-        value={editAttended}
-        onChange={e => setEditAttended(e.target.value)}
-      />
+      <div className="field">
+  <label>Classes Attended</label>
+  <input
+    type="number"
+    value={editAttended}
+    onChange={e => setEditAttended(e.target.value)}
+  />
+</div>
 
-      <input
-        type="number"
-        placeholder="Total classes"
-        value={editTotal}
-        onChange={e => setEditTotal(e.target.value)}
-      />
+<div className="field">
+  <label>Total Classes</label>
+  <input
+    type="number"
+    value={editTotal}
+    onChange={e => setEditTotal(e.target.value)}
+  />
+</div>
 
       <div className="modal-actions">
         <button
