@@ -5,22 +5,7 @@ const DAYS = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"];
 const START_HOUR = 8;
 const END_HOUR = 18;
 const getTodayDay = () => {
-  const todayIndex = new Date().getDay(); 
-  // JS: 0 = Sun, 1 = Mon, ... 6 = Sat
-const getClassStatus = (start, end, isToday) => {
-  if (!isToday) return "upcoming"; // other days = neutral upcoming
-
-  const now = new Date();
-  const currentHour =
-    now.getHours() + now.getMinutes() / 60;
-
-  if (currentHour >= end) return "past";
-  if (currentHour >= start && currentHour < end)
-    return "ongoing";
-  return "upcoming";
-};
-
-
+  const todayIndex = new Date().getDay();
   const map = {
     0: "Sun",
     1: "Mon",
@@ -30,8 +15,18 @@ const getClassStatus = (start, end, isToday) => {
     5: "Fri",
     6: "Sat",
   };
-
   return map[todayIndex];
+};
+
+const getClassStatus = (start, end, isToday) => {
+  if (!isToday) return "neutral";
+
+  const now = new Date();
+  const currentHour = now.getHours() + now.getMinutes() / 60;
+
+  if (currentHour >= end) return "past";
+  if (currentHour >= start && currentHour < end) return "ongoing";
+  return "upcoming";
 };
 
 const generateSlots = () => {
@@ -273,19 +268,24 @@ export default function Timetable() {
           </div>
 
           {(savedWeek[activeDay] || []).map((cls, idx) => (
-            <div
-            className={`tt-class-card ${
-            getClassStatus(
-            cls.start,cls.end,
-            activeDay === getTodayDay()) }`}key={idx}>
+  <div
+    key={idx}
+    className={`tt-class-card ${
+      getClassStatus(
+        cls.start,
+        cls.end,
+        activeDay === getTodayDay()
+      )
+    }`}
+  >
+    <h3>{cls.subject}</h3>
+    <p>
+      {formatTime(cls.start)} – {formatTime(cls.end)}
+    </p>
+    {cls.venue && <span>{cls.venue}</span>}
+  </div>
+))}
 
-              <h3>{cls.subject}</h3>
-              <p>
-                {formatTime(cls.start)} – {formatTime(cls.end)}
-              </p>
-              {cls.venue && <span>{cls.venue}</span>}
-            </div>
-          ))}
 
           {!savedWeek[activeDay] && (
             <p className="tt-empty-text">No classes scheduled.</p>
@@ -314,7 +314,7 @@ export default function Timetable() {
           </div>
 
           <div className="tt-slot-grid">
-            {weekSlots[activeDay].map((slot, index) => (
+            {weekSlots[activeDay]?.map((slot, index) => (
               <div className="tt-slot-card" key={index}>
                 <div className="tt-time">
                   {formatTime(slot.start)} – {formatTime(slot.end)}
