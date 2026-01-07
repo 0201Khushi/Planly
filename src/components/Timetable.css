@@ -5,6 +5,27 @@
   font-family: system-ui, sans-serif;
 }
 
+.tt-days {
+  display: flex;
+  gap: 6px;
+  margin-bottom: 12px;
+  overflow-x: auto;
+}
+
+.tt-day-btn {
+  padding: 6px 10px;
+  border-radius: 8px;
+  border: none;
+  background: #f1f1f5;
+  font-size: 13px;
+  cursor: pointer;
+}
+
+.tt-day-btn.active {
+  background: #4f46e5;
+  color: white;
+}
+
 .tt-header {
   display: flex;
   justify-content: space-between;
@@ -13,7 +34,7 @@
 
 .tt-empty-text {
   text-align: center;
-  margin-bottom: 16px;
+  margin: 16px 0;
   color: #666;
 }
 
@@ -26,6 +47,7 @@
   border-radius: 10px;
   font-size: 15px;
   cursor: pointer;
+  margin-top: 12px;
 }
 
 .tt-secondary-btn {
@@ -41,22 +63,6 @@
   padding: 14px;
   border-radius: 12px;
   margin-bottom: 12px;
-}
-
-.tt-class-card h3 {
-  margin: 0;
-  font-size: 16px;
-}
-
-.tt-class-card p {
-  margin: 4px 0;
-  font-size: 14px;
-  color: #444;
-}
-
-.tt-class-card span {
-  font-size: 13px;
-  color: #777;
 }
 
 .tt-slot-grid {
