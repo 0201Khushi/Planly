@@ -338,3 +338,6 @@
   margin-top:12px
 
 }
+.tt-class-card:last-child {
+  margin-bottom: 16px;
+}
