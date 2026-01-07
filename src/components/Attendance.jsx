@@ -78,6 +78,24 @@ export default function Attendance() {
 
     return `Attend next ${needed} classes to get back on track`;
   };
+  const getLeaveMessage = (attended, total) => {
+  if (total === 0) return "";
+
+  const maxLeaves = Math.floor(
+    (attended * 100) / target - total
+  );
+
+  if (maxLeaves <= 0) {
+    return "Do NOT leave the next class";
+  }
+
+  if (maxLeaves === 1) {
+    return "You may leave the next class";
+  }
+
+  return `You may leave the next ${maxLeaves} classes`;
+};
+
 
   const getStatusClass = (attended, total) => {
     if (total === 0) return "safe";
@@ -156,6 +174,9 @@ export default function Attendance() {
 
               <p className="status-text">
                 {getStatusText(subject.attended, subject.total)}
+              </p>
+              <p className="leave-text">
+              {getLeaveMessage(subject.attended, subject.total)}
               </p>
             </div>
 
