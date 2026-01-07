@@ -80,6 +80,9 @@ export default function Attendance() {
   };
   const getLeaveMessage = (attended, total) => {
   if (total === 0) return "";
+  if ((attended / total) * 100 < target) {
+    return "";
+  }
 
   const maxLeaves = Math.floor(
     (attended * 100) / target - total
