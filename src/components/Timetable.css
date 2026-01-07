@@ -99,3 +99,19 @@
   align-items: center;
   padding: 12px 0 16px;
 }
+/* TIME-BASED CLASS STATES */
+
+.tt-class-card.past {
+  background: #f1f1f1;
+  color: #777;
+}
+
+.tt-class-card.ongoing {
+  background: #e6f7f3;
+  border-left: 4px solid #14b8a6;
+}
+
+.tt-class-card.upcoming {
+  background: #eef4ff;
+  border-left: 4px solid #3b82f6;
+}

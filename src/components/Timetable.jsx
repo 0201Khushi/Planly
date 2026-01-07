@@ -7,6 +7,19 @@ const END_HOUR = 18;
 const getTodayDay = () => {
   const todayIndex = new Date().getDay(); 
   // JS: 0 = Sun, 1 = Mon, ... 6 = Sat
+const getClassStatus = (start, end, isToday) => {
+  if (!isToday) return "upcoming"; // other days = neutral upcoming
+
+  const now = new Date();
+  const currentHour =
+    now.getHours() + now.getMinutes() / 60;
+
+  if (currentHour >= end) return "past";
+  if (currentHour >= start && currentHour < end)
+    return "ongoing";
+  return "upcoming";
+};
+
 
   const map = {
     0: "Sun",
@@ -260,7 +273,12 @@ export default function Timetable() {
           </div>
 
           {(savedWeek[activeDay] || []).map((cls, idx) => (
-            <div className="tt-class-card" key={idx}>
+            <div
+            className={`tt-class-card ${
+            getClassStatus(
+            cls.start,cls.end,
+            activeDay === getTodayDay()) }`}key={idx}>
+
               <h3>{cls.subject}</h3>
               <p>
                 {formatTime(cls.start)} – {formatTime(cls.end)}
