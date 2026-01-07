@@ -1,7 +1,10 @@
 import { useEffect, useState } from "react";
 import "./Attendance.css";
+const normalize = (s) => s.trim().toLowerCase();
 
-const ATTENDANCE_KEY = "planly_attendance_data";
+const SUBJECTS_KEY = "planly_subjects";
+const ATTENDANCE_KEY = "planly_attendance";
+
 
 export default function Attendance() {
   const [subjects, setSubjects] = useState([]);
@@ -21,15 +24,41 @@ export default function Attendance() {
   });
 
   /* LOAD */
-  useEffect(() => {
-    const stored = JSON.parse(localStorage.getItem(ATTENDANCE_KEY));
-    if (stored) setSubjects(stored);
-  }, []);
+ useEffect(() => {
+  const storedSubjects =
+    JSON.parse(localStorage.getItem(SUBJECTS_KEY)) || [];
+
+  const storedAttendance =
+    JSON.parse(localStorage.getItem(ATTENDANCE_KEY)) || {};
+
+  const merged = storedSubjects.map((name) => ({
+    id: normalize(name), // stable id
+    name,
+    attended: storedAttendance[name]?.attended || 0,
+    total: storedAttendance[name]?.total || 0,
+  }));
+
+  setSubjects(merged);
+}, []);
+
 
   /* SAVE */
-  useEffect(() => {
-    localStorage.setItem(ATTENDANCE_KEY, JSON.stringify(subjects));
-  }, [subjects]);
+ useEffect(() => {
+  const attendanceObj = {};
+
+  subjects.forEach((s) => {
+    attendanceObj[s.name] = {
+      attended: s.attended,
+      total: s.total,
+    };
+  });
+
+  localStorage.setItem(
+    ATTENDANCE_KEY,
+    JSON.stringify(attendanceObj)
+  );
+}, [subjects]);
+
 
   const updateSubject = (id, updated) => {
     setSubjects(prev =>
@@ -53,21 +82,49 @@ export default function Attendance() {
   };
 
   const confirmAddSubject = () => {
-    if (!newSubjectName.trim()) return;
+  const name = newSubjectName.trim();
+  if (!name) return;
 
-    setSubjects(prev => [
-      ...prev,
-      {
-        id: Date.now().toString(),
-        name: newSubjectName.trim(),
-        attended: 0,
-        total: 0
-      }
-    ]);
+  const existing =
+    JSON.parse(localStorage.getItem(SUBJECTS_KEY)) || [];
 
-    setNewSubjectName("");
-    setShowModal(false);
-  };
+  if (existing.map(normalize).includes(normalize(name))) {
+    alert("Subject already exists");
+    return;
+  }
+
+  // update subject registry
+  const updatedSubjects = [...existing, name];
+  localStorage.setItem(
+    SUBJECTS_KEY,
+    JSON.stringify(updatedSubjects)
+  );
+
+  // update attendance
+  const updatedAttendance =
+    JSON.parse(localStorage.getItem(ATTENDANCE_KEY)) || {};
+
+  updatedAttendance[name] = { attended: 0, total: 0 };
+  localStorage.setItem(
+    ATTENDANCE_KEY,
+    JSON.stringify(updatedAttendance)
+  );
+
+  // update UI
+  setSubjects((prev) => [
+    ...prev,
+    {
+      id: normalize(name),
+      name,
+      attended: 0,
+      total: 0,
+    },
+  ]);
+
+  setNewSubjectName("");
+  setShowModal(false);
+};
+
 
   const getStatusText = (attended, total) => {
     if (total === 0) return "No classes yet";
@@ -116,9 +173,39 @@ export default function Attendance() {
     return Math.round((attended / total) * 100);
   })();
   const deleteSubject = (id) => {
-  setSubjects(prev => prev.filter(s => s.id !== id));
+  const subject = subjects.find((s) => s.id === id);
+  if (!subject) return;
+
+  // remove from UI
+  setSubjects((prev) => prev.filter((s) => s.id !== id));
+
+  // remove from subject registry
+  const existing =
+    JSON.parse(localStorage.getItem(SUBJECTS_KEY)) || [];
+
+  localStorage.setItem(
+    SUBJECTS_KEY,
+    JSON.stringify(
+      existing.filter(
+        (s) => normalize(s) !== normalize(subject.name)
+      )
+    )
+  );
+
+  // remove attendance data
+  const attendance =
+    JSON.parse(localStorage.getItem(ATTENDANCE_KEY)) || {};
+
+  delete attendance[subject.name];
+
+  localStorage.setItem(
+    ATTENDANCE_KEY,
+    JSON.stringify(attendance)
+  );
+
   setOpenMenuId(null);
 };
+
 
 const resetAttendance = (id) => {
   setSubjects(prev =>

@@ -23,6 +23,53 @@ const formatTime = (hour) => {
   const h = hour > 12 ? hour - 12 : hour;
   return `${h}:00 ${period}`;
 };
+const normalizeSubject = (name) =>
+  name.trim().toLowerCase();
+
+const syncSubjectsFromTimetable = (mergedWeek) => {
+  // existing subjects (manual + auto)
+  const existingSubjects =
+    JSON.parse(localStorage.getItem("planly_subjects")) || [];
+
+  const normalizedExisting = existingSubjects.map(normalizeSubject);
+  const updatedSubjects = [...existingSubjects];
+
+  // extract subjects from timetable
+  Object.values(mergedWeek).forEach((dayClasses) => {
+    dayClasses.forEach((cls) => {
+      const subject = cls.subject.trim();
+      if (!subject) return;
+
+      const norm = normalizeSubject(subject);
+      if (!normalizedExisting.includes(norm)) {
+        updatedSubjects.push(subject);
+        normalizedExisting.push(norm);
+      }
+    });
+  });
+
+  // save subjects
+  localStorage.setItem(
+    "planly_subjects",
+    JSON.stringify(updatedSubjects)
+  );
+
+  // init attendance safely (do NOT reset)
+  const attendance =
+    JSON.parse(localStorage.getItem("planly_attendance")) || {};
+
+  updatedSubjects.forEach((subj) => {
+    if (!attendance[subj]) {
+      attendance[subj] = { attended: 0, total: 0 };
+    }
+  });
+
+  localStorage.setItem(
+    "planly_attendance",
+    JSON.stringify(attendance)
+  );
+};
+
 
 export default function Timetable() {
   const [activeDay, setActiveDay] = useState("Mon");
@@ -101,7 +148,7 @@ export default function Timetable() {
 
       if (merged.length > 0) mergedWeek[day] = merged;
     });
-
+    syncSubjectsFromTimetable(mergedWeek);
     setSavedWeek(mergedWeek);
     setEditing(false);
   };
@@ -191,7 +238,6 @@ export default function Timetable() {
     }}>Planner</h2>
       </header>
           <div className="tt-header">
-            <h2 style={{color: "#000",}}>{activeDay}</h2>
             <button className="tt-secondary-btn" onClick={editTimetable}>
               Edit
             </button>
