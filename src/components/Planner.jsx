@@ -17,6 +17,15 @@ const [tasks, setTasks] = useState([]);
 const [loading, setLoading] = useState(true);
 const [editingId, setEditingId] = useState(null);
 const [editTask, setEditTask] = useState(null);
+const [timeFilter, setTimeFilter] = useState("Past");
+const todayMidnight = (() => {
+  const d = new Date();
+  d.setHours(0, 0, 0, 0);
+  return d.getTime();
+})();
+
+const tomorrowMidnight = todayMidnight + 24 * 60 * 60 * 1000;
+const dayAfterTomorrow = tomorrowMidnight + 24 * 60 * 60 * 1000;
 
 // ✅ activeTab stays simple
 const [activeTab, setActiveTab] = useState("All");
@@ -52,10 +61,34 @@ if (loading) {
   );
 }
 
-  const visibleTasks =
-    activeTab === "All"
-      ? tasks
-      : tasks.filter((t) => t.category === activeTab);
+const pastTasks = tasks.filter(
+  (t) => t.date && t.date < todayMidnight
+);
+
+const todayTasks = tasks.filter(
+  (t) => t.date >= todayMidnight && t.date < tomorrowMidnight
+);
+
+const tomorrowTasks = tasks.filter(
+  (t) => t.date >= tomorrowMidnight && t.date < dayAfterTomorrow
+);
+
+const upcomingTasks = tasks.filter(
+  (t) => t.date && t.date >= todayMidnight
+);
+let timeFilteredTasks = [];
+
+if (timeFilter === "Past") timeFilteredTasks = pastTasks;
+if (timeFilter === "Today") timeFilteredTasks = todayTasks;
+if (timeFilter === "Tomorrow") timeFilteredTasks = tomorrowTasks;
+if (timeFilter === "Upcoming") timeFilteredTasks = upcomingTasks;
+const visibleTasks =
+  activeTab === "All"
+    ? timeFilteredTasks
+    : timeFilteredTasks.filter(
+        (t) => t.category === activeTab
+      );
+
 async function handleAdd() {
   if (!input.trim()) return;
 
@@ -127,18 +160,6 @@ function handleDelete(id) {
   );
   setEditingId(null);
   setEditTask(null);
-}
-function formatDateWithDay(dateString) {
-  if (!dateString) return "";
-
-  const [y, m, d] = dateString.split("-").map(Number);
-  const date = new Date(y, m - 1, d);
-
-  return date.toLocaleDateString("en-US", {
-    weekday: "long",
-    day: "numeric",
-    month: "short",
-  });
 }
 
 function inferDateFromText(text) {
@@ -249,6 +270,7 @@ function formatDateWithDay(timestamp) {
 
 
 
+
   return (
     <div className="planner-page">
 
@@ -296,11 +318,17 @@ function formatDateWithDay(timestamp) {
 
       {/* Filter Pills */}
       <div className="filter-row">
-        <div className="filter-pill active">Past</div>
-        <div className="filter-pill">Upcoming</div>
-        <div className="filter-pill">Today</div>
-        <div className="filter-pill">Tomorrow</div>
-      </div>
+  {["Past", "Upcoming", "Today", "Tomorrow"].map((f) => (
+    <div
+      key={f}
+      className={`filter-pill ${timeFilter === f ? "active" : ""}`}
+      onClick={() => setTimeFilter(f)}
+    >
+      {f}
+    </div>
+  ))}
+</div>
+
 
       {/* Sample Card */}
 
@@ -359,9 +387,17 @@ function formatDateWithDay(timestamp) {
   onBlur={(e) => {
     if (!e.target.value) e.target.type = "text";
   }}
-  onChange={(e) =>
-    setEditTask(prev => ({ ...prev, date: e.target.value }))
+  onChange={(e) => {
+  const value = e.target.value;
+  if (!value) {
+    setEditTask(prev => ({ ...prev, date: null }));
+  } else {
+    const [y, m, d] = value.split("-").map(Number);
+    const ts = new Date(y, m - 1, d).getTime();
+    setEditTask(prev => ({ ...prev, date: ts }));
   }
+}}
+
 />
 
     {/* TIME */}
