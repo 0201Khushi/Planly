@@ -112,8 +112,8 @@ export default function Attendance() {
     return Math.round((attended / total) * 100);
   })();
 const ProgressRing = ({ percentage }) => {
-  const radius = 35;
-  const stroke = 6;
+  const radius = 40;
+  const stroke = 7;
   const normalizedRadius = radius - stroke * 2;
   const circumference = normalizedRadius * 2 * Math.PI;
 
