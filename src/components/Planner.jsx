@@ -17,7 +17,7 @@ const [tasks, setTasks] = useState([]);
 const [loading, setLoading] = useState(true);
 const [editingId, setEditingId] = useState(null);
 const [editTask, setEditTask] = useState(null);
-const [timeFilter, setTimeFilter] = useState("Past");
+const [timeFilter, setTimeFilter] = useState("All");
 const todayMidnight = (() => {
   const d = new Date();
   d.setHours(0, 0, 0, 0);
@@ -61,27 +61,51 @@ if (loading) {
   );
 }
 
-const pastTasks = tasks.filter(
-  (t) => t.date && t.date < todayMidnight
-);
-
-const todayTasks = tasks.filter(
-  (t) => t.date >= todayMidnight && t.date < tomorrowMidnight
-);
-
-const tomorrowTasks = tasks.filter(
-  (t) => t.date >= tomorrowMidnight && t.date < dayAfterTomorrow
-);
-
-const upcomingTasks = tasks.filter(
-  (t) => t.date && t.date >= todayMidnight
-);
 let timeFilteredTasks = [];
 
-if (timeFilter === "Past") timeFilteredTasks = pastTasks;
-if (timeFilter === "Today") timeFilteredTasks = todayTasks;
-if (timeFilter === "Tomorrow") timeFilteredTasks = tomorrowTasks;
-if (timeFilter === "Upcoming") timeFilteredTasks = upcomingTasks;
+if (timeFilter === "All") {
+  // 🔥 Includes EVERYTHING, including tasks with no date
+  timeFilteredTasks = tasks;
+}
+
+if (timeFilter === "Past") {
+  timeFilteredTasks = tasks.filter(
+    (t) => t.date && t.date < todayMidnight
+  );
+}
+
+if (timeFilter === "Today") {
+  timeFilteredTasks = tasks.filter(
+    (t) =>
+      t.date &&
+      t.date >= todayMidnight &&
+      t.date < tomorrowMidnight
+  );
+}
+
+if (timeFilter === "Tomorrow") {
+  timeFilteredTasks = tasks.filter(
+    (t) =>
+      t.date &&
+      t.date >= tomorrowMidnight &&
+      t.date < dayAfterTomorrow
+  );
+}
+
+if (timeFilter === "Upcoming") {
+  timeFilteredTasks = tasks.filter(
+    (t) => t.date && t.date >= todayMidnight
+  );
+}
+if (timeFilter === "All") {
+  timeFilteredTasks = [...timeFilteredTasks].sort((a, b) => {
+    if (!a.date && !b.date) return 0;
+    if (!a.date) return 1;   // no-date tasks go last
+    if (!b.date) return -1;
+    return a.date - b.date;
+  });
+}
+
 const visibleTasks =
   activeTab === "All"
     ? timeFilteredTasks
@@ -308,11 +332,12 @@ function formatDateWithDay(timestamp) {
       {tab}
     </div>
   ))}
+  
 </div>
 
       {/* Filter Pills */}
       <div className="filter-row">
-  {["Past", "Upcoming", "Today", "Tomorrow"].map((f) => (
+  {["Past", "Upcoming", "Today", "Tomorrow","All"].map((f) => (
     <div
       key={f}
       className={`filter-pill ${timeFilter === f ? "active" : ""}`}
@@ -320,6 +345,7 @@ function formatDateWithDay(timestamp) {
     >
       {f}
     </div>
+    
   ))}
 </div>
 
