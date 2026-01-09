@@ -337,7 +337,7 @@ function formatDateWithDay(timestamp) {
 
       {/* Filter Pills */}
       <div className="filter-row">
-  {["Past", "Upcoming", "Today", "Tomorrow","All"].map((f) => (
+  {["Past",,"All","Upcoming", "Today", "Tomorrow"].map((f) => (
     <div
       key={f}
       className={`filter-pill ${timeFilter === f ? "active" : ""}`}
