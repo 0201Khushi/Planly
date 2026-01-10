@@ -342,9 +342,11 @@
    PAST EVENTS (GREYED)
    ========================= */
 
+/* ===== Past Events ===== */
 .past-event {
   opacity: 0.55;
   filter: grayscale(0.6);
+  background: #f9fafb;
 }
 
 .past-event .event-title,
@@ -359,5 +361,3 @@
 .past-event {
   border-left-color: #d1d5db !important;
 }
-
-
