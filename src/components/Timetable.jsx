@@ -152,8 +152,14 @@ export default function Timetable() {
     <div className="timetable-page">
       {/* TOP BAR */}
       <header className="top-bar">
-        <h2>Planner</h2>
-      </header>
+      <h2 style={{
+      fontFamily: "Jura, sans-serif",
+      fontSize: "22px",
+      fontWeight: "600",
+      color: "#000",
+      margin: 0,
+    }}>Timetable</h2>
+    </header>
 
       {/* SCROLL AREA */}
       <div className="tt-scroll">
