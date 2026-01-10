@@ -231,7 +231,11 @@ export default function Timetable() {
         {editing && (
           <>
             <div className="top-section">
-              <h2>Edit {activeDay}</h2>
+              <h2 style={{
+      fontSize: "16px",
+      color: "#000",
+      
+    }}>Edit {activeDay}</h2>
               <button className="tt-primary-btn" onClick={saveTimetable}>
                 Save Timetable
               </button>
