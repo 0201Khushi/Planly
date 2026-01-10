@@ -1,54 +1,72 @@
 .home {
-  padding: 24px;
   min-height: 100vh;
-  background: linear-gradient(#f8fafc, #f1f5f9);
+  padding: 24px;
+  background: linear-gradient(#f8fafc, #eef2f7);
   font-family: "Inter", sans-serif;
-  color: #0f172a;
+  color: #111827;
 }
 
-/* HERO */
-.hero h1 {
-  font-size: 30px;
+/* HEADER */
+.header h1 {
+  font-size: 28px;
   font-weight: 600;
 }
 
 .quote {
-  margin-top: 6px;
-  max-width: 520px;
+  margin-top: 4px;
   font-style: italic;
-  color: #64748b;
+  color: #6b7280;
 }
 
-/* GRID */
-.grid {
+/* STATS */
+.stats-row {
   display: grid;
-  grid-template-columns: repeat(2, 1fr);
+  grid-template-columns: 1fr 1fr;
   gap: 16px;
   margin: 24px 0;
 }
 
+.stat-card {
+  background: #ffffff;
+  border-radius: 18px;
+  padding: 20px;
+  text-align: center;
+  box-shadow: 0 10px 25px rgba(0,0,0,0.05);
+}
+
+.stat-title {
+  font-size: 14px;
+  color: #6b7280;
+}
+
+.stat-number {
+  font-size: 36px;
+  font-weight: 600;
+  color: #14b8a6;
+}
+
+.stat-sub {
+  font-size: 13px;
+  color: #9ca3af;
+}
+
 /* CARDS */
 .card {
-  background: #fff;
-  border-radius: 20px;
+  background: #ffffff;
+  border-radius: 18px;
   padding: 20px;
-  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.05);
+  margin-bottom: 20px;
+  box-shadow: 0 10px 25px rgba(0,0,0,0.05);
 }
 
 .card h3 {
-  font-size: 15px;
-  color: #334155;
-  margin-bottom: 10px;
+  margin-bottom: 6px;
 }
 
-/* STATS */
-.stat {
-  text-align: center;
-}
-
-.big {
-  font-size: 36px;
-  font-weight: 600;
+.subtext {
+  font-size: 13px;
+  color: #6b7280;
+  margin-bottom: 12px;
 }
 
 /* DEADLINES */
@@ -60,36 +78,48 @@
 
 .label {
   font-size: 12px;
-  color: #64748b;
+  color: #6b7280;
   text-transform: uppercase;
+  margin-bottom: 6px;
 }
 
 .item {
-  margin-top: 6px;
   font-size: 14px;
+  margin-bottom: 4px;
 }
 
 /* MUST ATTEND */
 .danger {
-  border-left: 4px solid #ef4444;
+  border-left: 4px solid #f97316;
 }
 
-.risk-row {
+.must-row {
   display: flex;
   justify-content: space-between;
-  padding: 8px 0;
+  align-items: center;
+  padding: 12px 0;
+  border-top: 1px solid #f1f5f9;
 }
 
-.pill {
-  background: #fee2e2;
-  color: #991b1b;
+.subject {
+  font-weight: 500;
+}
+
+.time {
+  font-size: 13px;
+  color: #6b7280;
+}
+
+.critical {
+  background: #fb923c;
+  color: #fff;
   font-size: 12px;
-  padding: 4px 10px;
+  padding: 6px 12px;
   border-radius: 999px;
 }
 
 /* UTIL */
 .muted {
-  color: #94a3b8;
+  color: #9ca3af;
   font-size: 14px;
 }

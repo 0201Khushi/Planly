@@ -7,11 +7,10 @@ const TIMETABLE_KEY = "planly_savedWeek";
 const TARGET_ATTENDANCE = 75;
 
 const QUOTES = [
-  "Discipline beats motivation every single day.",
-  "Clarity comes before speed.",
-  "Small actions, done daily, change everything.",
-  "Focus on execution, not perfection.",
-  "You are exactly where your habits placed you.",
+  "Precision is the soul of discipline.",
+  "Clarity creates momentum.",
+  "Consistency compounds quietly.",
+  "Focus is a competitive advantage.",
 ];
 
 const todayMidnight = (() => {
@@ -30,7 +29,7 @@ const getGreeting = () => {
 };
 
 const getTodayDay = () =>
-  ["Sun","Mon","Tue","Wed","Thu","Fri","Sat"][new Date().getDay()];
+  ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"][new Date().getDay()];
 
 export default function Home() {
   const [quote, setQuote] = useState("");
@@ -82,68 +81,78 @@ export default function Home() {
     <div className="home">
 
       {/* HEADER */}
-      <section className="hero">
-        <h1>{getGreeting()}, Khushi</h1>
+      <div className="header">
+        <h1>{getGreeting()}, Khushi.</h1>
         <p className="quote">“{quote}”</p>
-      </section>
+      </div>
 
-      {/* TODAY OVERVIEW */}
-      <section className="grid">
-        <div className="card stat">
-          <h3>Today’s Classes</h3>
-          <p className="big">{todayClasses.length}</p>
+      {/* STATS */}
+      <div className="stats-row">
+        <div className="stat-card">
+          <p className="stat-title">Today’s Classes</p>
+          <p className="stat-number">{todayClasses.length}</p>
+          <p className="stat-sub">Scheduled</p>
         </div>
 
-        <div className="card stat">
-          <h3>Deadlines Today</h3>
-          <p className="big">{todayDeadlines.length}</p>
+        <div className="stat-card">
+          <p className="stat-title">Deadlines Today</p>
+          <p className="stat-number">{todayDeadlines.length}</p>
+          <p className="stat-sub">Pending</p>
         </div>
-      </section>
+      </div>
 
-      {/* DEADLINES */}
-      <section className="card">
-        <h3>Deadlines & Events</h3>
+      {/* UPCOMING DEADLINES */}
+      <div className="card">
+        <h3>Upcoming Deadlines</h3>
 
         <div className="two-col">
           <div>
-            <span className="label">Today</span>
+            <p className="label">Today</p>
             {todayDeadlines.length ? (
               todayDeadlines.map(t => (
-                <p key={t.id} className="item">{t.title}</p>
+                <p key={t.id} className="item">• {t.title}</p>
               ))
             ) : (
-              <p className="muted">Nothing due today</p>
+              <p className="muted">Nothing due</p>
             )}
           </div>
 
           <div>
-            <span className="label">Tomorrow</span>
+            <p className="label">Tomorrow</p>
             {tomorrowDeadlines.length ? (
               tomorrowDeadlines.map(t => (
-                <p key={t.id} className="item">{t.title}</p>
+                <p key={t.id} className="item">• {t.title}</p>
               ))
             ) : (
-              <p className="muted">No deadlines tomorrow</p>
+              <p className="muted">Nothing else due</p>
             )}
           </div>
         </div>
-      </section>
+      </div>
 
       {/* MUST ATTEND */}
-      <section className="card danger">
+      <div className="card danger">
         <h3>Must-Attend Classes</h3>
+        <p className="subtext">
+          These sessions are required to maintain your 75% threshold.
+        </p>
 
         {mustAttend.length ? (
           mustAttend.map((cls, i) => (
-            <div key={i} className="risk-row">
-              <span>{cls.subject}</span>
-              <span className="pill">Critical</span>
+            <div key={i} className="must-row">
+              <div>
+                <p className="subject">{cls.subject}</p>
+                <p className="time">
+                  {cls.start}:00 – {cls.end}:00
+                </p>
+              </div>
+              <span className="critical">Critical</span>
             </div>
           ))
         ) : (
           <p className="muted">Attendance is safe today 🎉</p>
         )}
-      </section>
+      </div>
 
     </div>
   );
