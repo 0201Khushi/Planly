@@ -1,9 +1,10 @@
-import { useState,useEffect } from "react";
+import { useState, useEffect } from "react";
 import "./Timetable.css";
 
 const DAYS = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"];
 const START_HOUR = 8;
 const END_HOUR = 18;
+
 const getTodayDay = () => {
   const todayIndex = new Date().getDay();
   const map = {
@@ -47,53 +48,6 @@ const formatTime = (hour) => {
   const h = hour > 12 ? hour - 12 : hour;
   return `${h}:00 ${period}`;
 };
-const normalizeSubject = (name) =>
-  name.trim().toLowerCase();
-
-const syncSubjectsFromTimetable = (mergedWeek) => {
-  // existing subjects (manual + auto)
-  const existingSubjects =
-    JSON.parse(localStorage.getItem("planly_subjects")) || [];
-
-  const normalizedExisting = existingSubjects.map(normalizeSubject);
-  const updatedSubjects = [...existingSubjects];
-
-  // extract subjects from timetable
-  Object.values(mergedWeek).forEach((dayClasses) => {
-    dayClasses.forEach((cls) => {
-      const subject = cls.subject.trim();
-      if (!subject) return;
-
-      const norm = normalizeSubject(subject);
-      if (!normalizedExisting.includes(norm)) {
-        updatedSubjects.push(subject);
-        normalizedExisting.push(norm);
-      }
-    });
-  });
-
-  // save subjects
-  localStorage.setItem(
-    "planly_subjects",
-    JSON.stringify(updatedSubjects)
-  );
-
-  // init attendance safely (do NOT reset)
-  const attendance =
-    JSON.parse(localStorage.getItem("planly_attendance")) || {};
-
-  updatedSubjects.forEach((subj) => {
-    if (!attendance[subj]) {
-      attendance[subj] = { attended: 0, total: 0 };
-    }
-  });
-
-  localStorage.setItem(
-    "planly_attendance",
-    JSON.stringify(attendance)
-  );
-};
-
 
 export default function Timetable() {
   const [activeDay, setActiveDay] = useState(getTodayDay());
@@ -107,29 +61,14 @@ export default function Timetable() {
   );
 
   const [savedWeek, setSavedWeek] = useState({});
+
   useEffect(() => {
     const storedWeek = localStorage.getItem("planly_savedWeek");
     const storedSlots = localStorage.getItem("planly_weekSlots");
 
     if (storedWeek) setSavedWeek(JSON.parse(storedWeek));
-
-    if (storedSlots) {
-      setWeekSlots(JSON.parse(storedSlots));
-    } else {
-      const fresh = DAYS.reduce((acc, day) => {
-        acc[day] = generateSlots();
-        return acc;
-      }, {});
-      setWeekSlots(fresh);
-    }
+    if (storedSlots) setWeekSlots(JSON.parse(storedSlots));
   }, []);
-  useEffect(() => {
-    localStorage.setItem("planly_savedWeek", JSON.stringify(savedWeek));
-  }, [savedWeek]);
-
-  useEffect(() => {
-    localStorage.setItem("planly_weekSlots", JSON.stringify(weekSlots));
-  }, [weekSlots]);
 
   const handleChange = (day, index, field, value) => {
     const updated = { ...weekSlots };
@@ -172,211 +111,163 @@ export default function Timetable() {
 
       if (merged.length > 0) mergedWeek[day] = merged;
     });
-    syncSubjectsFromTimetable(mergedWeek);
+
+    localStorage.setItem("planly_savedWeek", JSON.stringify(mergedWeek));
+    localStorage.setItem("planly_weekSlots", JSON.stringify(weekSlots));
+
     setSavedWeek(mergedWeek);
     setEditing(false);
   };
 
-  const editTimetable = () => {
-    const rebuilt = DAYS.reduce((acc, day) => {
-      acc[day] = generateSlots();
-      return acc;
-    }, {});
-
-    Object.entries(savedWeek).forEach(([day, classes]) => {
-      classes.forEach((cls) => {
-        for (let h = cls.start; h < cls.end; h++) {
-          rebuilt[day][h - START_HOUR].subject = cls.subject;
-          rebuilt[day][h - START_HOUR].venue = cls.venue;
-        }
-      });
-    });
-
-    setWeekSlots(rebuilt);
-    setEditing(true);
-  };
   const resetTimetable = () => {
-  const confirmReset = window.confirm(
-    "This will erase your entire timetable. This action cannot be undone."
-  );
+    if (!window.confirm("Reset entire timetable?")) return;
 
-  if (!confirmReset) return;
+    localStorage.removeItem("planly_savedWeek");
+    localStorage.removeItem("planly_weekSlots");
 
-  // Clear localStorage
-  localStorage.removeItem("planly_savedWeek");
-  localStorage.removeItem("planly_weekSlots");
-
-  // Reset state
-  const freshSlots = DAYS.reduce((acc, day) => {
-    acc[day] = generateSlots();
-    return acc;
-  }, {});
-
-  setSavedWeek({});
-  setWeekSlots(freshSlots);
-  setEditing(false);
-  setActiveDay(getTodayDay());
-};
-
+    setSavedWeek({});
+    setWeekSlots(
+      DAYS.reduce((acc, day) => {
+        acc[day] = generateSlots();
+        return acc;
+      }, {})
+    );
+    setEditing(false);
+    setActiveDay(getTodayDay());
+  };
 
   const hasAnyTimetable = Object.keys(savedWeek).length > 0;
 
-  // EMPTY STATE
-  if (!hasAnyTimetable && !editing) {
-    return (
-      <div>
-      <header className="top-bar">
-      <h2 style={{
-      fontFamily: "Jura, sans-serif",
-      fontSize: "22px",
-      fontWeight: "600",
-      color: "#000",
-      margin: 0,
-    }}>Planner</h2>
-      </header>
-      <div className="tt-container">
-        <p className="tt-empty-text">Your timetable is empty.</p>
-        <button className="tt-primary-btn" onClick={() => setEditing(true)}>
-          Add Timetable
-        </button>
-      </div>
-      </div>
-    );
-  }
-
   return (
-    <div>
+    <div className="timetable-page">
+      {/* TOP BAR */}
       <header className="top-bar">
-      <h2 style={{
-      fontFamily: "Jura, sans-serif",
-      fontSize: "22px",
-      fontWeight: "600",
-      color: "#000",
-      margin: 0,
-    }}>Planner</h2>
+        <h2>Planner</h2>
       </header>
-    <div className="tt-container">
-      {/* DAY TABS */}
-      <div className="tt-days">
-        {DAYS.map((day) => (
-          <button
-            key={day}
-            className={`tt-day-btn ${
-              activeDay === day ? "active" : ""
-            }`}
-            onClick={() => setActiveDay(day)}
-          >
-            {day}
-          </button>
-        ))}
-      </div>
-      </div>
 
-      {/* VIEW MODE */}
-      {!editing && (
-        <><div>
-      <header className="top-bar">
-      <h2 style={{
-      fontFamily: "Jura, sans-serif",
-      fontSize: "22px",
-      fontWeight: "600",
-      color: "#000",
-      margin: 0,
-    }}>Planner</h2>
-      </header>
-          <div className="tt-header">
-  <button className="tt-secondary-btn" onClick={editTimetable}>
-    Edit
-  </button>
-
-  <button
-    className="tt-danger-btn"
-    onClick={resetTimetable}
-  >
-    Reset
-  </button>
-</div>
-
-
-          {(savedWeek[activeDay] || []).map((cls, idx) => (
-  <div
-    key={idx}
-    className={`tt-class-card ${
-      getClassStatus(
-        cls.start,
-        cls.end,
-        activeDay === getTodayDay()
-      )
-    }`}
-  >
-    <h3>{cls.subject}</h3>
-    <p>
-      {formatTime(cls.start)} – {formatTime(cls.end)}
-    </p>
-    {cls.venue && <span>{cls.venue}</span>}
-  </div>
-))}
-
-
-          {!savedWeek[activeDay] && (
-            <p className="tt-empty-text">No classes scheduled.</p>
-          )}
+      {/* SCROLL AREA */}
+      <div className="tt-scroll">
+        {/* EMPTY STATE */}
+        {!hasAnyTimetable && !editing && (
+          <div className="tt-container">
+            <p className="tt-empty-text">Your timetable is empty.</p>
+            <button
+              className="tt-primary-btn"
+              onClick={() => setEditing(true)}
+            >
+              Add Timetable
+            </button>
           </div>
-        </>
-      )}
+        )}
 
-      {/* EDIT MODE */}
-      {editing && (
-        <><div>
-      <header className="top-bar">
-      <h2 style={{
-      fontFamily: "Jura, sans-serif",
-      fontSize: "22px",
-      fontWeight: "600",
-      color: "#000",
-      margin: 0,
-    }}>Planner</h2>
-      </header>
-         <div className="top-section">
-          <h2  style={{color: "#000",}}>Edit {activeDay}</h2>
-          <button className="tt-primary-btn" onClick={saveTimetable}>
-            Save Timetable
-          </button>
-          </div>
+        {hasAnyTimetable && (
+          <>
+            {/* DAY TABS */}
+            <div className="tt-days">
+              {DAYS.map((day) => (
+                <button
+                  key={day}
+                  className={`tt-day-btn ${
+                    activeDay === day ? "active" : ""
+                  }`}
+                  onClick={() => setActiveDay(day)}
+                >
+                  {day}
+                </button>
+              ))}
+            </div>
 
-          <div className="tt-slot-grid">
-            {weekSlots[activeDay]?.map((slot, index) => (
-              <div className="tt-slot-card" key={index}>
-                <div className="tt-time">
-                  {formatTime(slot.start)} – {formatTime(slot.end)}
+            {/* VIEW MODE */}
+            {!editing && (
+              <>
+                <div className="tt-header">
+                  <button
+                    className="tt-danger-btn"
+                    onClick={resetTimetable}
+                  >
+                    Reset
+                  </button>
+                  <button
+                    className="tt-secondary-btn"
+                    onClick={() => setEditing(true)}
+                  >
+                    Edit
+                  </button>
                 </div>
 
-                <input
-                  type="text"
-                  placeholder="Subject"
-                  value={slot.subject}
-                  onChange={(e) =>
-                    handleChange(activeDay, index, "subject", e.target.value)
-                  }
-                />
+                {(savedWeek[activeDay] || []).map((cls, idx) => (
+                  <div
+                    key={idx}
+                    className={`tt-class-card ${getClassStatus(
+                      cls.start,
+                      cls.end,
+                      activeDay === getTodayDay()
+                    )}`}
+                  >
+                    <h3>{cls.subject}</h3>
+                    <p>
+                      {formatTime(cls.start)} – {formatTime(cls.end)}
+                    </p>
+                    {cls.venue && <span>{cls.venue}</span>}
+                  </div>
+                ))}
+              </>
+            )}
 
-                <input
-                  type="text"
-                  placeholder="Venue / Prof (optional)"
-                  value={slot.venue}
-                  onChange={(e) =>
-                    handleChange(activeDay, index, "venue", e.target.value)
-                  }
-                />
-              </div>
-            ))}
-          </div>
-          </div>
+            {/* EDIT MODE */}
+            {editing && (
+              <>
+                <div className="top-section">
+                  <h2>Edit {activeDay}</h2>
+                  <button
+                    className="tt-primary-btn"
+                    onClick={saveTimetable}
+                  >
+                    Save Timetable
+                  </button>
+                </div>
 
-          
-        </>
-      )}
-    
+                <div className="tt-slot-grid">
+                  {weekSlots[activeDay]?.map((slot, index) => (
+                    <div className="tt-slot-card" key={index}>
+                      <div className="tt-time">
+                        {formatTime(slot.start)} –{" "}
+                        {formatTime(slot.end)}
+                      </div>
+
+                      <input
+                        placeholder="Subject"
+                        value={slot.subject}
+                        onChange={(e) =>
+                          handleChange(
+                            activeDay,
+                            index,
+                            "subject",
+                            e.target.value
+                          )
+                        }
+                      />
+
+                      <input
+                        placeholder="Venue / Prof"
+                        value={slot.venue}
+                        onChange={(e) =>
+                          handleChange(
+                            activeDay,
+                            index,
+                            "venue",
+                            e.target.value
+                          )
+                        }
+                      />
+                    </div>
+                  ))}
+                </div>
+              </>
+            )}
+          </>
+        )}
+      </div>
     </div>
   );
 }
