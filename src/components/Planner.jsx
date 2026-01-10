@@ -278,16 +278,14 @@ function inferOrdinalDate(text) {
 
   const normalizedText = normalizeMonths(text);
 
-  // captures: 12th January 2025 | 12 January | 12th jan 2025
   const match = normalizedText.match(
-    /\b(\d{1,2})(st|nd|rd|th)?\s+(january|february|march|april|may|june|july|august|september|october|november|december)(?:\s+(\d{4}))?\b/i
+    /\b(\d{1,2})(st|nd|rd|th)?\s+(january|february|march|april|may|june|july|august|september|october|november|december)\b/i
   );
 
   if (!match) return null;
 
   const day = parseInt(match[1], 10);
   const monthName = match[3].toLowerCase();
-  const explicitYear = match[4] ? parseInt(match[4], 10) : null;
 
   const monthIndex = [
     "january","february","march","april","may","june",
@@ -295,24 +293,31 @@ function inferOrdinalDate(text) {
   ].indexOf(monthName);
 
   const now = new Date();
-
-  // 🧠 CASE 1: User explicitly wrote year → TRUST IT
-  if (explicitYear) {
-    return toLocalMidnightTimestamp(
-      new Date(explicitYear, monthIndex, day)
-    );
-  }
-
-  // 🧠 CASE 2: No year → infer smartly
   let year = now.getFullYear();
-  const candidate = new Date(year, monthIndex, day);
 
+  // if date already passed → assume next year
+  const candidate = new Date(year, monthIndex, day);
   if (candidate < now) year += 1;
 
   return toLocalMidnightTimestamp(
     new Date(year, monthIndex, day)
   );
 }
+function formatDateWithDay(timestamp) {
+  if (!timestamp) return "";
+
+  const date = new Date(timestamp);
+  return date.toLocaleDateString("en-US", {
+    weekday: "long",
+    day: "numeric",
+    month: "short",
+  });
+
+}
+
+
+
+
   return (
     <div className="planner-page">
 
