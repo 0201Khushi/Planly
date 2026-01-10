@@ -1,7 +1,6 @@
 import { useEffect, useState } from "react";
 import "./Home.css";
 
-/* ------------------ CONSTANTS ------------------ */
 const PLANNER_KEY = "planly_planner_data";
 const ATTENDANCE_KEY = "planly_attendance";
 const TIMETABLE_KEY = "planly_savedWeek";
@@ -15,7 +14,6 @@ const QUOTES = [
   "You are exactly where your habits placed you.",
 ];
 
-/* ------------------ HELPERS ------------------ */
 const todayMidnight = (() => {
   const d = new Date();
   d.setHours(0, 0, 0, 0);
@@ -31,14 +29,11 @@ const getGreeting = () => {
   return "Good evening";
 };
 
-const getTodayDay = () => {
-  return ["Sun","Mon","Tue","Wed","Thu","Fri","Sat"][new Date().getDay()];
-};
+const getTodayDay = () =>
+  ["Sun","Mon","Tue","Wed","Thu","Fri","Sat"][new Date().getDay()];
 
-/* ------------------ COMPONENT ------------------ */
 export default function Home() {
   const [quote, setQuote] = useState("");
-
   const [todayClasses, setTodayClasses] = useState([]);
   const [todayDeadlines, setTodayDeadlines] = useState([]);
   const [tomorrowDeadlines, setTomorrowDeadlines] = useState([]);
@@ -47,7 +42,6 @@ export default function Home() {
   useEffect(() => {
     setQuote(QUOTES[Math.floor(Math.random() * QUOTES.length)]);
 
-    /* ---------- LOAD DATA ---------- */
     const planner =
       JSON.parse(localStorage.getItem(PLANNER_KEY)) || [];
     const attendance =
@@ -55,107 +49,101 @@ export default function Home() {
     const timetable =
       JSON.parse(localStorage.getItem(TIMETABLE_KEY)) || {};
 
-    /* ---------- DEADLINES ---------- */
-    const todayD = planner.filter(
-      t => t.date >= todayMidnight && t.date < tomorrowMidnight
+    setTodayDeadlines(
+      planner.filter(
+        t => t.date >= todayMidnight && t.date < tomorrowMidnight
+      )
     );
 
-    const tomorrowD = planner.filter(
-      t =>
-        t.date >= tomorrowMidnight &&
-        t.date < tomorrowMidnight + 86400000
+    setTomorrowDeadlines(
+      planner.filter(
+        t =>
+          t.date >= tomorrowMidnight &&
+          t.date < tomorrowMidnight + 86400000
+      )
     );
 
-    setTodayDeadlines(todayD);
-    setTomorrowDeadlines(tomorrowD);
-
-    /* ---------- TODAY CLASSES ---------- */
-    const day = getTodayDay();
-    const classes = timetable[day] || [];
+    const classes = timetable[getTodayDay()] || [];
     setTodayClasses(classes);
 
-    /* ---------- MUST ATTEND LOGIC ---------- */
-    const must = classes.filter(cls => {
-      const record = attendance[cls.subject];
-      if (!record || record.total === 0) return true;
-
-      const currentPct =
-        (record.attended / record.total) * 100;
-
-      const pctIfAbsent =
-        (record.attended / (record.total + 1)) * 100;
-
-      return (
-        currentPct < TARGET_ATTENDANCE ||
-        pctIfAbsent < TARGET_ATTENDANCE
-      );
-    });
-
-    setMustAttend(must);
+    setMustAttend(
+      classes.filter(cls => {
+        const r = attendance[cls.subject];
+        if (!r || r.total === 0) return true;
+        const pct = (r.attended / r.total) * 100;
+        const pctIfAbsent =
+          (r.attended / (r.total + 1)) * 100;
+        return pct < TARGET_ATTENDANCE || pctIfAbsent < TARGET_ATTENDANCE;
+      })
+    );
   }, []);
 
   return (
-    <div className="home-page">
+    <div className="home">
 
-      {/* Greeting */}
-      <h1 className="greeting">
-        {getGreeting()}, Khushi
-      </h1>
+      {/* HEADER */}
+      <section className="hero">
+        <h1>{getGreeting()}, Khushi</h1>
+        <p className="quote">“{quote}”</p>
+      </section>
 
-      {/* Quote */}
-      <p className="quote">“{quote}”</p>
-
-      {/* Today Classes */}
-      <div className="home-card">
-        <h3>📚 Today’s Classes</h3>
-        <p>
-          Total classes scheduled:{" "}
-          <strong>{todayClasses.length}</strong>
-        </p>
-      </div>
-
-      {/* Deadlines */}
-      <div className="home-card">
-        <h3>⏰ Deadlines & Events</h3>
-
-        <div className="deadline-block">
-          <h4>Today</h4>
-          {todayDeadlines.length ? (
-            todayDeadlines.map(t => (
-              <li key={t.id}>{t.title}</li>
-            ))
-          ) : (
-            <p className="muted">No deadlines today</p>
-          )}
+      {/* TODAY OVERVIEW */}
+      <section className="grid">
+        <div className="card stat">
+          <h3>Today’s Classes</h3>
+          <p className="big">{todayClasses.length}</p>
         </div>
 
-        <div className="deadline-block">
-          <h4>Tomorrow</h4>
-          {tomorrowDeadlines.length ? (
-            tomorrowDeadlines.map(t => (
-              <li key={t.id}>{t.title}</li>
-            ))
-          ) : (
-            <p className="muted">No deadlines tomorrow</p>
-          )}
+        <div className="card stat">
+          <h3>Deadlines Today</h3>
+          <p className="big">{todayDeadlines.length}</p>
         </div>
-      </div>
+      </section>
 
-      {/* Must Attend */}
-      <div className="home-card danger">
-        <h3>⚠️ Classes You MUST Attend Today</h3>
+      {/* DEADLINES */}
+      <section className="card">
+        <h3>Deadlines & Events</h3>
+
+        <div className="two-col">
+          <div>
+            <span className="label">Today</span>
+            {todayDeadlines.length ? (
+              todayDeadlines.map(t => (
+                <p key={t.id} className="item">{t.title}</p>
+              ))
+            ) : (
+              <p className="muted">Nothing due today</p>
+            )}
+          </div>
+
+          <div>
+            <span className="label">Tomorrow</span>
+            {tomorrowDeadlines.length ? (
+              tomorrowDeadlines.map(t => (
+                <p key={t.id} className="item">{t.title}</p>
+              ))
+            ) : (
+              <p className="muted">No deadlines tomorrow</p>
+            )}
+          </div>
+        </div>
+      </section>
+
+      {/* MUST ATTEND */}
+      <section className="card danger">
+        <h3>Must-Attend Classes</h3>
 
         {mustAttend.length ? (
           mustAttend.map((cls, i) => (
-            <div key={i} className="must-attend-row">
+            <div key={i} className="risk-row">
               <span>{cls.subject}</span>
-              <span className="badge">Critical</span>
+              <span className="pill">Critical</span>
             </div>
           ))
         ) : (
-          <p className="muted">No attendance risk today 🎉</p>
+          <p className="muted">Attendance is safe today 🎉</p>
         )}
-      </div>
+      </section>
 
     </div>
   );
