@@ -244,12 +244,41 @@ function toLocalMidnightTimestamp(date) {
     date.getDate()
   ).getTime();
 }
+// normalize short months → full months
+function normalizeMonths(text) {
+  const MONTH_MAP = {
+    jan: "january",
+    feb: "february",
+    mar: "march",
+    apr: "april",
+    jun: "june",
+    jul: "july",
+    aug: "august",
+    sep: "september",
+    sept: "september",
+    oct: "october",
+    nov: "november",
+    dec: "december",
+  };
+
+  let normalized = text.toLowerCase();
+
+  Object.keys(MONTH_MAP).forEach((short) => {
+    const regex = new RegExp(`\\b${short}\\b`, "gi");
+    normalized = normalized.replace(regex, MONTH_MAP[short]);
+  });
+
+  return normalized;
+}
+
 
 // infer ordinal dates like "3rd December"
 function inferOrdinalDate(text) {
   if (!text) return null;
 
-  const match = text.match(
+  const normalizedText = normalizeMonths(text);
+
+  const match = normalizedText.match(
     /\b(\d{1,2})(st|nd|rd|th)?\s+(january|february|march|april|may|june|july|august|september|october|november|december)\b/i
   );
 
@@ -313,7 +342,7 @@ function formatDateWithDay(timestamp) {
 
    <textarea
     className="paste-input"
-    placeholder="Paste messages in Hindi, English, or Hinglish"
+    placeholder="Paste or Type messages in English"
     value={input}
     onChange={(e) => setInput(e.target.value)}
    />
