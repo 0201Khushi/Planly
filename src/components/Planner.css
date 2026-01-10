@@ -338,4 +338,26 @@
   margin-top:12px
 
 }
+/* =========================
+   PAST EVENTS (GREYED)
+   ========================= */
+
+.past-event {
+  opacity: 0.55;
+  filter: grayscale(0.6);
+}
+
+.past-event .event-title,
+.past-event .event-date,
+.past-event .event-time,
+.past-event .event-venue,
+.past-event .event-notes,
+.past-event .event-type {
+  color: #9ca3af !important;
+}
+
+.past-event {
+  border-left-color: #d1d5db !important;
+}
+
 
