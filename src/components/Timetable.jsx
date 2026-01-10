@@ -195,6 +195,29 @@ export default function Timetable() {
     setWeekSlots(rebuilt);
     setEditing(true);
   };
+  const resetTimetable = () => {
+  const confirmReset = window.confirm(
+    "This will erase your entire timetable. This action cannot be undone."
+  );
+
+  if (!confirmReset) return;
+
+  // Clear localStorage
+  localStorage.removeItem("planly_savedWeek");
+  localStorage.removeItem("planly_weekSlots");
+
+  // Reset state
+  const freshSlots = DAYS.reduce((acc, day) => {
+    acc[day] = generateSlots();
+    return acc;
+  }, {});
+
+  setSavedWeek({});
+  setWeekSlots(freshSlots);
+  setEditing(false);
+  setActiveDay(getTodayDay());
+};
+
 
   const hasAnyTimetable = Object.keys(savedWeek).length > 0;
 
@@ -262,10 +285,18 @@ export default function Timetable() {
     }}>Planner</h2>
       </header>
           <div className="tt-header">
-            <button className="tt-secondary-btn" onClick={editTimetable}>
-              Edit
-            </button>
-          </div>
+  <button className="tt-secondary-btn" onClick={editTimetable}>
+    Edit
+  </button>
+
+  <button
+    className="tt-danger-btn"
+    onClick={resetTimetable}
+  >
+    Reset
+  </button>
+</div>
+
 
           {(savedWeek[activeDay] || []).map((cls, idx) => (
   <div
