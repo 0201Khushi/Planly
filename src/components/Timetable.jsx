@@ -232,7 +232,7 @@ export default function Timetable() {
           <>
             <div className="top-section">
               <h2 style={{
-      fontSize: "16px",
+      fontSize: "22px",
       color: "#000",
       
     }}>Edit {activeDay}</h2>
