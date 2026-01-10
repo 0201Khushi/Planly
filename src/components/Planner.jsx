@@ -353,123 +353,151 @@ function formatDateWithDay(timestamp) {
       {/* Sample Card */}
 
       {visibleTasks.map((task) => {
-       const isPast = task.date && task.date < todayMidnight;
-  <div className={`event-card ${(task.category || "events").trim().toLowerCase()}`} key={task.id}>
-    <div className="event-header-row">
-    <div className="event-type">
-      {task.category?.toUpperCase() || "EVENT"}
-    </div>
-    <div className="action-icons">
-    <button
-    className="edit-btn"
-    onClick={() => startEdit(task)}
-  >✏️
-  </button>
-    <button
-    className="delete-btn"
-    onClick={() => handleDelete(task.id)}
-  >🗑️
-  </button>
-  </div>
-</div>
+  const isPast = task.date && task.date < todayMidnight;
 
-    {editingId === task.id ? (
-  <div className="edit-card">
-
-    {/* EVENT TYPE */}
-    <select
-      value={editTask.category || "Events"}
-      onChange={(e) =>
-        setEditTask(prev => ({ ...prev, category: e.target.value }))
-      }
+  return (
+    <div
+      key={task.id}
+      className={`event-card ${(task.category || "events")
+        .trim()
+        .toLowerCase()} ${isPast ? "past-event" : ""}`}
     >
-      <option value="Events">Events</option>
-      <option value="Academic">Academic</option>
-      <option value="Exams">Exams</option>
-      <option value="Clubs">Clubs</option>
-    </select>
+      <div className="event-header-row">
+        <div className="event-type">
+          {task.category?.toUpperCase() || "EVENT"}
+        </div>
+        <div className="action-icons">
+          <button
+            className="edit-btn"
+            onClick={() => startEdit(task)}
+          >
+            ✏️
+          </button>
+          <button
+            className="delete-btn"
+            onClick={() => handleDelete(task.id)}
+          >
+            🗑️
+          </button>
+        </div>
+      </div>
 
-    {/* TITLE */}
-    <input
-      value={editTask.title || ""}
-      onChange={(e) =>
-        setEditTask(prev => ({ ...prev, title: e.target.value }))
-      }
-      placeholder="Event title"
-      autoFocus
-    />
+      {editingId === task.id ? (
+        <div className="edit-card">
+          <select
+            value={editTask.category || "Events"}
+            onChange={(e) =>
+              setEditTask((prev) => ({
+                ...prev,
+                category: e.target.value,
+              }))
+            }
+          >
+            <option value="Events">Events</option>
+            <option value="Academic">Academic</option>
+            <option value="Exams">Exams</option>
+            <option value="Clubs">Clubs</option>
+          </select>
 
-    {/* DATE */}
-    <input
-  type="text"
-  placeholder="Date"
-  value={editTask.date || ""}
-  onFocus={(e) => (e.target.type = "date")}
-  onBlur={(e) => {
-    if (!e.target.value) e.target.type = "text";
-  }}
-  onChange={(e) => {
-  const value = e.target.value;
-  if (!value) {
-    setEditTask(prev => ({ ...prev, date: null }));
-  } else {
-    const [y, m, d] = value.split("-").map(Number);
-    const ts = new Date(y, m - 1, d).getTime();
-    setEditTask(prev => ({ ...prev, date: ts }));
-  }
-}}
+          <input
+            value={editTask.title || ""}
+            onChange={(e) =>
+              setEditTask((prev) => ({
+                ...prev,
+                title: e.target.value,
+              }))
+            }
+            placeholder="Event title"
+            autoFocus
+          />
 
-/>
+          <input
+            type="date"
+            value={
+              editTask.date
+                ? new Date(editTask.date)
+                    .toISOString()
+                    .slice(0, 10)
+                : ""
+            }
+            onChange={(e) => {
+              const [y, m, d] = e.target.value
+                .split("-")
+                .map(Number);
+              setEditTask((prev) => ({
+                ...prev,
+                date: new Date(y, m - 1, d).getTime(),
+              }));
+            }}
+          />
 
-    {/* TIME */}
-    <input
-  type="text"
-  placeholder="Time"
-  value={editTask.time || ""}
-  onFocus={(e) => (e.target.type = "time")}
-  onBlur={(e) => {
-    if (!e.target.value) e.target.type = "text";
-  }}
-  onChange={(e) =>
-    setEditTask(prev => ({ ...prev, time: e.target.value }))
-  }
-/>
+          <input
+            type="time"
+            value={editTask.time || ""}
+            onChange={(e) =>
+              setEditTask((prev) => ({
+                ...prev,
+                time: e.target.value,
+              }))
+            }
+          />
 
-    {/* VENUE */}
-    <input
-      value={editTask.venue || ""}
-      onChange={(e) =>
-        setEditTask(prev => ({ ...prev, venue: e.target.value }))
-      }
-      placeholder="Venue"
-    />
+          <input
+            value={editTask.venue || ""}
+            onChange={(e) =>
+              setEditTask((prev) => ({
+                ...prev,
+                venue: e.target.value,
+              }))
+            }
+            placeholder="Venue"
+          />
 
-    {/* NOTES */}
-    <textarea
-      value={editTask.notes || ""}
-      onChange={(e) =>
-        setEditTask(prev => ({ ...prev, notes: e.target.value }))
-      }
-      placeholder="Notes"
-    />
-    <div className="save-row">
-    <button className="save" onClick={() => saveEdit(task.id)}>Save</button>
+          <textarea
+            value={editTask.notes || ""}
+            onChange={(e) =>
+              setEditTask((prev) => ({
+                ...prev,
+                notes: e.target.value,
+              }))
+            }
+            placeholder="Notes"
+          />
+
+          <div className="save-row">
+            <button
+              className="save"
+              onClick={() => saveEdit(task.id)}
+            >
+              Save
+            </button>
+          </div>
+        </div>
+      ) : (
+        <>
+          <div className="event-title">{task.title}</div>
+
+          {task.date && (
+            <div className="event-date">
+              {formatDateWithDay(task.date)}
+            </div>
+          )}
+
+          {task.time && (
+            <div className="event-time">{task.time}</div>
+          )}
+
+          {task.venue && (
+            <div className="event-venue">{task.venue}</div>
+          )}
+
+          {task.notes && (
+            <div className="event-notes">{task.notes}</div>
+          )}
+        </>
+      )}
     </div>
-  </div>
-) : (
-  <>
-    <div className="event-title">{task.title}</div>
-    {task.date && (
-  <div className="event-date">
-    {formatDateWithDay(task.date)}
-  </div>
-)}
-    {task.time && <div className="event-time">{task.time}</div>}
-    {task.venue && <div className="event-venue">{task.venue}</div>}
-    {task.notes && <div className="event-notes">{task.notes}</div>}
-  </>
-)}
-  </div>
+  );
 })}
     </div>
     
