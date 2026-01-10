@@ -5,6 +5,8 @@ const DAYS = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"];
 const START_HOUR = 8;
 const END_HOUR = 18;
 
+/* ---------------- HELPERS ---------------- */
+
 const getTodayDay = () => {
   const todayIndex = new Date().getDay();
   const map = {
@@ -49,6 +51,8 @@ const formatTime = (hour) => {
   return `${h}:00 ${period}`;
 };
 
+/* ---------------- COMPONENT ---------------- */
+
 export default function Timetable() {
   const [activeDay, setActiveDay] = useState(getTodayDay());
   const [editing, setEditing] = useState(false);
@@ -62,6 +66,7 @@ export default function Timetable() {
 
   const [savedWeek, setSavedWeek] = useState({});
 
+  /* -------- LOAD FROM STORAGE -------- */
   useEffect(() => {
     const storedWeek = localStorage.getItem("planly_savedWeek");
     const storedSlots = localStorage.getItem("planly_weekSlots");
@@ -69,6 +74,8 @@ export default function Timetable() {
     if (storedWeek) setSavedWeek(JSON.parse(storedWeek));
     if (storedSlots) setWeekSlots(JSON.parse(storedSlots));
   }, []);
+
+  /* -------- HANDLERS -------- */
 
   const handleChange = (day, index, field, value) => {
     const updated = { ...weekSlots };
@@ -120,7 +127,7 @@ export default function Timetable() {
   };
 
   const resetTimetable = () => {
-    if (!window.confirm("Reset entire timetable?")) return;
+    if (!window.confirm("This will erase your entire timetable.")) return;
 
     localStorage.removeItem("planly_savedWeek");
     localStorage.removeItem("planly_weekSlots");
@@ -132,11 +139,14 @@ export default function Timetable() {
         return acc;
       }, {})
     );
+
     setEditing(false);
     setActiveDay(getTodayDay());
   };
 
   const hasAnyTimetable = Object.keys(savedWeek).length > 0;
+
+  /* ---------------- RENDER ---------------- */
 
   return (
     <div className="timetable-page">
@@ -147,6 +157,19 @@ export default function Timetable() {
 
       {/* SCROLL AREA */}
       <div className="tt-scroll">
+        {/* DAY TABS (always visible) */}
+        <div className="tt-days">
+          {DAYS.map((day) => (
+            <button
+              key={day}
+              className={`tt-day-btn ${activeDay === day ? "active" : ""}`}
+              onClick={() => setActiveDay(day)}
+            >
+              {day}
+            </button>
+          ))}
+        </div>
+
         {/* EMPTY STATE */}
         {!hasAnyTimetable && !editing && (
           <div className="tt-container">
@@ -160,111 +183,89 @@ export default function Timetable() {
           </div>
         )}
 
-        {hasAnyTimetable && (
+        {/* VIEW MODE */}
+        {hasAnyTimetable && !editing && (
           <>
-            {/* DAY TABS */}
-            <div className="tt-days">
-              {DAYS.map((day) => (
-                <button
-                  key={day}
-                  className={`tt-day-btn ${
-                    activeDay === day ? "active" : ""
-                  }`}
-                  onClick={() => setActiveDay(day)}
-                >
-                  {day}
-                </button>
-              ))}
+            <div className="tt-header">
+              <button className="tt-danger-btn" onClick={resetTimetable}>
+                Reset
+              </button>
+              <button
+                className="tt-secondary-btn"
+                onClick={() => setEditing(true)}
+              >
+                Edit
+              </button>
             </div>
 
-            {/* VIEW MODE */}
-            {!editing && (
-              <>
-                <div className="tt-header">
-                  <button
-                    className="tt-danger-btn"
-                    onClick={resetTimetable}
-                  >
-                    Reset
-                  </button>
-                  <button
-                    className="tt-secondary-btn"
-                    onClick={() => setEditing(true)}
-                  >
-                    Edit
-                  </button>
-                </div>
+            {(savedWeek[activeDay] || []).map((cls, idx) => (
+              <div
+                key={idx}
+                className={`tt-class-card ${getClassStatus(
+                  cls.start,
+                  cls.end,
+                  activeDay === getTodayDay()
+                )}`}
+              >
+                <h3>{cls.subject}</h3>
+                <p>
+                  {formatTime(cls.start)} – {formatTime(cls.end)}
+                </p>
+                {cls.venue && <span>{cls.venue}</span>}
+              </div>
+            ))}
 
-                {(savedWeek[activeDay] || []).map((cls, idx) => (
-                  <div
-                    key={idx}
-                    className={`tt-class-card ${getClassStatus(
-                      cls.start,
-                      cls.end,
-                      activeDay === getTodayDay()
-                    )}`}
-                  >
-                    <h3>{cls.subject}</h3>
-                    <p>
-                      {formatTime(cls.start)} – {formatTime(cls.end)}
-                    </p>
-                    {cls.venue && <span>{cls.venue}</span>}
+            {!savedWeek[activeDay] && (
+              <p className="tt-empty-text">No classes scheduled.</p>
+            )}
+          </>
+        )}
+
+        {/* EDIT MODE (ALWAYS RENDERS WHEN editing=true) */}
+        {editing && (
+          <>
+            <div className="top-section">
+              <h2>Edit {activeDay}</h2>
+              <button className="tt-primary-btn" onClick={saveTimetable}>
+                Save Timetable
+              </button>
+            </div>
+
+            <div className="tt-slot-grid">
+              {weekSlots[activeDay]?.map((slot, index) => (
+                <div className="tt-slot-card" key={index}>
+                  <div className="tt-time">
+                    {formatTime(slot.start)} – {formatTime(slot.end)}
                   </div>
-                ))}
-              </>
-            )}
 
-            {/* EDIT MODE */}
-            {editing && (
-              <>
-                <div className="top-section">
-                  <h2>Edit {activeDay}</h2>
-                  <button
-                    className="tt-primary-btn"
-                    onClick={saveTimetable}
-                  >
-                    Save Timetable
-                  </button>
+                  <input
+                    placeholder="Subject"
+                    value={slot.subject}
+                    onChange={(e) =>
+                      handleChange(
+                        activeDay,
+                        index,
+                        "subject",
+                        e.target.value
+                      )
+                    }
+                  />
+
+                  <input
+                    placeholder="Venue / Prof (optional)"
+                    value={slot.venue}
+                    onChange={(e) =>
+                      handleChange(
+                        activeDay,
+                        index,
+                        "venue",
+                        e.target.value
+                      )
+                    }
+                  />
                 </div>
-
-                <div className="tt-slot-grid">
-                  {weekSlots[activeDay]?.map((slot, index) => (
-                    <div className="tt-slot-card" key={index}>
-                      <div className="tt-time">
-                        {formatTime(slot.start)} –{" "}
-                        {formatTime(slot.end)}
-                      </div>
-
-                      <input
-                        placeholder="Subject"
-                        value={slot.subject}
-                        onChange={(e) =>
-                          handleChange(
-                            activeDay,
-                            index,
-                            "subject",
-                            e.target.value
-                          )
-                        }
-                      />
-
-                      <input
-                        placeholder="Venue / Prof"
-                        value={slot.venue}
-                        onChange={(e) =>
-                          handleChange(
-                            activeDay,
-                            index,
-                            "venue",
-                            e.target.value
-                          )
-                        }
-                      />
-                    </div>
-                  ))}
-                </div>
-              </>
-            )}
+              ))}
+            </div>
           </>
         )}
       </div>
