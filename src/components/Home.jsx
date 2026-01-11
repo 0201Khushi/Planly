@@ -99,7 +99,11 @@ export default function Home() {
 
         <div className="stat-card">
           <p className="stat-title">Deadlines Today</p>
-          <p className="stat-number">{todayDeadlines.length}</p>
+          <p className="stat-number" style={{
+      fontSize: "36px",
+      fontWeight: "600",
+      color: "#000",
+    }}>{todayDeadlines.length}</p>
         </div>
       </div>
 
