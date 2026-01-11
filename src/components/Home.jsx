@@ -150,7 +150,8 @@ export default function Home() {
             </div>
           ))
         ) : (
-          <p className="muted">Attendance is safe today 🎉</p>
+          <p className="muted">Attendance is within safe limits
+</p>
         )}
       </div>
 
