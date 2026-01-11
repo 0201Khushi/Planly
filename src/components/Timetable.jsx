@@ -214,7 +214,7 @@ export default function Timetable() {
                 )}`}
               >
                 <h3 style={{
-      fontWeight: "600",
+      fontWeight: "900",
        }} >{cls.subject}</h3>
                 <p>
                   {formatTime(cls.start)} – {formatTime(cls.end)}
