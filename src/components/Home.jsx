@@ -82,7 +82,7 @@ export default function Home() {
 
       {/* HEADER */}
       <div className="header">
-        <h1 className="greeting">{getGreeting()}</h1>
+        <p className="greeting">{getGreeting()}</p>
         <p className="quote">“{quote}”</p>
       </div>
 
