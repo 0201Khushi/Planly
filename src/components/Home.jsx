@@ -32,7 +32,7 @@ const getTodayDay = () =>
   ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"][new Date().getDay()];
 
 export default function Home() {
-  const [quote, setQuote] = useState("");
+  const [quote, setQuote] = useState();
   const [todayClasses, setTodayClasses] = useState([]);
   const [todayDeadlines, setTodayDeadlines] = useState([]);
   const [tomorrowDeadlines, setTomorrowDeadlines] = useState([]);
@@ -110,7 +110,7 @@ export default function Home() {
             <p className="label">Today</p>
             {todayDeadlines.length ? (
               todayDeadlines.map(t => (
-                <p key={t.id} className="item">• {t.title}</p>
+                <p key={t.id} className="item">{t.title}</p>
               ))
             ) : (
               <p className="muted">Nothing due</p>
