@@ -57,12 +57,12 @@ function App() {
          </div>
 
         <div className={`nav-item ${activeTab === "planner" ? "active" : ""}`} onClick={() => setActiveTab("planner")}>
-         <MdAccessTime size={20} />
+          <MdEventNote size={20} />
          <p>Planner</p>
         </div>
 
         <div className={`nav-item ${activeTab === "timetable" ? "active" : ""}`} onClick={() => setActiveTab("timetable")}>
-         <span>📅</span>
+         <MdAccessTime size={20} />
          <p>Timetable</p>
          </div>
        </footer>
