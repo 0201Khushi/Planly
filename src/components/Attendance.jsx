@@ -1,5 +1,7 @@
 import { useEffect, useState } from "react";
 import "./Attendance.css";
+import { FiEdit, FiTrash2 } from "react-icons/fi";
+
 const normalize = (s) => s.trim().toLowerCase();
 
 const SUBJECTS_KEY = "planly_subjects";

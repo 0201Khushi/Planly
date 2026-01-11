@@ -2,6 +2,7 @@ import "./Planner.css";
 import { BsChatDots } from "react-icons/bs";
 import { useState,useEffect} from "react";
 import { classifyCategory } from "../utils/classifyCategory";
+import { FiEdit, FiTrash2 } from "react-icons/fi";
 
 
 const PLANNER_KEY = "planly_planner_data";
@@ -400,13 +401,13 @@ function formatDateWithDay(timestamp) {
             className="edit-btn"
             onClick={() => startEdit(task)}
           >
-            ✏️
+             <FiEdit size={16} />
           </button>
           <button
             className="delete-btn"
             onClick={() => handleDelete(task.id)}
           >
-            🗑️
+          <FiTrash2 size={16} />
           </button>
         </div>
       </div>
