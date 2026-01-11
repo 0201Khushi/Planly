@@ -213,7 +213,9 @@ export default function Timetable() {
                   activeDay === getTodayDay()
                 )}`}
               >
-                <h3>{cls.subject}</h3>
+                <h3 style={{
+      fontWeight: "600",
+       }} >{cls.subject}</h3>
                 <p>
                   {formatTime(cls.start)} – {formatTime(cls.end)}
                 </p>
