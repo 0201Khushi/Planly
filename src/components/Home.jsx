@@ -139,9 +139,7 @@ export default function Home() {
       {/* MUST ATTEND */}
       <div className="card danger">
         <p className="must">Must-Attend Classes</p>
-        <p className="subtext">
-          These sessions are required to maintain your 75% threshold.
-        </p>
+        
 
         {mustAttend.length ? (
           mustAttend.map((cls, i) => (
