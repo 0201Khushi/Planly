@@ -76,6 +76,8 @@ export default function Home() {
       })
     );
   }, []);
+  const attendanceState =
+  mustAttend.length === 0 ? "confirmation" : "critical";
 
   return (
     <div className="home">
@@ -135,7 +137,7 @@ export default function Home() {
       </div>
 
       {/* MUST ATTEND */}
-      <div className="card danger">
+      <div className={`card ${attendanceState}`}>
         <p className="must">Must-Attend Classes</p>
         
 
@@ -152,7 +154,7 @@ export default function Home() {
             </div>
           ))
         ) : (
-          <p className="muted">Attendance is within safe limits
+          <p className="muted">Attendance is currently within safe limits
 </p>
         )}
       </div>

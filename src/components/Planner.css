@@ -361,3 +361,9 @@
 .past-event {
   border-left-color: #d1d5db !important;
 }
+.card.confirmation {
+  border-left: 3px solid #FDE68A; /* soft amber */
+}
+.card.critical {
+  border-left: 4px solid #F59E0B; /* strong amber */
+}
