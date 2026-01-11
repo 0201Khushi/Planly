@@ -367,3 +367,15 @@
 .card.critical {
   border-left: 4px solid #F59E0B; /* strong amber */
 }
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.field-label {
+  font-size: 12px;
+  font-weight: 600;
+  color: #6b7280;
+}
+

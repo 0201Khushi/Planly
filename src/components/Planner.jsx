@@ -441,36 +441,38 @@ function formatDateWithDay(timestamp) {
             autoFocus
           />
 
-          <input
-            type="date"
-            value={
-              editTask.date
-                ? new Date(editTask.date)
-                    .toISOString()
-                    .slice(0, 10)
-                : ""
-            }
-            onChange={(e) => {
-              const [y, m, d] = e.target.value
-                .split("-")
-                .map(Number);
-              setEditTask((prev) => ({
-                ...prev,
-                date: new Date(y, m - 1, d).getTime(),
-              }));
-            }}
-          />
+          <div className="field">
+  <label className="field-label">Date</label>
+  <input
+    type="date"
+    value={
+      editTask.date
+        ? new Date(editTask.date).toISOString().slice(0, 10)
+        : ""
+    }
+    onChange={(e) => {
+      const [y, m, d] = e.target.value.split("-").map(Number);
+      setEditTask((prev) => ({
+        ...prev,
+        date: new Date(y, m - 1, d).getTime(),
+      }));
+    }}
+  />
+</div>
 
-          <input
-            type="time"
-            value={editTask.time || ""}
-            onChange={(e) =>
-              setEditTask((prev) => ({
-                ...prev,
-                time: e.target.value,
-              }))
-            }
-          />
+<div className="field">
+  <label className="field-label">Time</label>
+  <input
+    type="time"
+    value={editTask.time || ""}
+    onChange={(e) =>
+      setEditTask((prev) => ({
+        ...prev,
+        time: e.target.value,
+      }))
+    }
+  />
+</div>
 
           <input
             value={editTask.venue || ""}
