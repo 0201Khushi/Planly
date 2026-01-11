@@ -90,7 +90,11 @@ export default function Home() {
       <div className="stats-row">
         <div className="stat-card">
           <p className="stat-title">Today’s Classes</p>
-          <p className="stat-number">{todayClasses.length}</p>
+          <p className="stat-number" style={{
+      fontSize: "36px",
+      fontWeight: "600",
+      color: "#000",
+    }}>{todayClasses.length}</p>
         </div>
 
         <div className="stat-card">
