@@ -5,7 +5,8 @@ import Home from "./components/Home";
 import Attendance from "./components/Attendance";
 import Planner from "./components/Planner";
 import Timetable from "./components/Timetable";
-
+import { MdHome, MdEventNote, MdAccessTime, MdChecklist } from "react-icons/md";
+import { FiEdit, FiTrash2 } from "react-icons/fi";
 function App() {
   const [activeTab, setActiveTab] = useState("home");
    
@@ -43,7 +44,7 @@ function App() {
           className={`nav-item ${activeTab === "home" ? "active" : ""}`}
           onClick={() => setActiveTab("home")}
          >
-          <span>🏠</span>
+          <MdHome size={20} />
           <p>Home</p>
          </div>
 
@@ -51,12 +52,12 @@ function App() {
           className={`nav-item ${activeTab === "attendance" ? "active" : ""}`}
           onClick={() => setActiveTab("attendance")}
          >
-          <span>✔️</span>
+          <MdChecklist size={20} />
           <p>Attendance</p>
          </div>
 
         <div className={`nav-item ${activeTab === "planner" ? "active" : ""}`} onClick={() => setActiveTab("planner")}>
-         <span>📝</span>
+         <MdAccessTime size={20} />
          <p>Planner</p>
         </div>
 
