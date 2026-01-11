@@ -149,3 +149,8 @@
   line-height:1.5;
   letter-spacing:+0.04em;
 }
+.stat-card,.card,.card.danger{
+  border-radius:12px;
+  padding:18px;
+  background:#FFFFFF;
+}
