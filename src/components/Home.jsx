@@ -23,9 +23,9 @@ const tomorrowMidnight = todayMidnight + 86400000;
 
 const getGreeting = () => {
   const h = new Date().getHours();
-  if (h < 12) return "Good morning";
-  if (h < 18) return "Good afternoon";
-  return "Good evening";
+  if (h < 12) return <h5>Good morning</h5>;
+  if (h < 18) return <h5>Good afternoon</h5>;
+  return <h5>Good evening</h5>;
 };
 
 const getTodayDay = () =>
