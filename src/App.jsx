@@ -29,8 +29,6 @@ function App() {
         {activeTab === "home" && (
         <header className="top-bar">
           <img src={logo} alt="Planly" className="logo" />
-          {/* Settings icon */}
-          <FiSettings className="settings-icon" />
         </header>)}
 
         {/* MAIN CONTENT */}
