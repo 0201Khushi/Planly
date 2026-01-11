@@ -91,13 +91,11 @@ export default function Home() {
         <div className="stat-card">
           <p className="stat-title">Today’s Classes</p>
           <p className="stat-number">{todayClasses.length}</p>
-          <p className="stat-sub">Scheduled</p>
         </div>
 
         <div className="stat-card">
           <p className="stat-title">Deadlines Today</p>
           <p className="stat-number">{todayDeadlines.length}</p>
-          <p className="stat-sub">Pending</p>
         </div>
       </div>
 
