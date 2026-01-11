@@ -311,13 +311,13 @@ const ProgressRing = ({ percentage }) => {
       <div className="attendance-summary">
         <div>
           <p className="summary-percent" style={{
-            fontSize: "22px",
+            fontSize: "14px",
           }}>{totalAttendance}%</p>
           <p style={{
-            fontSize: "22px",
+            fontSize: "14px",
           }}>Target: {target}%</p>
           <p style={{
-            fontSize: "22px",
+            fontSize: "14px",
           }}>{todayDate}</p>
         </div>
 
