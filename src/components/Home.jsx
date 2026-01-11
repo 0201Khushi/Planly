@@ -92,7 +92,7 @@ export default function Home() {
           <p className="stat-title">Today’s Classes</p>
           <p className="stat-number" style={{
       fontSize: "36px",
-      fontWeight: "600",
+      fontWeight: "300",
       color: "#000",
     }}>{todayClasses.length}</p>
         </div>
@@ -101,7 +101,7 @@ export default function Home() {
           <p className="stat-title">Deadlines Today</p>
           <p className="stat-number" style={{
       fontSize: "36px",
-      fontWeight: "600",
+      fontWeight: "300",
       color: "#000",
     }}>{todayDeadlines.length}</p>
         </div>
