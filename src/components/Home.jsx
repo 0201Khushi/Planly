@@ -103,7 +103,7 @@ export default function Home() {
 
       {/* UPCOMING DEADLINES */}
       <div className="card">
-        <h3>Upcoming Deadlines</h3>
+        <p className="Upcoming">Upcoming Deadlines</p>
 
         <div className="two-col">
           <div>
@@ -132,7 +132,7 @@ export default function Home() {
 
       {/* MUST ATTEND */}
       <div className="card danger">
-        <h3>Must-Attend Classes</h3>
+        <p className="must">Must-Attend Classes</p>
         <p className="subtext">
           These sessions are required to maintain your 75% threshold.
         </p>
