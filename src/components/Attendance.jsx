@@ -315,7 +315,7 @@ const ProgressRing = ({ percentage }) => {
           }}>Total:{totalAttendance}%</p>
           <p style={{
             fontSize: "16px",
-          }}>Target: {target}%</p>
+          }}>Target:  {target}%</p>
           <p style={{
             fontSize: "16px",
           }}>{todayDate}</p>
