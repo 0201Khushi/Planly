@@ -459,7 +459,7 @@ const ProgressRing = ({ percentage }) => {
       className="modal-card"
       onClick={e => e.stopPropagation()}
     >
-      <h3>Edit Attendance</h3>
+      <h1>Edit Attendance</h1>
 
       <div className="field">
   <label className="text1">Classes Attended</label>
