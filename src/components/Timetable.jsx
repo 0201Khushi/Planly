@@ -82,6 +82,58 @@ export default function Timetable() {
     updated[day][index][field] = value;
     setWeekSlots(updated);
   };
+const syncSubjectsToAttendance = (weekSlots) => {
+  const SUBJECTS_KEY = "planly_subjects";
+  const ATTENDANCE_KEY = "planly_attendance";
+
+  // collect subjects from timetable
+  const timetableSubjects = new Set();
+
+  Object.values(weekSlots).forEach((daySlots) => {
+    daySlots.forEach((slot) => {
+      if (slot.subject?.trim()) {
+        timetableSubjects.add(slot.subject.trim());
+      }
+    });
+  });
+
+  if (timetableSubjects.size === 0) return;
+
+  // load existing attendance data
+  const existingSubjects =
+    JSON.parse(localStorage.getItem(SUBJECTS_KEY)) || [];
+
+  const attendance =
+    JSON.parse(localStorage.getItem(ATTENDANCE_KEY)) || {};
+
+  const normalizedExisting = existingSubjects.map((s) =>
+    s.trim().toLowerCase()
+  );
+
+  let changed = false;
+
+  timetableSubjects.forEach((subject) => {
+    const normalized = subject.toLowerCase();
+
+    if (!normalizedExisting.includes(normalized)) {
+      // add new subject
+      existingSubjects.push(subject);
+      attendance[subject] = { attended: 0, total: 0 };
+      changed = true;
+    }
+  });
+
+  if (changed) {
+    localStorage.setItem(
+      SUBJECTS_KEY,
+      JSON.stringify(existingSubjects)
+    );
+    localStorage.setItem(
+      ATTENDANCE_KEY,
+      JSON.stringify(attendance)
+    );
+  }
+};
 
   const saveTimetable = () => {
     const mergedWeek = {};
@@ -121,7 +173,7 @@ export default function Timetable() {
 
     localStorage.setItem("planly_savedWeek", JSON.stringify(mergedWeek));
     localStorage.setItem("planly_weekSlots", JSON.stringify(weekSlots));
-
+    syncSubjectsToAttendance(weekSlots);
     setSavedWeek(mergedWeek);
     setEditing(false);
   };
