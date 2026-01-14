@@ -248,7 +248,10 @@
   color: #ef4444;
 }
 .text1{
+  font-family:Inter;
   color:#111;
   font-size:6px;
+  font-weight:200;
+
 
 }
