@@ -19,6 +19,9 @@ const [loading, setLoading] = useState(true);
 const [editingId, setEditingId] = useState(null);
 const [editTask, setEditTask] = useState(null);
 const [timeFilter, setTimeFilter] = useState("All");
+const [recentlyDeleted, setRecentlyDeleted] = useState(null);
+const [undoTimeout, setUndoTimeout] = useState(null);
+
 const todayMidnight = (() => {
   const d = new Date();
   d.setHours(0, 0, 0, 0);
@@ -167,8 +170,35 @@ return {
   }
 }
 function handleDelete(id) {
-    setTasks((prev) => prev.filter((task) => task.id !== id));
-  }
+  const deletedTask = tasks.find((t) => t.id === id);
+  if (!deletedTask) return;
+
+  // remove immediately
+  setTasks((prev) => prev.filter((task) => task.id !== id));
+
+  // store deleted task for undo
+  setRecentlyDeleted(deletedTask);
+
+  // clear any previous timer
+  if (undoTimeout) clearTimeout(undoTimeout);
+
+  // auto-clear undo after 5 seconds
+  const timeout = setTimeout(() => {
+    setRecentlyDeleted(null);
+  }, 5000);
+
+  setUndoTimeout(timeout);
+}
+function handleUndo() {
+  if (!recentlyDeleted) return;
+
+  setTasks((prev) => [recentlyDeleted, ...prev]);
+  setRecentlyDeleted(null);
+
+  if (undoTimeout) clearTimeout(undoTimeout);
+}
+
+
  /* =========================
      EDIT TASK
      ========================= */
@@ -531,6 +561,13 @@ function formatDateWithDay(timestamp) {
     </div>
   );
 })}
+{recentlyDeleted && (
+  <div className="undo-bar">
+    <span>Event deleted</span>
+    <button onClick={handleUndo}>Undo</button>
+  </div>
+)}
+
     </div>
     
   );
