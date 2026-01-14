@@ -462,7 +462,8 @@ const ProgressRing = ({ percentage }) => {
       <h3>Edit Attendance</h3>
 
       <div className="field">
-  <label className="text1">Classes Attended</label>
+  <label className="text1" style={{
+            fontFamily: "Inter",}}>Classes Attended</label>
   <input
     type="number"
     value={editAttended}
