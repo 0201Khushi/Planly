@@ -175,16 +175,16 @@ export default function Home() {
 
   <div className="feedback-options">
     <button className="feedback-btn">
-      🐞 Report a Bug
+       Report a Bug
     </button>
 
     <button className="feedback-btn">
-      💡 Recommend a Feature
+       Recommend a Feature
     </button>
 
-    <button className="feedback-btn">
-       Contact Us
-    </button>
+    <p className="feedback-btn">
+       Contact Us :planly.team@gmail.com
+    </p>
   </div>
 </div>
 
