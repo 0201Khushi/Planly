@@ -345,6 +345,14 @@ function formatDateWithDay(timestamp) {
   });
 
 }
+function timestampToInputDate(ts) {
+  const d = new Date(ts);
+  const y = d.getFullYear();
+  const m = String(d.getMonth() + 1).padStart(2, "0");
+  const day = String(d.getDate()).padStart(2, "0");
+  return `${y}-${m}-${day}`;
+}
+
 
 
 
@@ -475,11 +483,7 @@ function formatDateWithDay(timestamp) {
   <label className="field-label">Date</label>
   <input
     type="date"
-    value={
-      editTask.date
-        ? new Date(editTask.date).toISOString().slice(0, 10)
-        : ""
-    }
+    value={editTask.date ? timestampToInputDate(editTask.date) : ""}
     onChange={(e) => {
       const [y, m, d] = e.target.value.split("-").map(Number);
       setEditTask((prev) => ({
