@@ -185,7 +185,7 @@ function handleDelete(id) {
   // auto-clear undo after 5 seconds
   const timeout = setTimeout(() => {
     setRecentlyDeleted(null);
-  }, 5000);
+  }, 3000);
 
   setUndoTimeout(timeout);
 }
