@@ -254,24 +254,26 @@
 }
 .undo-bar {
   position: fixed;
-  bottom: 16px;
+  bottom: 20px;
   left: 50%;
   transform: translateX(-50%);
   background: #111;
   color: #fff;
   padding: 10px 16px;
-  border-radius: 8px;
+  border-radius: 14px;
   display: flex;
-  gap: 12px;
   align-items: center;
-  z-index: 1000;
+  gap: 14px;
+  font-size: 14px;
+  box-shadow: 0 8px 20px rgba(0,0,0,0.25);
+  z-index: 2000;
 }
 
 .undo-bar button {
-  background: none;
+  background: transparent;
   border: none;
-  color: #4f6cff;
-  font-weight: 600;
+  color: #5b6cff;
+  font-weight: 700;
   cursor: pointer;
 }
 
