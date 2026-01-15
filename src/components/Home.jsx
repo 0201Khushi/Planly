@@ -185,13 +185,14 @@ export default function Home() {
   
 </p>
 </a>
-  <p className="feedback-btn">
-  <a
+    <a
     href="mailto:planly.team@gmail.com"
     className="feedback-link"
-  >Contact us
-  </a>
+  >
+  <p className="feedback-btn">
+  Contact us
 </p>
+</a>
 
   </div>
 </div>
