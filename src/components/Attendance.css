@@ -251,6 +251,27 @@
   color:#111;
   font-size:6px;
   font-weight:200;
-
-
 }
+.undo-bar {
+  position: fixed;
+  bottom: 16px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: #111;
+  color: #fff;
+  padding: 10px 16px;
+  border-radius: 8px;
+  display: flex;
+  gap: 12px;
+  align-items: center;
+  z-index: 1000;
+}
+
+.undo-bar button {
+  background: none;
+  border: none;
+  color: #4f6cff;
+  font-weight: 600;
+  cursor: pointer;
+}
+
