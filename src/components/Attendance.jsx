@@ -461,7 +461,11 @@ const ProgressRing = ({ percentage }) => {
     >
 
       <div className="field">
-  <label className="text1">Classes Attended</label>
+  <label className="text1" style={{
+            fontFamily: "Jura, sans-serif",
+            fontSize: "22px",
+            fontWeight: "600",
+          }}>Classes Attended</label>
   <input
     type="number"
     value={editAttended}
@@ -470,7 +474,11 @@ const ProgressRing = ({ percentage }) => {
 </div>
 
 <div className="field">
-  <label className="text1">Total Classes</label>
+  <label className="text1" style={{
+            fontFamily: "Jura, sans-serif",
+            fontSize: "22px",
+            fontWeight: "600",
+          }}>Total Classes</label>
   <input
     type="number"
     value={editTotal}
