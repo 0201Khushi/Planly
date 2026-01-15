@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import "./Attendance.css";
 import { FiEdit, FiTrash2 } from "react-icons/fi";
+import { useRef } from "react";
 
 const normalize = (s) => s.trim().toLowerCase();
 
@@ -19,6 +20,7 @@ export default function Attendance() {
   const [editAttended, setEditAttended] = useState("");
   const [editTotal, setEditTotal] = useState("");
   const [undoAction, setUndoAction] = useState(null);
+  const undoTimerRef = useRef(null);
 
   const todayDate = new Date().toLocaleDateString("en-US", {
     weekday: "short",
@@ -178,10 +180,11 @@ export default function Attendance() {
   const deleteSubject = (id) => {
   const subject = subjects.find((s) => s.id === id);
   if (!subject) return;
-setUndoAction({
-    type: "delete",
-    payload: subject,
-  });
+showUndo({
+  type: "delete",
+  payload: subject,
+});
+
   // remove from UI
   setSubjects((prev) => prev.filter((s) => s.id !== id));
 
@@ -218,10 +221,11 @@ const resetAttendance = (id) => {
   if (!subject) return;
 
   // 🔁 SAVE FOR UNDO (treat as "edit")
-  setUndoAction({
-    type: "edit",
-    payload: subject,
-  });
+  showUndo({
+  type: "reset",
+  payload: subject,
+});
+
 
   // reset attendance
   setSubjects(prev =>
@@ -328,8 +332,26 @@ const ProgressRing = ({ percentage }) => {
     );
   }
 
-  setUndoAction(null);
+  if (undoTimerRef.current) {
+  clearTimeout(undoTimerRef.current);
+}
+setUndoAction(null);
+
 };
+const showUndo = (action) => {
+  setUndoAction(action);
+
+  // clear existing timer
+  if (undoTimerRef.current) {
+    clearTimeout(undoTimerRef.current);
+  }
+
+  // auto-dismiss after 5 seconds
+  undoTimerRef.current = setTimeout(() => {
+    setUndoAction(null);
+  }, 5000);
+};
+
 
 
   return (
