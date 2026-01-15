@@ -66,15 +66,26 @@ export default function Home() {
     setTodayClasses(classes);
 
     setMustAttend(
-      classes.filter(cls => {
-        const r = attendance[cls.subject];
-        if (!r || r.total === 0) return true;
-        const pct = (r.attended / r.total) * 100;
-        const pctIfAbsent =
-          (r.attended / (r.total + 1)) * 100;
-        return pct < TARGET_ATTENDANCE || pctIfAbsent < TARGET_ATTENDANCE;
-      })
-    );
+  classes.filter(cls => {
+    const r = attendance[cls.subject];
+
+    // If attendance record exists
+    if (r && r.total > 0) {
+      const currentPct = (r.attended / r.total) * 100;
+      const pctIfAbsent =
+        (r.attended / (r.total + 1)) * 100;
+
+      return (
+        currentPct < TARGET_ATTENDANCE ||
+        pctIfAbsent < TARGET_ATTENDANCE
+      );
+    }
+
+    // If no record exists yet → assume first class must be attended
+    return true;
+  })
+);
+
   }, []);
   const attendanceState =
   mustAttend.length === 0 ? "confirmation" : "critical";
