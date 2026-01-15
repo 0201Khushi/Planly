@@ -312,7 +312,11 @@ function inferOrdinalDate(text) {
   const match = normalizedText.match(
     /\b(\d{1,2})(st|nd|rd|th)?\s+(january|february|march|april|may|june|july|august|september|october|november|december)\b/i
   );
-
+  if (!match) {
+    match = normalizedText.match(
+      /\b(january|february|march|april|may|june|july|august|september|october|november|december)\s+(\d{1,2})(st|nd|rd|th)?\b/
+    );
+  }
   if (!match) return null;
 
   const day = parseInt(match[1], 10);
