@@ -175,17 +175,16 @@ export default function Home() {
 
   <div className="feedback-options">
    <p className="feedback-btn">
-  Feedback:
+  Feedback
   <a
     href="https://forms.gle/f9yKWS2sLUn3qejn7"
     target="_blank"
     rel="noopener noreferrer"
     className="feedback-link"
   >
-    Share feedback
   </a>
 </p>
-  <p className="feedback-item">
+  <p className="feedback-btn">
   Contact us:
   <a
     href="mailto:planly.team@gmail.com"
