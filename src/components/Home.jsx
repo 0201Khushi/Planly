@@ -183,7 +183,7 @@ export default function Home() {
     </button>
 
     <button className="feedback-btn">
-      📩 Contact Us
+       Contact Us
     </button>
   </div>
 </div>

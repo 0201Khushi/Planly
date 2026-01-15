@@ -164,3 +164,35 @@
 .header {
   margin-bottom: 24px;
 }
+.feedback-card {
+  margin-top: 16px;
+}
+
+.feedback-title {
+  font-size: 14px;
+  font-weight: 600;
+  margin-bottom: 12px;
+  color: #333;
+}
+
+.feedback-options {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.feedback-btn {
+  width: 100%;
+  padding: 12px 14px;
+  border-radius: 10px;
+  border: 1px solid #eee;
+  background: #fafafa;
+  text-align: left;
+  font-size: 14px;
+  cursor: pointer;
+  transition: background 0.2s ease;
+}
+
+.feedback-btn:hover {
+  background: #f0f0f0;
+}
