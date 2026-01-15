@@ -486,7 +486,11 @@ const ProgressRing = ({ percentage }) => {
   />
 </div>
 
-      <div className="modal-actions">
+      <div className="modal-actions" style={{
+            fontFamily: "Jura, sans-serif",
+            fontSize: "16px",
+            fontWeight: "600",
+          }}>
         <button
           className="cancel-btn"
           onClick={() => setEditSubject(null)}
