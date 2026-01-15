@@ -18,6 +18,7 @@ export default function Attendance() {
   const [editSubject, setEditSubject] = useState(null);
   const [editAttended, setEditAttended] = useState("");
   const [editTotal, setEditTotal] = useState("");
+  const [undoAction, setUndoAction] = useState(null);
 
   const todayDate = new Date().toLocaleDateString("en-US", {
     weekday: "short",
@@ -177,7 +178,10 @@ export default function Attendance() {
   const deleteSubject = (id) => {
   const subject = subjects.find((s) => s.id === id);
   if (!subject) return;
-
+setUndoAction({
+    type: "delete",
+    payload: subject,
+  });
   // remove from UI
   setSubjects((prev) => prev.filter((s) => s.id !== id));
 
@@ -226,6 +230,10 @@ const openEditModal = (subject) => {
 
 const saveEditAttendance = () => {
   if (editAttended === "" || editTotal === "") return;
+  setUndoAction({
+    type: "edit",
+    payload: editSubject,
+  });
 
   setSubjects(prev =>
     prev.map(s =>
@@ -292,6 +300,29 @@ const ProgressRing = ({ percentage }) => {
     </svg>
   );
 };
+  const handleUndo = () => {
+  if (!undoAction) return;
+
+  if (undoAction.type === "delete") {
+    setSubjects(prev => [
+      undoAction.payload,
+      ...prev,
+    ]);
+  }
+
+  if (undoAction.type === "edit") {
+    setSubjects(prev =>
+      prev.map(s =>
+        s.id === undoAction.payload.id
+          ? undoAction.payload
+          : s
+      )
+    );
+  }
+
+  setUndoAction(null);
+};
+
 
   return (
     <div className="attendance-page">
@@ -502,6 +533,18 @@ const ProgressRing = ({ percentage }) => {
         </button>
       </div>
     </div>
+  </div>
+)}
+{undoAction && (
+  <div className="undo-bar">
+    <span>
+      {undoAction.type === "delete"
+        ? "Subject deleted"
+        : "Attendance updated"}
+    </span>
+    <button onClick={() => handleUndo()}>
+      Undo
+    </button>
   </div>
 )}
 
