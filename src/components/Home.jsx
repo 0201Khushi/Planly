@@ -169,6 +169,25 @@ export default function Home() {
 </p>
         )}
       </div>
+      {/* HELP & FEEDBACK */}
+<div className="card feedback-card">
+  <p className="feedback-title">Help & Feedback</p>
+
+  <div className="feedback-options">
+    <button className="feedback-btn">
+      🐞 Report a Bug
+    </button>
+
+    <button className="feedback-btn">
+      💡 Recommend a Feature
+    </button>
+
+    <button className="feedback-btn">
+      📩 Contact Us
+    </button>
+  </div>
+</div>
+
 
     </div>
   );
