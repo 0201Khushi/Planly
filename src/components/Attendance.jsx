@@ -475,7 +475,7 @@ const ProgressRing = ({ percentage }) => {
 
 <div className="field">
   <label className="text1" style={{
-            fontFamily: "Jura, sans-serif",
+            fontFamily: "Inter",
             fontSize: "16px",
             fontWeight: "600",
           }}>Total Classes</label>
