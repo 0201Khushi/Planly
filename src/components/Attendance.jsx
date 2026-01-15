@@ -463,7 +463,7 @@ const ProgressRing = ({ percentage }) => {
       <div className="field">
   <label className="text1" style={{
             fontFamily: "Jura, sans-serif",
-            fontSize: "22px",
+            fontSize: "16px",
             fontWeight: "600",
           }}>Classes Attended</label>
   <input
@@ -486,11 +486,7 @@ const ProgressRing = ({ percentage }) => {
   />
 </div>
 
-      <div className="modal-actions" style={{
-            fontFamily: "Jura, sans-serif",
-            fontSize: "16px",
-            fontWeight: "600",
-          }}>
+      <div className="modal-actions">
         <button
           className="cancel-btn"
           onClick={() => setEditSubject(null)}
