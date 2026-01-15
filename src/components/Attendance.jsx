@@ -214,13 +214,25 @@ setUndoAction({
 
 
 const resetAttendance = (id) => {
+  const subject = subjects.find(s => s.id === id);
+  if (!subject) return;
+
+  // 🔁 SAVE FOR UNDO (treat as "edit")
+  setUndoAction({
+    type: "edit",
+    payload: subject,
+  });
+
+  // reset attendance
   setSubjects(prev =>
     prev.map(s =>
       s.id === id ? { ...s, attended: 0, total: 0 } : s
     )
   );
+
   setOpenMenuId(null);
 };
+
 
 const openEditModal = (subject) => {
   setEditSubject(subject);
@@ -230,10 +242,6 @@ const openEditModal = (subject) => {
 
 const saveEditAttendance = () => {
   if (editAttended === "" || editTotal === "") return;
-  setUndoAction({
-    type: "edit",
-    payload: editSubject,
-  });
 
   setSubjects(prev =>
     prev.map(s =>
