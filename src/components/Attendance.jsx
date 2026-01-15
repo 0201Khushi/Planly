@@ -346,10 +346,10 @@ const showUndo = (action) => {
     clearTimeout(undoTimerRef.current);
   }
 
-  // auto-dismiss after 5 seconds
+  // auto-dismiss after 3 seconds
   undoTimerRef.current = setTimeout(() => {
     setUndoAction(null);
-  }, 5000);
+  }, 3000);
 };
 
 
