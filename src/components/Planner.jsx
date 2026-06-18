@@ -5,6 +5,9 @@ import { classifyCategory } from "../utils/classifyCategory";
 import { FiEdit, FiTrash2 } from "react-icons/fi";
 
 
+const CATEGORIES_KEY = "planly_categories";
+const DEFAULT_CATEGORIES = ["All", "Events", "Academic", "Exams"];
+const OPTIONAL_POOL = ["Placements", "Career", "Clubs", "Friends", "Social"];
 const PLANNER_KEY = "planly_planner_data";
 
 
@@ -21,6 +24,23 @@ const [editTask, setEditTask] = useState(null);
 const [timeFilter, setTimeFilter] = useState("All");
 const [recentlyDeleted, setRecentlyDeleted] = useState(null);
 const [undoTimeout, setUndoTimeout] = useState(null);
+const [categories, setCategories] = useState(() => {
+  const saved = localStorage.getItem(CATEGORIES_KEY);
+  if (saved) {
+    return JSON.parse(saved);
+  }
+  // Default initial categories if nothing is saved, including "Clubs" from the optional pool
+  return [...DEFAULT_CATEGORIES, "Clubs"];
+});
+const [showAddCategory, setShowAddCategory] = useState(false);
+const [selectedOptions, setSelectedOptions] = useState(() => {
+  const saved = localStorage.getItem(CATEGORIES_KEY);
+  if (saved) {
+    const savedCategories = JSON.parse(saved);
+    return savedCategories.filter(c => !DEFAULT_CATEGORIES.includes(c));
+  }
+  return ["Clubs"]; // "Clubs" is initially selected if nothing saved
+});
 
 const todayMidnight = (() => {
   const d = new Date();
@@ -51,6 +71,10 @@ useEffect(() => {
     localStorage.setItem(PLANNER_KEY, JSON.stringify(tasks));
   }
 }, [tasks, loading]);
+
+useEffect(() => {
+  localStorage.setItem(CATEGORIES_KEY, JSON.stringify(categories));
+}, [categories]);
 
 if (loading) {
   return (
@@ -198,6 +222,16 @@ function handleUndo() {
   if (undoTimeout) clearTimeout(undoTimeout);
 }
 
+function handleAddCategory() {
+  const nextCategories = [...DEFAULT_CATEGORIES, ...selectedOptions];
+  setCategories(nextCategories);
+
+  // If the currently active tab was removed from the selection, reset to "All"
+  if (!nextCategories.includes(activeTab)) {
+    setActiveTab("All");
+  }
+  setShowAddCategory(false);
+}
 
  /* =========================
      EDIT TASK
@@ -391,7 +425,7 @@ function timestampToInputDate(ts) {
   <div className="text1">Your Schedule</div>
       {/* Category Tabs */}
       <div className="tab-container">
-  {["All", "Events", "Academic", "Exams", "Clubs"].map((tab) => (
+  {categories.map((tab) => (
     <div
       key={tab}
       className={`tab ${activeTab === tab ? "active" : ""}`}
@@ -400,7 +434,13 @@ function timestampToInputDate(ts) {
       {tab}
     </div>
   ))}
-  
+  <button 
+    className="tab-add-button" 
+    onClick={() => {
+      // Initialize selectedOptions with currently active optional categories
+      setSelectedOptions(categories.filter(c => !DEFAULT_CATEGORIES.includes(c)));
+      setShowAddCategory(true);
+    }}>+</button>
 </div>
 
       {/* Filter Pills */}
@@ -459,12 +499,10 @@ function timestampToInputDate(ts) {
                 ...prev,
                 category: e.target.value,
               }))
-            }
-          >
-            <option value="Events">Events</option>
-            <option value="Academic">Academic</option>
-            <option value="Exams">Exams</option>
-            <option value="Clubs">Clubs</option>
+            }>
+            {categories.filter(c => c !== "All").map(cat => (
+              <option key={cat} value={cat}>{cat}</option>
+            ))}
           </select>
 
           <input
@@ -572,10 +610,53 @@ function timestampToInputDate(ts) {
   </div>
 )}
 
+{/* ADD CATEGORY MODAL */}
+{showAddCategory && (
+  <div className="modal-overlay" onClick={() => setShowAddCategory(false)}>
+    <div className="modal-card" onClick={(e) => e.stopPropagation()}>
+      <h3 style={{ marginBottom: '8px' }}>Manage Tabs</h3>
+      <p style={{ fontSize: '14px', marginBottom: '16px', opacity: 0.6 }}>
+        Select up to 2 additional categories to show as tabs:
+      </p>
+      
+      <div style={{ display: 'flex', flexWrap: 'wrap', gap: '8px', marginBottom: '24px' }}>
+        {OPTIONAL_POOL.map(opt => (
+          <div
+            key={opt}
+            className={`filter-pill ${selectedOptions.includes(opt) ? "active" : ""}`}
+            style={{ cursor: 'pointer' }}
+            onClick={() => {
+              if (selectedOptions.includes(opt)) {
+                setSelectedOptions(prev => prev.filter(o => o !== opt));
+              } else {
+                if (selectedOptions.length < 2) {
+                  setSelectedOptions(prev => [...prev, opt]);
+                } else {
+                  alert("You can only choose at most two extra categories.");
+                }
+              }
+            }}
+          >
+            {opt}
+          </div>
+        ))}
+      </div>
+
+      <div className="modal-actions" style={{ display: 'flex', justifyContent: 'flex-end', gap: '8px' }}>
+        <button className="cancel-btn" onClick={() => setShowAddCategory(false)}>
+          Cancel
+        </button>
+        <button className="confirm-btn" onClick={handleAddCategory}>
+          Add
+        </button>
+      </div>
+    </div>
+  </div>
+)}
+
     </div>
     
   );
 }
 
 export default Planner;
-

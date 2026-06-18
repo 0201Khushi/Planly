@@ -7,10 +7,49 @@ const TIMETABLE_KEY = "planly_savedWeek";
 const TARGET_ATTENDANCE = 75;
 
 const QUOTES = [
-  "Precision is the soul of discipline.",
-  "Clarity creates momentum.",
-  "Consistency compounds quietly.",
-  "Focus is a competitive advantage.",
+  "You don't have to carry it all in your head.",
+  "Let your mind rest.",
+  "Some things are better written down.",
+  "Keep your thoughts. Lose the stress.",
+  "Your brain deserves a break.",
+"When everything has a place, nothing feels overwhelming.",
+"Save your energy for what matters.",
+"Less mental clutter. More mental space.",
+"It's okay to slow down and organize.",
+"Take a breath. We've got the details.",
+"A calmer day starts here.",
+"One less thing to worry about.",
+"Planning doesn't have to feel stressful.",
+"A little clarity goes a long way.",
+"You are allowed to feel organized.",
+"Today's chaos can be tomorrow's plan.",
+"The day feels lighter when it's written down.",
+"You don't need to figure it all out at once.",
+"Keep your ideas safe.",
+"A home for deadlines, ideas, and everything in between.",
+"Because important things deserve to be remembered.",
+"Store the details. Keep the focus.",
+"Remember less. Live more.",
+"You're closer than you think.",
+"Small plans lead to big achievements.",
+"One step is enough for today.",
+"Progress starts with a plan.",
+"Every organized day begins with a single note.",
+"You already know what to do. Let's keep track of it.",
+"A little planning can change a lot.",
+"Future you will appreciate this.",
+"The hardest part is starting.",
+"You are more capable than your to-do list suggests.",
+"Clear mind. Clear path.",
+"Thoughtfully organized.",
+"Make room for what matters.",
+"Find clarity.",
+"Plan with confidence.",
+"Stay grounded.",
+"Simple plans. Peaceful days.",
+"Organized, effortlessly.",
+"Everything in its place.",
+"Clarity, one task at a time."
 ];
 
 const todayMidnight = (() => {
@@ -94,10 +133,12 @@ export default function Home() {
     <div className="home">
 
       {/* HEADER */}
+      
       <div className="header">
         <p className="greeting">{getGreeting()}</p>
         <p className="quote">{quote}</p>
       </div>
+      
 
       {/* STATS */}
       <div className="stats-row">
