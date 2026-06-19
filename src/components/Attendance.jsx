@@ -29,40 +29,40 @@ export default function Attendance() {
   });
 
   /* LOAD */
- useEffect(() => {
-  const storedSubjects =
-    JSON.parse(localStorage.getItem(SUBJECTS_KEY)) || [];
+  useEffect(() => {
+    const storedSubjects =
+      JSON.parse(localStorage.getItem(SUBJECTS_KEY)) || [];
 
-  const storedAttendance =
-    JSON.parse(localStorage.getItem(ATTENDANCE_KEY)) || {};
+    const storedAttendance =
+      JSON.parse(localStorage.getItem(ATTENDANCE_KEY)) || {};
 
-  const merged = storedSubjects.map((name) => ({
-    id: normalize(name), // stable id
-    name,
-    attended: storedAttendance[name]?.attended || 0,
-    total: storedAttendance[name]?.total || 0,
-  }));
+    const merged = storedSubjects.map((name) => ({
+      id: normalize(name), // stable id
+      name,
+      attended: storedAttendance[name]?.attended || 0,
+      total: storedAttendance[name]?.total || 0,
+    }));
 
-  setSubjects(merged);
-}, []);
+    setSubjects(merged);
+  }, []);
 
 
   /* SAVE */
- useEffect(() => {
-  const attendanceObj = {};
+  useEffect(() => {
+    const attendanceObj = {};
 
-  subjects.forEach((s) => {
-    attendanceObj[s.name] = {
-      attended: s.attended,
-      total: s.total,
-    };
-  });
+    subjects.forEach((s) => {
+      attendanceObj[s.name] = {
+        attended: s.attended,
+        total: s.total,
+      };
+    });
 
-  localStorage.setItem(
-    ATTENDANCE_KEY,
-    JSON.stringify(attendanceObj)
-  );
-}, [subjects]);
+    localStorage.setItem(
+      ATTENDANCE_KEY,
+      JSON.stringify(attendanceObj)
+    );
+  }, [subjects]);
 
 
   const updateSubject = (id, updated) => {
@@ -87,48 +87,48 @@ export default function Attendance() {
   };
 
   const confirmAddSubject = () => {
-  const name = newSubjectName.trim();
-  if (!name) return;
+    const name = newSubjectName.trim();
+    if (!name) return;
 
-  const existing =
-    JSON.parse(localStorage.getItem(SUBJECTS_KEY)) || [];
+    const existing =
+      JSON.parse(localStorage.getItem(SUBJECTS_KEY)) || [];
 
-  if (existing.map(normalize).includes(normalize(name))) {
-    alert("Subject already exists");
-    return;
-  }
+    if (existing.map(normalize).includes(normalize(name))) {
+      alert("Subject already exists");
+      return;
+    }
 
-  // update subject registry
-  const updatedSubjects = [...existing, name];
-  localStorage.setItem(
-    SUBJECTS_KEY,
-    JSON.stringify(updatedSubjects)
-  );
+    // update subject registry
+    const updatedSubjects = [...existing, name];
+    localStorage.setItem(
+      SUBJECTS_KEY,
+      JSON.stringify(updatedSubjects)
+    );
 
-  // update attendance
-  const updatedAttendance =
-    JSON.parse(localStorage.getItem(ATTENDANCE_KEY)) || {};
+    // update attendance
+    const updatedAttendance =
+      JSON.parse(localStorage.getItem(ATTENDANCE_KEY)) || {};
 
-  updatedAttendance[name] = { attended: 0, total: 0 };
-  localStorage.setItem(
-    ATTENDANCE_KEY,
-    JSON.stringify(updatedAttendance)
-  );
+    updatedAttendance[name] = { attended: 0, total: 0 };
+    localStorage.setItem(
+      ATTENDANCE_KEY,
+      JSON.stringify(updatedAttendance)
+    );
 
-  // update UI
-  setSubjects((prev) => [
-    ...prev,
-    {
-      id: normalize(name),
-      name,
-      attended: 0,
-      total: 0,
-    },
-  ]);
+    // update UI
+    setSubjects((prev) => [
+      ...prev,
+      {
+        id: normalize(name),
+        name,
+        attended: 0,
+        total: 0,
+      },
+    ]);
 
-  setNewSubjectName("");
-  setShowModal(false);
-};
+    setNewSubjectName("");
+    setShowModal(false);
+  };
 
 
   const getStatusText = (attended, total) => {
@@ -145,25 +145,25 @@ export default function Attendance() {
     return `Attend next ${needed} classes to get back on track`;
   };
   const getLeaveMessage = (attended, total) => {
-  if (total === 0) return "";
-  if ((attended / total) * 100 < target) {
-    return "";
-  }
+    if (total === 0) return "";
+    if ((attended / total) * 100 < target) {
+      return "";
+    }
 
-  const maxLeaves = Math.floor(
-    (attended * 100) / target - total
-  );
+    const maxLeaves = Math.floor(
+      (attended * 100) / target - total
+    );
 
-  if (maxLeaves <= 0) {
-    return "Do NOT leave the next class";
-  }
+    if (maxLeaves <= 0) {
+      return "Do NOT leave the next class";
+    }
 
-  if (maxLeaves === 1) {
-    return "You may leave the next class";
-  }
+    if (maxLeaves === 1) {
+      return "You may leave the next class";
+    }
 
-  return `You may leave the next ${maxLeaves} classes`;
-};
+    return `You may leave the next ${maxLeaves} classes`;
+  };
 
 
   const getStatusClass = (attended, total) => {
@@ -178,179 +178,179 @@ export default function Attendance() {
     return Math.round((attended / total) * 100);
   })();
   const deleteSubject = (id) => {
-  const subject = subjects.find((s) => s.id === id);
-  if (!subject) return;
-showUndo({
-  type: "delete",
-  payload: subject,
-});
+    const subject = subjects.find((s) => s.id === id);
+    if (!subject) return;
+    showUndo({
+      type: "delete",
+      payload: subject,
+    });
 
-  // remove from UI
-  setSubjects((prev) => prev.filter((s) => s.id !== id));
+    // remove from UI
+    setSubjects((prev) => prev.filter((s) => s.id !== id));
 
-  // remove from subject registry
-  const existing =
-    JSON.parse(localStorage.getItem(SUBJECTS_KEY)) || [];
+    // remove from subject registry
+    const existing =
+      JSON.parse(localStorage.getItem(SUBJECTS_KEY)) || [];
 
-  localStorage.setItem(
-    SUBJECTS_KEY,
-    JSON.stringify(
-      existing.filter(
-        (s) => normalize(s) !== normalize(subject.name)
+    localStorage.setItem(
+      SUBJECTS_KEY,
+      JSON.stringify(
+        existing.filter(
+          (s) => normalize(s) !== normalize(subject.name)
+        )
       )
-    )
-  );
+    );
 
-  // remove attendance data
-  const attendance =
-    JSON.parse(localStorage.getItem(ATTENDANCE_KEY)) || {};
+    // remove attendance data
+    const attendance =
+      JSON.parse(localStorage.getItem(ATTENDANCE_KEY)) || {};
 
-  delete attendance[subject.name];
+    delete attendance[subject.name];
 
-  localStorage.setItem(
-    ATTENDANCE_KEY,
-    JSON.stringify(attendance)
-  );
+    localStorage.setItem(
+      ATTENDANCE_KEY,
+      JSON.stringify(attendance)
+    );
 
-  setOpenMenuId(null);
-};
-
-
-const resetAttendance = (id) => {
-  const subject = subjects.find(s => s.id === id);
-  if (!subject) return;
-
-  // 🔁 SAVE FOR UNDO (treat as "edit")
-  showUndo({
-  type: "reset",
-  payload: subject,
-});
+    setOpenMenuId(null);
+  };
 
 
-  // reset attendance
-  setSubjects(prev =>
-    prev.map(s =>
-      s.id === id ? { ...s, attended: 0, total: 0 } : s
-    )
-  );
+  const resetAttendance = (id) => {
+    const subject = subjects.find(s => s.id === id);
+    if (!subject) return;
 
-  setOpenMenuId(null);
-};
+    // 🔁 SAVE FOR UNDO (treat as "edit")
+    showUndo({
+      type: "reset",
+      payload: subject,
+    });
 
 
-const openEditModal = (subject) => {
-  setEditSubject(subject);
-  setEditAttended(subject.attended);
-  setEditTotal(subject.total);
-};
+    // reset attendance
+    setSubjects(prev =>
+      prev.map(s =>
+        s.id === id ? { ...s, attended: 0, total: 0 } : s
+      )
+    );
 
-const saveEditAttendance = () => {
-  if (editAttended === "" || editTotal === "") return;
+    setOpenMenuId(null);
+  };
 
-  setSubjects(prev =>
-    prev.map(s =>
-      s.id === editSubject.id
-        ? {
+
+  const openEditModal = (subject) => {
+    setEditSubject(subject);
+    setEditAttended(subject.attended);
+    setEditTotal(subject.total);
+  };
+
+  const saveEditAttendance = () => {
+    if (editAttended === "" || editTotal === "") return;
+
+    setSubjects(prev =>
+      prev.map(s =>
+        s.id === editSubject.id
+          ? {
             ...s,
             attended: Number(editAttended),
             total: Number(editTotal),
           }
-        : s
-    )
-  );
-
-  setEditSubject(null);
-};
-
-
-const ProgressRing = ({ percentage }) => {
-  const radius = 40;
-  const stroke = 7;
-  const normalizedRadius = radius - stroke * 2;
-  const circumference = normalizedRadius * 2 * Math.PI;
-
-  const strokeDashoffset =
-    circumference - (percentage / 100) * circumference;
-
-  return (
-    <svg height={radius * 2} width={radius * 2}>
-      {/* background ring */}
-      <circle
-        stroke="#e6e6e6"
-        fill="transparent"
-        strokeWidth={stroke}
-        r={normalizedRadius}
-        cx={radius}
-        cy={radius}
-      />
-
-      {/* progress ring */}
-      <circle
-        stroke="#14b8a6"
-        fill="transparent"
-        strokeWidth={stroke}
-        strokeLinecap="round"
-        strokeDasharray={circumference + " " + circumference}
-        style={{ strokeDashoffset }}
-        r={normalizedRadius}
-        cx={radius}
-        cy={radius}
-      />
-
-      {/* percentage text */}
-      <text
-        x="50%"
-        y="50%"
-        textAnchor="middle"
-        dominantBaseline="middle"
-        fontSize="11"
-        fontWeight="600"
-        fill="#111"
-      >
-        {percentage}%
-      </text>
-    </svg>
-  );
-};
-  const handleUndo = () => {
-  if (!undoAction) return;
-
-  if (undoAction.type === "delete") {
-    setSubjects(prev => [
-      undoAction.payload,
-      ...prev,
-    ]);
-  }
-
-  if (undoAction.type === "edit") {
-    setSubjects(prev =>
-      prev.map(s =>
-        s.id === undoAction.payload.id
-          ? undoAction.payload
           : s
       )
     );
-  }
 
-  if (undoTimerRef.current) {
-  clearTimeout(undoTimerRef.current);
-}
-setUndoAction(null);
+    setEditSubject(null);
+  };
 
-};
-const showUndo = (action) => {
-  setUndoAction(action);
 
-  // clear existing timer
-  if (undoTimerRef.current) {
-    clearTimeout(undoTimerRef.current);
-  }
+  const ProgressRing = ({ percentage }) => {
+    const radius = 40;
+    const stroke = 7;
+    const normalizedRadius = radius - stroke * 2;
+    const circumference = normalizedRadius * 2 * Math.PI;
 
-  // auto-dismiss after 3 seconds
-  undoTimerRef.current = setTimeout(() => {
+    const strokeDashoffset =
+      circumference - (percentage / 100) * circumference;
+
+    return (
+      <svg height={radius * 2} width={radius * 2}>
+        {/* background ring */}
+        <circle
+          stroke="#e6e6e6"
+          fill="transparent"
+          strokeWidth={stroke}
+          r={normalizedRadius}
+          cx={radius}
+          cy={radius}
+        />
+
+        {/* progress ring */}
+        <circle
+          stroke="#14b8a6"
+          fill="transparent"
+          strokeWidth={stroke}
+          strokeLinecap="round"
+          strokeDasharray={circumference + " " + circumference}
+          style={{ strokeDashoffset }}
+          r={normalizedRadius}
+          cx={radius}
+          cy={radius}
+        />
+
+        {/* percentage text */}
+        <text
+          x="50%"
+          y="50%"
+          textAnchor="middle"
+          dominantBaseline="middle"
+          fontSize="11"
+          fontWeight="600"
+          fill="#111"
+        >
+          {percentage}%
+        </text>
+      </svg>
+    );
+  };
+  const handleUndo = () => {
+    if (!undoAction) return;
+
+    if (undoAction.type === "delete") {
+      setSubjects(prev => [
+        undoAction.payload,
+        ...prev,
+      ]);
+    }
+
+    if (undoAction.type === "edit") {
+      setSubjects(prev =>
+        prev.map(s =>
+          s.id === undoAction.payload.id
+            ? undoAction.payload
+            : s
+        )
+      );
+    }
+
+    if (undoTimerRef.current) {
+      clearTimeout(undoTimerRef.current);
+    }
     setUndoAction(null);
-  }, 3000);
-};
+
+  };
+  const showUndo = (action) => {
+    setUndoAction(action);
+
+    // clear existing timer
+    if (undoTimerRef.current) {
+      clearTimeout(undoTimerRef.current);
+    }
+
+    // auto-dismiss after 3 seconds
+    undoTimerRef.current = setTimeout(() => {
+      setUndoAction(null);
+    }, 3000);
+  };
 
 
 
@@ -375,10 +375,10 @@ const showUndo = (action) => {
         <div>
           <p className="summary-percent" style={{
             fontSize: "16px",
-          }}>Total: { totalAttendance}%</p>
+          }}>Total: {totalAttendance}%</p>
           <p style={{
             fontSize: "16px",
-          }}>Target:  { target}%</p>
+          }}>Target:  {target}%</p>
           <p style={{
             fontSize: "16px",
           }}>{todayDate}</p>
@@ -427,7 +427,7 @@ const showUndo = (action) => {
                 {getStatusText(subject.attended, subject.total)}
               </p>
               <p className="leave-text">
-              {getLeaveMessage(subject.attended, subject.total)}
+                {getLeaveMessage(subject.attended, subject.total)}
               </p>
             </div>
 
@@ -438,37 +438,37 @@ const showUndo = (action) => {
                 <button onClick={() => markPresent(subject)}>✓</button>
                 <button onClick={() => markAbsent(subject)}>✕</button>
                 <div className="menu-wrapper">
-  <button
-    className="more"
-    onClick={() =>
-      setOpenMenuId(
-        openMenuId === subject.id ? null : subject.id
-      )
-    }
-  >
-    ⋮
-  </button>
+                  <button
+                    className="more"
+                    onClick={() =>
+                      setOpenMenuId(
+                        openMenuId === subject.id ? null : subject.id
+                      )
+                    }
+                  >
+                    ⋮
+                  </button>
 
-  {openMenuId === subject.id && (
-    <div className="menu">
-      <button onClick={() => openEditModal(subject)}>
-      Edit attendance
-      </button>
+                  {openMenuId === subject.id && (
+                    <div className="menu">
+                      <button onClick={() => openEditModal(subject)}>
+                        Edit attendance
+                      </button>
 
 
-      <button onClick={() => resetAttendance(subject.id)}>
-        Reset attendance
-      </button>
+                      <button onClick={() => resetAttendance(subject.id)}>
+                        Reset attendance
+                      </button>
 
-      <button
-        className="danger"
-        onClick={() => deleteSubject(subject.id)}
-      >
-        Delete subject
-      </button>
-    </div>
-  )}
-</div>
+                      <button
+                        className="danger"
+                        onClick={() => deleteSubject(subject.id)}
+                      >
+                        Delete subject
+                      </button>
+                    </div>
+                  )}
+                </div>
 
               </div>
             </div>
@@ -515,68 +515,68 @@ const showUndo = (action) => {
         </div>
       )}
       {editSubject && (
-  <div className="modal-overlay" onClick={() => setEditSubject(null)}>
-    <div
-      className="modal-card"
-      onClick={e => e.stopPropagation()}
-    >
+        <div className="modal-overlay" onClick={() => setEditSubject(null)}>
+          <div
+            className="modal-card"
+            onClick={e => e.stopPropagation()}
+          >
 
-      <div className="field">
-  <label className="text1" style={{
-            fontFamily: "Inter",
-            fontSize: "16px",
-            fontWeight: "600",
-          }}>Classes Attended</label>
-  <input
-    type="number"
-    value={editAttended}
-    onChange={e => setEditAttended(e.target.value)}
-  />
-</div>
+            <div className="field">
+              <label className="text1" style={{
+                fontFamily: "Inter",
+                fontSize: "16px",
+                fontWeight: "600",
+              }}>Classes Attended</label>
+              <input
+                type="number"
+                value={editAttended}
+                onChange={e => setEditAttended(e.target.value)}
+              />
+            </div>
 
-<div className="field">
-  <label className="text1" style={{
-            fontFamily: "Inter",
-            fontSize: "16px",
-            fontWeight: "600",
-          }}>Total Classes</label>
-  <input
-    type="number"
-    value={editTotal}
-    onChange={e => setEditTotal(e.target.value)}
-  />
-</div>
+            <div className="field">
+              <label className="text1" style={{
+                fontFamily: "Inter",
+                fontSize: "16px",
+                fontWeight: "600",
+              }}>Total Classes</label>
+              <input
+                type="number"
+                value={editTotal}
+                onChange={e => setEditTotal(e.target.value)}
+              />
+            </div>
 
-      <div className="modal-actions">
-        <button
-          className="cancel-btn"
-          onClick={() => setEditSubject(null)}
-        >
-          Cancel
-        </button>
+            <div className="modal-actions">
+              <button
+                className="cancel-btn"
+                onClick={() => setEditSubject(null)}
+              >
+                Cancel
+              </button>
 
-        <button
-          className="confirm-btn"
-          onClick={saveEditAttendance}
-        >
-          Save
-        </button>
-      </div>
-    </div>
-  </div>
-)}
-{undoAction && (
-  <div className="undo-bar">
-    <span>
-      {undoAction.type === "delete"
-        ? "Subject deleted"
-        : "Attendance updated"}
-    </span>
-    <button onClick={() => handleUndo()}>
-      Undo
-    </button>
-  </div>
-)}
+              <button
+                className="confirm-btn"
+                onClick={saveEditAttendance}
+              >
+                Save
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+      {undoAction && (
+        <div className="undo-bar">
+          <span>
+            {undoAction.type === "delete"
+              ? "Subject deleted"
+              : "Attendance updated"}
+          </span>
+          <button onClick={() => handleUndo()}>
+            Undo
+          </button>
+        </div>
+      )}
 
     </div>
   );

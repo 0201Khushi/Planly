@@ -1,6 +1,6 @@
 import './App.css';
 import logo from './assets/logo.png';
-import { useState,useEffect } from "react";
+import { useState, useEffect } from "react";
 import Home from "./components/Home";
 import Attendance from "./components/Attendance";
 import Planner from "./components/Planner";
@@ -9,12 +9,12 @@ import { MdHome, MdEventNote, MdAccessTime, MdChecklist } from "react-icons/md";
 import { FiEdit, FiTrash2 } from "react-icons/fi";
 function App() {
   const [activeTab, setActiveTab] = useState("home");
-   
+
   return (
     <div className="app-root">
       {/* Desktop Message */}
       <div className="desktop-message" >
-        <div className="container"> 
+        <div className="container">
           <img src={logo} alt="logo" />
 
         </div>
@@ -25,49 +25,49 @@ function App() {
       {/* Mobile App */}
       <div className="mobile-app">
         <div className="page-wrapper">
-        {/* TOP BAR */}
-        {activeTab === "home" && (
-        <header className="top-bar">
-          <img src={logo} alt="Planly" className="logo" />
-        </header>)}
+          {/* TOP BAR */}
+          {activeTab === "home" && (
+            <header className="top-bar">
+              <img src={logo} alt="Planly" className="logo" />
+            </header>)}
 
-        {/* MAIN CONTENT */}
-        <main className="app-content">
-          {activeTab === "home" && <Home />}
-          {activeTab === "attendance" && <Attendance />}
-          {activeTab === "planner" && <Planner />}
-          {activeTab === "timetable" && <Timetable />}
-        </main>
-      </div>
-        <footer className="bottom-nav">
-         <div
-          className={`nav-item ${activeTab === "home" ? "active" : ""}`}
-          onClick={() => setActiveTab("home")}
-         >
-          <MdHome size={20} />
-          <p>Home</p>
-         </div>
-
-         <div
-          className={`nav-item ${activeTab === "attendance" ? "active" : ""}`}
-          onClick={() => setActiveTab("attendance")}
-         >
-          <MdChecklist size={20} />
-          <p>Attendance</p>
-         </div>
-
-        <div className={`nav-item ${activeTab === "planner" ? "active" : ""}`} onClick={() => setActiveTab("planner")}>
-          <MdEventNote size={20} />
-         <p>Planner</p>
+          {/* MAIN CONTENT */}
+          <main className="app-content">
+            {activeTab === "home" && <Home />}
+            {activeTab === "attendance" && <Attendance />}
+            {activeTab === "planner" && <Planner />}
+            {activeTab === "timetable" && <Timetable />}
+          </main>
         </div>
+        <footer className="bottom-nav">
+          <div
+            className={`nav-item ${activeTab === "home" ? "active" : ""}`}
+            onClick={() => setActiveTab("home")}
+          >
+            <MdHome size={20} />
+            <p>Home</p>
+          </div>
 
-        <div className={`nav-item ${activeTab === "timetable" ? "active" : ""}`} onClick={() => setActiveTab("timetable")}>
-         <MdAccessTime size={20} />
-         <p>Timetable</p>
-         </div>
-       </footer>
+          <div
+            className={`nav-item ${activeTab === "attendance" ? "active" : ""}`}
+            onClick={() => setActiveTab("attendance")}
+          >
+            <MdChecklist size={20} />
+            <p>Attendance</p>
+          </div>
 
-    </div>
+          <div className={`nav-item ${activeTab === "planner" ? "active" : ""}`} onClick={() => setActiveTab("planner")}>
+            <MdEventNote size={20} />
+            <p>Planner</p>
+          </div>
+
+          <div className={`nav-item ${activeTab === "timetable" ? "active" : ""}`} onClick={() => setActiveTab("timetable")}>
+            <MdAccessTime size={20} />
+            <p>Timetable</p>
+          </div>
+        </footer>
+
+      </div>
     </div>
   );
 }

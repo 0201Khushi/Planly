@@ -70,15 +70,34 @@ const getGreeting = () => {
 const getTodayDay = () =>
   ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"][new Date().getDay()];
 
+const getFormattedDate = () => {
+  return new Date().toLocaleDateString("en-US", {
+    weekday: "long",
+    month: "long",
+    day: "numeric",
+    year: "numeric"
+  });
+};
+
 export default function Home() {
   const [quote, setQuote] = useState();
   const [todayClasses, setTodayClasses] = useState([]);
   const [todayDeadlines, setTodayDeadlines] = useState([]);
   const [tomorrowDeadlines, setTomorrowDeadlines] = useState([]);
   const [mustAttend, setMustAttend] = useState([]);
+  const [userName, setUserName] = useState("");
+  const [tempName, setTempName] = useState("");
+  const [showPopup, setShowPopup] = useState(false);
 
   useEffect(() => {
     setQuote(QUOTES[Math.floor(Math.random() * QUOTES.length)]);
+
+    const storedName = localStorage.getItem("planly_user_name");
+    if (storedName) {
+      setUserName(storedName);
+    } else {
+      setShowPopup(true);
+    }
 
     const planner =
       JSON.parse(localStorage.getItem(PLANNER_KEY)) || [];
@@ -105,57 +124,90 @@ export default function Home() {
     setTodayClasses(classes);
 
     setMustAttend(
-  classes.filter(cls => {
-    const r = attendance[cls.subject];
+      classes.filter(cls => {
+        const r = attendance[cls.subject];
 
-    // If attendance record exists
-    if (r && r.total > 0) {
-      const currentPct = (r.attended / r.total) * 100;
-      const pctIfAbsent =
-        (r.attended / (r.total + 1)) * 100;
+        // If attendance record exists
+        if (r && r.total > 0) {
+          const currentPct = (r.attended / r.total) * 100;
+          const pctIfAbsent =
+            (r.attended / (r.total + 1)) * 100;
 
-      return (
-        currentPct < TARGET_ATTENDANCE ||
-        pctIfAbsent < TARGET_ATTENDANCE
-      );
-    }
+          return (
+            currentPct < TARGET_ATTENDANCE ||
+            pctIfAbsent < TARGET_ATTENDANCE
+          );
+        }
 
-    // If no record exists yet → assume first class must be attended
-    return true;
-  })
-);
+        // If no record exists yet → assume first class must be attended
+        return true;
+      })
+    );
 
   }, []);
+
+  const handleNameSubmit = (e) => {
+    e.preventDefault();
+    const trimmed = tempName.trim();
+    if (trimmed) {
+      localStorage.setItem("planly_user_name", trimmed);
+      setUserName(trimmed);
+      setShowPopup(false);
+    }
+  };
+
   const attendanceState =
-  mustAttend.length === 0 ? "confirmation" : "critical";
+    mustAttend.length === 0 ? "confirmation" : "critical";
 
   return (
     <div className="home">
+      {showPopup && (
+        <div className="name-modal-overlay">
+          <div className="name-modal-content">
+            <h2 className="name-modal-title">Welcome to Planly</h2>
+            <p className="name-modal-subtitle">What should I call you?</p>
+            <form onSubmit={handleNameSubmit} className="name-modal-form">
+              <input
+                type="text"
+                className="name-modal-input"
+                placeholder="Enter your name"
+                value={tempName}
+                onChange={(e) => setTempName(e.target.value)}
+                autoFocus
+                required
+              />
+              <button
+                type="submit"
+                className="name-modal-btn"
+                disabled={!tempName.trim()}
+              >
+                Continue
+              </button>
+            </form>
+          </div>
+        </div>
+      )}
 
       {/* HEADER */}
       
       <div className="header">
         <p className="greeting">{getGreeting()}</p>
+        {userName && <p className="username-display">{userName}</p>}
         <p className="quote">{quote}</p>
+        <p className="date-display">{getFormattedDate()}</p>
       </div>
       
 
       {/* STATS */}
       <div className="stats-row">
         <div className="stat-card">
-          <p className="stat-title">Today’s Classes</p>
-          <p className="stat-number" style={{
-      fontSize: "36px",
-      color: "#000",
-    }}>{todayClasses.length}</p>
+          <p className="stat-title">Today's Classes</p>
+          <p className="stat-number">{todayClasses.length}</p>
         </div>
 
         <div className="stat-card">
           <p className="stat-title">Deadlines Today</p>
-          <p className="stat-number" style={{
-      fontSize: "36px",
-      color: "#000",
-    }}>{todayDeadlines.length}</p>
+          <p className="stat-number">{todayDeadlines.length}</p>
         </div>
       </div>
 
@@ -211,32 +263,23 @@ export default function Home() {
         )}
       </div>
       {/* HELP & FEEDBACK */}
-<div className="card feedback-card">
-  <p className="feedback-title">Help & Feedback</p>
-
-  <div className="feedback-options">
-    <a
-    href="https://forms.gle/f9yKWS2sLUn3qejn7"
-    target="_blank"
-    rel="noopener noreferrer"
-    className="feedback-link"
-  >
-   <p className="feedback-btn">
-  Feedback
-  
-</p>
-</a>
-    <a
-    href="mailto:planly.team@gmail.com"
-    className="feedback-link"
-  >
-  <p className="feedback-btn">
-  Contact us
-</p>
-</a>
-
-  </div>
-</div>
+      <div className="footer-links">
+        <a
+          href="https://forms.gle/f9yKWS2sLUn3qejn7"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="footer-link"
+        >
+          Feedback
+        </a>
+        <span className="footer-divider">•</span>
+        <a
+          href="mailto:planly.team@gmail.com"
+          className="footer-link"
+        >
+          Contact us
+        </a>
+      </div>
 
 
     </div>

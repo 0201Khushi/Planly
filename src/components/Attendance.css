@@ -202,11 +202,13 @@
   font-weight: 600;
   cursor: pointer;
 }
+
 .leave-text {
   font-size: 12px;
   margin-top: 4px;
   color: #555;
 }
+
 .right {
   display: flex;
   flex-direction: column;
@@ -214,6 +216,7 @@
   justify-content: center;
   gap: 6px;
 }
+
 .menu-wrapper {
   position: relative;
 }
@@ -247,11 +250,13 @@
 .menu button.danger {
   color: #ef4444;
 }
-.text1{
-  color:#111;
-  font-size:6px;
-  font-weight:200;
+
+.text1 {
+  color: #111;
+  font-size: 6px;
+  font-weight: 200;
 }
+
 .undo-bar {
   position: fixed;
   bottom: 20px;
@@ -265,7 +270,7 @@
   align-items: center;
   gap: 14px;
   font-size: 14px;
-  box-shadow: 0 8px 20px rgba(0,0,0,0.25);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.25);
   z-index: 2000;
 }
 
@@ -276,4 +281,3 @@
   font-weight: 700;
   cursor: pointer;
 }
-

@@ -1,6 +1,6 @@
 import "./Planner.css";
 import { BsChatDots } from "react-icons/bs";
-import { useState,useEffect} from "react";
+import { useState, useEffect } from "react";
 import { classifyCategory } from "../utils/classifyCategory";
 import { FiEdit, FiTrash2 } from "react-icons/fi";
 
@@ -13,379 +13,379 @@ const PLANNER_KEY = "planly_planner_data";
 
 
 function Planner() {
-  
+
   const [input, setInput] = useState("");
 
-// ✅ LOAD TASKS FROM STORAGE
-const [tasks, setTasks] = useState([]);
-const [loading, setLoading] = useState(true);
-const [editingId, setEditingId] = useState(null);
-const [editTask, setEditTask] = useState(null);
-const [timeFilter, setTimeFilter] = useState("All");
-const [recentlyDeleted, setRecentlyDeleted] = useState(null);
-const [undoTimeout, setUndoTimeout] = useState(null);
-const [categories, setCategories] = useState(() => {
-  const saved = localStorage.getItem(CATEGORIES_KEY);
-  if (saved) {
-    return JSON.parse(saved);
-  }
-  // Default initial categories if nothing is saved, including "Clubs" from the optional pool
-  return [...DEFAULT_CATEGORIES, "Clubs"];
-});
-const [showAddCategory, setShowAddCategory] = useState(false);
-const [selectedOptions, setSelectedOptions] = useState(() => {
-  const saved = localStorage.getItem(CATEGORIES_KEY);
-  if (saved) {
-    const savedCategories = JSON.parse(saved);
-    return savedCategories.filter(c => !DEFAULT_CATEGORIES.includes(c));
-  }
-  return ["Clubs"]; // "Clubs" is initially selected if nothing saved
-});
-
-const todayMidnight = (() => {
-  const d = new Date();
-  d.setHours(0, 0, 0, 0);
-  return d.getTime();
-})();
-
-const tomorrowMidnight = todayMidnight + 24 * 60 * 60 * 1000;
-const dayAfterTomorrow = tomorrowMidnight + 24 * 60 * 60 * 1000;
-
-// ✅ activeTab stays simple
-const [activeTab, setActiveTab] = useState("All");
-useEffect(() => {
-  const saved = localStorage.getItem(PLANNER_KEY);
-  if (saved) {
-    try {
-      setTasks(JSON.parse(saved));
-    } catch (e) {
-      console.error("Failed to parse planner data", e);
-      setTasks([]);
+  // ✅ LOAD TASKS FROM STORAGE
+  const [tasks, setTasks] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [editingId, setEditingId] = useState(null);
+  const [editTask, setEditTask] = useState(null);
+  const [timeFilter, setTimeFilter] = useState("All");
+  const [recentlyDeleted, setRecentlyDeleted] = useState(null);
+  const [undoTimeout, setUndoTimeout] = useState(null);
+  const [categories, setCategories] = useState(() => {
+    const saved = localStorage.getItem(CATEGORIES_KEY);
+    if (saved) {
+      return JSON.parse(saved);
     }
-  }
-  setLoading(false);
-}, []);
-
-useEffect(() => {
-  if (!loading) {
-    localStorage.setItem(PLANNER_KEY, JSON.stringify(tasks));
-  }
-}, [tasks, loading]);
-
-useEffect(() => {
-  localStorage.setItem(CATEGORIES_KEY, JSON.stringify(categories));
-}, [categories]);
-
-if (loading) {
-  return (
-    <div className="planner-page">
-      <header className="top-bar">
-        <h2>Planner</h2>
-      </header>
-      <p style={{ padding: "16px", opacity: 0.6 }}>
-        Loading your schedule…
-      </p>
-    </div>
-  );
-}
-
-let timeFilteredTasks = [];
-
-if (timeFilter === "All") {
-  // 🔥 Includes EVERYTHING, including tasks with no date
-  timeFilteredTasks = tasks;
-}
-
-if (timeFilter === "Past") {
-  timeFilteredTasks = tasks.filter(
-    (t) => t.date && t.date < todayMidnight
-  );
-}
-
-if (timeFilter === "Today") {
-  timeFilteredTasks = tasks.filter(
-    (t) =>
-      t.date &&
-      t.date >= todayMidnight &&
-      t.date < tomorrowMidnight
-  );
-}
-
-if (timeFilter === "Tomorrow") {
-  timeFilteredTasks = tasks.filter(
-    (t) =>
-      t.date &&
-      t.date >= tomorrowMidnight &&
-      t.date < dayAfterTomorrow
-  );
-}
-
-if (timeFilter === "Upcoming") {
-  timeFilteredTasks = tasks.filter(
-    (t) => t.date && t.date >= todayMidnight
-  );
-}
-if (timeFilter === "All") {
-  timeFilteredTasks = [...timeFilteredTasks].sort((a, b) => {
-    if (!a.date && !b.date) return 0;
-    if (!a.date) return 1;   // no-date tasks go last
-    if (!b.date) return -1;
-    return a.date - b.date;
+    // Default initial categories if nothing is saved, including "Clubs" from the optional pool
+    return [...DEFAULT_CATEGORIES, "Clubs"];
   });
-}
+  const [showAddCategory, setShowAddCategory] = useState(false);
+  const [selectedOptions, setSelectedOptions] = useState(() => {
+    const saved = localStorage.getItem(CATEGORIES_KEY);
+    if (saved) {
+      const savedCategories = JSON.parse(saved);
+      return savedCategories.filter(c => !DEFAULT_CATEGORIES.includes(c));
+    }
+    return ["Clubs"]; // "Clubs" is initially selected if nothing saved
+  });
 
-const visibleTasks =
-  activeTab === "All"
-    ? timeFilteredTasks
-    : timeFilteredTasks.filter(
+  const todayMidnight = (() => {
+    const d = new Date();
+    d.setHours(0, 0, 0, 0);
+    return d.getTime();
+  })();
+
+  const tomorrowMidnight = todayMidnight + 24 * 60 * 60 * 1000;
+  const dayAfterTomorrow = tomorrowMidnight + 24 * 60 * 60 * 1000;
+
+  // ✅ activeTab stays simple
+  const [activeTab, setActiveTab] = useState("All");
+  useEffect(() => {
+    const saved = localStorage.getItem(PLANNER_KEY);
+    if (saved) {
+      try {
+        setTasks(JSON.parse(saved));
+      } catch (e) {
+        console.error("Failed to parse planner data", e);
+        setTasks([]);
+      }
+    }
+    setLoading(false);
+  }, []);
+
+  useEffect(() => {
+    if (!loading) {
+      localStorage.setItem(PLANNER_KEY, JSON.stringify(tasks));
+    }
+  }, [tasks, loading]);
+
+  useEffect(() => {
+    localStorage.setItem(CATEGORIES_KEY, JSON.stringify(categories));
+  }, [categories]);
+
+  if (loading) {
+    return (
+      <div className="planner-page">
+        <header className="top-bar">
+          <h2>Planner</h2>
+        </header>
+        <p style={{ padding: "16px", opacity: 0.6 }}>
+          Loading your schedule…
+        </p>
+      </div>
+    );
+  }
+
+  let timeFilteredTasks = [];
+
+  if (timeFilter === "All") {
+    // 🔥 Includes EVERYTHING, including tasks with no date
+    timeFilteredTasks = tasks;
+  }
+
+  if (timeFilter === "Past") {
+    timeFilteredTasks = tasks.filter(
+      (t) => t.date && t.date < todayMidnight
+    );
+  }
+
+  if (timeFilter === "Today") {
+    timeFilteredTasks = tasks.filter(
+      (t) =>
+        t.date &&
+        t.date >= todayMidnight &&
+        t.date < tomorrowMidnight
+    );
+  }
+
+  if (timeFilter === "Tomorrow") {
+    timeFilteredTasks = tasks.filter(
+      (t) =>
+        t.date &&
+        t.date >= tomorrowMidnight &&
+        t.date < dayAfterTomorrow
+    );
+  }
+
+  if (timeFilter === "Upcoming") {
+    timeFilteredTasks = tasks.filter(
+      (t) => t.date && t.date >= todayMidnight
+    );
+  }
+  if (timeFilter === "All") {
+    timeFilteredTasks = [...timeFilteredTasks].sort((a, b) => {
+      if (!a.date && !b.date) return 0;
+      if (!a.date) return 1;   // no-date tasks go last
+      if (!b.date) return -1;
+      return a.date - b.date;
+    });
+  }
+
+  const visibleTasks =
+    activeTab === "All"
+      ? timeFilteredTasks
+      : timeFilteredTasks.filter(
         (t) => t.category === activeTab
       );
 
-async function handleAdd() {
-  if (!input.trim()) return;
+  async function handleAdd() {
+    if (!input.trim()) return;
 
-  try {
-    // 1️⃣ Ask backend to split message into event texts
-    const splitRes = await fetch("/api/split", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({ text: input }),
-    });
+    try {
+      // 1️⃣ Ask backend to split message into event texts
+      const splitRes = await fetch("/api/split", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ text: input }),
+      });
 
-    const eventTexts = await splitRes.json(); // array of strings
+      const eventTexts = await splitRes.json(); // array of strings
 
-    // 2️⃣ Parse EACH event separately
-    const parsedEvents = await Promise.all(
-      eventTexts.map(async (eventText) => {
-        const res = await fetch("/api/parse", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({ text: eventText }),
-        });
+      // 2️⃣ Parse EACH event separately
+      const parsedEvents = await Promise.all(
+        eventTexts.map(async (eventText) => {
+          const res = await fetch("/api/parse", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({ text: eventText }),
+          });
 
-        const parsed = await res.json();
-        const finalDate =
-         inferOrdinalDate(eventText) ||
-         inferDateFromText(eventText) ||
-         null;
+          const parsed = await res.json();
+          const finalDate =
+            inferOrdinalDate(eventText) ||
+            inferDateFromText(eventText) ||
+            null;
 
-return {
-  id: Date.now() + Math.random(),
-  ...parsed,
-  date: finalDate,
-  category: classifyCategory(
-    `${parsed.title || ""} ${parsed.notes || ""}`
-  ),
-};
-      })
-    );
+          return {
+            id: Date.now() + Math.random(),
+            ...parsed,
+            date: finalDate,
+            category: classifyCategory(
+              `${parsed.title || ""} ${parsed.notes || ""}`
+            ),
+          };
+        })
+      );
 
-    // 3️⃣ Add all parsed events to tasks
-    setTasks((prev) => [...parsedEvents, ...prev]);
+      // 3️⃣ Add all parsed events to tasks
+      setTasks((prev) => [...parsedEvents, ...prev]);
 
-    // 4️⃣ Clear input
-    setInput("");
-  } catch (err) {
-    console.error("Add failed:", err);
-  }
-}
-function handleDelete(id) {
-  const deletedTask = tasks.find((t) => t.id === id);
-  if (!deletedTask) return;
-
-  // remove immediately
-  setTasks((prev) => prev.filter((task) => task.id !== id));
-
-  // store deleted task for undo
-  setRecentlyDeleted(deletedTask);
-
-  // clear any previous timer
-  if (undoTimeout) clearTimeout(undoTimeout);
-
-  // auto-clear undo after 5 seconds
-  const timeout = setTimeout(() => {
-    setRecentlyDeleted(null);
-  }, 3000);
-
-  setUndoTimeout(timeout);
-}
-function handleUndo() {
-  if (!recentlyDeleted) return;
-
-  setTasks((prev) => [recentlyDeleted, ...prev]);
-  setRecentlyDeleted(null);
-
-  if (undoTimeout) clearTimeout(undoTimeout);
-}
-
-function handleAddCategory() {
-  const nextCategories = [...DEFAULT_CATEGORIES, ...selectedOptions];
-  setCategories(nextCategories);
-
-  // If the currently active tab was removed from the selection, reset to "All"
-  if (!nextCategories.includes(activeTab)) {
-    setActiveTab("All");
-  }
-  setShowAddCategory(false);
-}
-
- /* =========================
-     EDIT TASK
-     ========================= */
-  function startEdit(task) {
-  setEditingId(task.id);
-  setEditTask({ ...task }); // clone entire task
-}
-
-  function saveEdit(id) {
-  setTasks(prev =>
-    prev.map(task =>
-      task.id === id ? editTask : task
-    )
-  );
-  setEditingId(null);
-  setEditTask(null);
-}
-
-function inferDateFromText(text) {
-  if (!text) return null;
-
-  const lower = text.toLowerCase();
-
-  const today = new Date();
-  const base = new Date(
-    today.getFullYear(),
-    today.getMonth(),
-    today.getDate()
-  ); // LOCAL midnight
-
-  const weekdays = [
-    "sunday",
-    "monday",
-    "tuesday",
-    "wednesday",
-    "thursday",
-    "friday",
-    "saturday",
-  ];
-
-  if (lower.includes("today")) {
-    return toLocalMidnightTimestamp(base);
-  }
-
-  if (lower.includes("tomorrow")) {
-    base.setDate(base.getDate() + 1);
-    return toLocalMidnightTimestamp(base);
-  }
-
-  if (lower.includes("yesterday")) {
-    base.setDate(base.getDate() - 1);
-    return toLocalMidnightTimestamp(base);
-  }
-
-  for (let i = 0; i < weekdays.length; i++) {
-    if (lower.includes(weekdays[i])) {
-      let diff = i - base.getDay();
-      if (diff <= 0) diff += 7;
-      if (lower.includes("next")) diff += 7;
-
-      base.setDate(base.getDate() + diff);
-      return toLocalMidnightTimestamp(base);
+      // 4️⃣ Clear input
+      setInput("");
+    } catch (err) {
+      console.error("Add failed:", err);
     }
   }
+  function handleDelete(id) {
+    const deletedTask = tasks.find((t) => t.id === id);
+    if (!deletedTask) return;
 
-  return null;
-}
+    // remove immediately
+    setTasks((prev) => prev.filter((task) => task.id !== id));
 
-// convert Date → local timestamp (no timezone bugs)
-function toLocalMidnightTimestamp(date) {
-  return new Date(
-    date.getFullYear(),
-    date.getMonth(),
-    date.getDate()
-  ).getTime();
-}
-// normalize short months → full months
-function normalizeMonths(text) {
-  const MONTH_MAP = {
-    jan: "january",
-    feb: "february",
-    mar: "march",
-    apr: "april",
-    jun: "june",
-    jul: "july",
-    aug: "august",
-    sep: "september",
-    sept: "september",
-    oct: "october",
-    nov: "november",
-    dec: "december",
-  };
+    // store deleted task for undo
+    setRecentlyDeleted(deletedTask);
 
-  let normalized = text.toLowerCase();
+    // clear any previous timer
+    if (undoTimeout) clearTimeout(undoTimeout);
 
-  Object.keys(MONTH_MAP).forEach((short) => {
-    const regex = new RegExp(`\\b${short}\\b`, "gi");
-    normalized = normalized.replace(regex, MONTH_MAP[short]);
-  });
+    // auto-clear undo after 5 seconds
+    const timeout = setTimeout(() => {
+      setRecentlyDeleted(null);
+    }, 3000);
 
-  return normalized;
-}
+    setUndoTimeout(timeout);
+  }
+  function handleUndo() {
+    if (!recentlyDeleted) return;
+
+    setTasks((prev) => [recentlyDeleted, ...prev]);
+    setRecentlyDeleted(null);
+
+    if (undoTimeout) clearTimeout(undoTimeout);
+  }
+
+  function handleAddCategory() {
+    const nextCategories = [...DEFAULT_CATEGORIES, ...selectedOptions];
+    setCategories(nextCategories);
+
+    // If the currently active tab was removed from the selection, reset to "All"
+    if (!nextCategories.includes(activeTab)) {
+      setActiveTab("All");
+    }
+    setShowAddCategory(false);
+  }
+
+  /* =========================
+      EDIT TASK
+      ========================= */
+  function startEdit(task) {
+    setEditingId(task.id);
+    setEditTask({ ...task }); // clone entire task
+  }
+
+  function saveEdit(id) {
+    setTasks(prev =>
+      prev.map(task =>
+        task.id === id ? editTask : task
+      )
+    );
+    setEditingId(null);
+    setEditTask(null);
+  }
+
+  function inferDateFromText(text) {
+    if (!text) return null;
+
+    const lower = text.toLowerCase();
+
+    const today = new Date();
+    const base = new Date(
+      today.getFullYear(),
+      today.getMonth(),
+      today.getDate()
+    ); // LOCAL midnight
+
+    const weekdays = [
+      "sunday",
+      "monday",
+      "tuesday",
+      "wednesday",
+      "thursday",
+      "friday",
+      "saturday",
+    ];
+
+    if (lower.includes("today")) {
+      return toLocalMidnightTimestamp(base);
+    }
+
+    if (lower.includes("tomorrow")) {
+      base.setDate(base.getDate() + 1);
+      return toLocalMidnightTimestamp(base);
+    }
+
+    if (lower.includes("yesterday")) {
+      base.setDate(base.getDate() - 1);
+      return toLocalMidnightTimestamp(base);
+    }
+
+    for (let i = 0; i < weekdays.length; i++) {
+      if (lower.includes(weekdays[i])) {
+        let diff = i - base.getDay();
+        if (diff <= 0) diff += 7;
+        if (lower.includes("next")) diff += 7;
+
+        base.setDate(base.getDate() + diff);
+        return toLocalMidnightTimestamp(base);
+      }
+    }
+
+    return null;
+  }
+
+  // convert Date → local timestamp (no timezone bugs)
+  function toLocalMidnightTimestamp(date) {
+    return new Date(
+      date.getFullYear(),
+      date.getMonth(),
+      date.getDate()
+    ).getTime();
+  }
+  // normalize short months → full months
+  function normalizeMonths(text) {
+    const MONTH_MAP = {
+      jan: "january",
+      feb: "february",
+      mar: "march",
+      apr: "april",
+      jun: "june",
+      jul: "july",
+      aug: "august",
+      sep: "september",
+      sept: "september",
+      oct: "october",
+      nov: "november",
+      dec: "december",
+    };
+
+    let normalized = text.toLowerCase();
+
+    Object.keys(MONTH_MAP).forEach((short) => {
+      const regex = new RegExp(`\\b${short}\\b`, "gi");
+      normalized = normalized.replace(regex, MONTH_MAP[short]);
+    });
+
+    return normalized;
+  }
 
 
-// infer ordinal dates like "3rd December"
-function inferOrdinalDate(text) {
-  if (!text) return null;
+  // infer ordinal dates like "3rd December"
+  function inferOrdinalDate(text) {
+    if (!text) return null;
 
-  const normalizedText = normalizeMonths(text);
+    const normalizedText = normalizeMonths(text);
 
-  const match = normalizedText.match(
-    /\b(\d{1,2})(st|nd|rd|th)?\s+(january|february|march|april|may|june|july|august|september|october|november|december)\b/i
-  );
- 
-  if (!match) return null;
+    const match = normalizedText.match(
+      /\b(\d{1,2})(st|nd|rd|th)?\s+(january|february|march|april|may|june|july|august|september|october|november|december)\b/i
+    );
 
-  const day = parseInt(match[1], 10);
-  const monthName = match[3].toLowerCase();
+    if (!match) return null;
 
-  const monthIndex = [
-    "january","february","march","april","may","june",
-    "july","august","september","october","november","december"
-  ].indexOf(monthName);
+    const day = parseInt(match[1], 10);
+    const monthName = match[3].toLowerCase();
 
-  const now = new Date();
-  let year = now.getFullYear();
+    const monthIndex = [
+      "january", "february", "march", "april", "may", "june",
+      "july", "august", "september", "october", "november", "december"
+    ].indexOf(monthName);
 
-  // if date already passed → assume next year
-  const candidate = new Date(year, monthIndex, day);
-  if (candidate < now) year += 1;
+    const now = new Date();
+    let year = now.getFullYear();
 
-  return toLocalMidnightTimestamp(
-    new Date(year, monthIndex, day)
-  );
-}
-function formatDateWithDay(timestamp) {
-  if (!timestamp) return "";
+    // if date already passed → assume next year
+    const candidate = new Date(year, monthIndex, day);
+    if (candidate < now) year += 1;
 
-  const date = new Date(timestamp);
-  return date.toLocaleDateString("en-US", {
-    weekday: "long",
-    day: "numeric",
-    month: "short",
-  });
+    return toLocalMidnightTimestamp(
+      new Date(year, monthIndex, day)
+    );
+  }
+  function formatDateWithDay(timestamp) {
+    if (!timestamp) return "";
 
-}
-function timestampToInputDate(ts) {
-  const d = new Date(ts);
-  const y = d.getFullYear();
-  const m = String(d.getMonth() + 1).padStart(2, "0");
-  const day = String(d.getDate()).padStart(2, "0");
-  return `${y}-${m}-${day}`;
-}
+    const date = new Date(timestamp);
+    return date.toLocaleDateString("en-US", {
+      weekday: "long",
+      day: "numeric",
+      month: "short",
+    });
+
+  }
+  function timestampToInputDate(ts) {
+    const d = new Date(ts);
+    const y = d.getFullYear();
+    const m = String(d.getMonth() + 1).padStart(2, "0");
+    const day = String(d.getDate()).padStart(2, "0");
+    return `${y}-${m}-${day}`;
+  }
 
 
 
@@ -396,266 +396,266 @@ function timestampToInputDate(ts) {
 
       {/* Header */}
       <header className="top-bar">
-      <h2 style={{
-      fontFamily: "Jura, sans-serif",
-      fontSize: "22px",
-      fontWeight: "600",
-      color: "#000",
-      margin: 0,
-    }}>Planner</h2>
+        <h2 style={{
+          fontFamily: "Jura, sans-serif",
+          fontSize: "22px",
+          fontWeight: "600",
+          color: "#000",
+          margin: 0,
+        }}>Planner</h2>
       </header>
 
       {/* Input Box */}
       <div className="paste-box">
-      <div className="paste-header">
-      <span className="paste-title">< BsChatDots style={{ marginRight: "8px" }} />Paste messages</span>
-      <button className="add-btn" onClick= {handleAdd}>
-      Add</button>
+        <div className="paste-header">
+          <span className="paste-title">< BsChatDots style={{ marginRight: "8px" }} />Paste messages</span>
+          <button className="add-btn" onClick={handleAdd}>
+            Add</button>
+        </div>
+
+        <textarea
+          className="paste-input"
+          placeholder="Paste or Type messages in English"
+          value={input}
+          onChange={(e) => setInput(e.target.value)}
+        />
+
       </div>
 
-   <textarea
-    className="paste-input"
-    placeholder="Paste or Type messages in English"
-    value={input}
-    onChange={(e) => setInput(e.target.value)}
-   />
-    
-  </div>
-
-  <div className="text1">Your Schedule</div>
+      <div className="text1">Your Schedule</div>
       {/* Category Tabs */}
       <div className="tab-container">
-  {categories.map((tab) => (
-    <div
-      key={tab}
-      className={`tab ${activeTab === tab ? "active" : ""}`}
-      onClick={() => setActiveTab(tab)}
-    >
-      {tab}
-    </div>
-  ))}
-  <button 
-    className="tab-add-button" 
-    onClick={() => {
-      // Initialize selectedOptions with currently active optional categories
-      setSelectedOptions(categories.filter(c => !DEFAULT_CATEGORIES.includes(c)));
-      setShowAddCategory(true);
-    }}>+</button>
-</div>
+        {categories.map((tab) => (
+          <div
+            key={tab}
+            className={`tab ${activeTab === tab ? "active" : ""}`}
+            onClick={() => setActiveTab(tab)}
+          >
+            {tab}
+          </div>
+        ))}
+        <button
+          className="tab-add-button"
+          onClick={() => {
+            // Initialize selectedOptions with currently active optional categories
+            setSelectedOptions(categories.filter(c => !DEFAULT_CATEGORIES.includes(c)));
+            setShowAddCategory(true);
+          }}>+</button>
+      </div>
 
       {/* Filter Pills */}
       <div className="filter-row">
-  {["Past",,"All","Upcoming", "Today", "Tomorrow"].map((f) => (
-    <div
-      key={f}
-      className={`filter-pill ${timeFilter === f ? "active" : ""}`}
-      onClick={() => setTimeFilter(f)}
-    >
-      {f}
-    </div>
-    
-  ))}
-</div>
+        {["Past", , "All", "Upcoming", "Today", "Tomorrow"].map((f) => (
+          <div
+            key={f}
+            className={`filter-pill ${timeFilter === f ? "active" : ""}`}
+            onClick={() => setTimeFilter(f)}
+          >
+            {f}
+          </div>
+
+        ))}
+      </div>
 
 
       {/* Sample Card */}
 
       {visibleTasks.map((task) => {
-  const isPast = task.date && task.date < todayMidnight;
+        const isPast = task.date && task.date < todayMidnight;
 
-  return (
-    <div
-      key={task.id}
-      className={`event-card ${(task.category || "events")
-        .trim()
-        .toLowerCase()} ${isPast ? "past-event" : ""}`}
-    >
-      <div className="event-header-row">
-        <div className="event-type">
-          {task.category?.toUpperCase() || "EVENT"}
-        </div>
-        <div className="action-icons">
-          <button
-            className="edit-btn"
-            onClick={() => startEdit(task)}
-          >
-             <FiEdit size={16} />
-          </button>
-          <button
-            className="delete-btn"
-            onClick={() => handleDelete(task.id)}
-          >
-          <FiTrash2 size={16} />
-          </button>
-        </div>
-      </div>
-
-      {editingId === task.id ? (
-        <div className="edit-card">
-          <select
-            value={editTask.category || "Events"}
-            onChange={(e) =>
-              setEditTask((prev) => ({
-                ...prev,
-                category: e.target.value,
-              }))
-            }>
-            {categories.filter(c => c !== "All").map(cat => (
-              <option key={cat} value={cat}>{cat}</option>
-            ))}
-          </select>
-
-          <input
-            value={editTask.title || ""}
-            onChange={(e) =>
-              setEditTask((prev) => ({
-                ...prev,
-                title: e.target.value,
-              }))
-            }
-            placeholder="Event title"
-            autoFocus
-          />
-
-          <div className="field">
-  <label className="field-label">Date</label>
-  <input
-    type="date"
-    value={editTask.date ? timestampToInputDate(editTask.date) : ""}
-    onChange={(e) => {
-      const [y, m, d] = e.target.value.split("-").map(Number);
-      setEditTask((prev) => ({
-        ...prev,
-        date: new Date(y, m - 1, d).getTime(),
-      }));
-    }}
-  />
-</div>
-
-<div className="field">
-  <label className="field-label">Time</label>
-  <input
-    type="time"
-    value={editTask.time || ""}
-    onChange={(e) =>
-      setEditTask((prev) => ({
-        ...prev,
-        time: e.target.value,
-      }))
-    }
-  />
-</div>
-
-          <input
-            value={editTask.venue || ""}
-            onChange={(e) =>
-              setEditTask((prev) => ({
-                ...prev,
-                venue: e.target.value,
-              }))
-            }
-            placeholder="Venue"
-          />
-
-          <textarea
-            value={editTask.notes || ""}
-            onChange={(e) =>
-              setEditTask((prev) => ({
-                ...prev,
-                notes: e.target.value,
-              }))
-            }
-            placeholder="Notes"
-          />
-
-          <div className="save-row">
-            <button
-              className="save"
-              onClick={() => saveEdit(task.id)}
-            >
-              Save
-            </button>
-          </div>
-        </div>
-      ) : (
-        <>
-          <div className="event-title">{task.title}</div>
-
-          {task.date && (
-            <div className="event-date">
-              {formatDateWithDay(task.date)}
-            </div>
-          )}
-
-          {task.time && (
-            <div className="event-time">{task.time}</div>
-          )}
-
-          {task.venue && (
-            <div className="event-venue">{task.venue}</div>
-          )}
-
-          {task.notes && (
-            <div className="event-notes">{task.notes}</div>
-          )}
-        </>
-      )}
-    </div>
-  );
-})}
-{recentlyDeleted && (
-  <div className="undo-bar">
-    <span>Event deleted</span>
-    <button onClick={handleUndo}>Undo</button>
-  </div>
-)}
-
-{/* ADD CATEGORY MODAL */}
-{showAddCategory && (
-  <div className="modal-overlay" onClick={() => setShowAddCategory(false)}>
-    <div className="modal-card" onClick={(e) => e.stopPropagation()}>
-      <h3 style={{ marginBottom: '8px' }}>Manage Tabs</h3>
-      <p style={{ fontSize: '14px', marginBottom: '16px', opacity: 0.6 }}>
-        Select up to 2 additional categories to show as tabs:
-      </p>
-      
-      <div style={{ display: 'flex', flexWrap: 'wrap', gap: '8px', marginBottom: '24px' }}>
-        {OPTIONAL_POOL.map(opt => (
+        return (
           <div
-            key={opt}
-            className={`filter-pill ${selectedOptions.includes(opt) ? "active" : ""}`}
-            style={{ cursor: 'pointer' }}
-            onClick={() => {
-              if (selectedOptions.includes(opt)) {
-                setSelectedOptions(prev => prev.filter(o => o !== opt));
-              } else {
-                if (selectedOptions.length < 2) {
-                  setSelectedOptions(prev => [...prev, opt]);
-                } else {
-                  alert("You can only choose at most two extra categories.");
-                }
-              }
-            }}
+            key={task.id}
+            className={`event-card ${(task.category || "events")
+              .trim()
+              .toLowerCase()} ${isPast ? "past-event" : ""}`}
           >
-            {opt}
+            <div className="event-header-row">
+              <div className="event-type">
+                {task.category?.toUpperCase() || "EVENT"}
+              </div>
+              <div className="action-icons">
+                <button
+                  className="edit-btn"
+                  onClick={() => startEdit(task)}
+                >
+                  <FiEdit size={16} />
+                </button>
+                <button
+                  className="delete-btn"
+                  onClick={() => handleDelete(task.id)}
+                >
+                  <FiTrash2 size={16} />
+                </button>
+              </div>
+            </div>
+
+            {editingId === task.id ? (
+              <div className="edit-card">
+                <select
+                  value={editTask.category || "Events"}
+                  onChange={(e) =>
+                    setEditTask((prev) => ({
+                      ...prev,
+                      category: e.target.value,
+                    }))
+                  }>
+                  {categories.filter(c => c !== "All").map(cat => (
+                    <option key={cat} value={cat}>{cat}</option>
+                  ))}
+                </select>
+
+                <input
+                  value={editTask.title || ""}
+                  onChange={(e) =>
+                    setEditTask((prev) => ({
+                      ...prev,
+                      title: e.target.value,
+                    }))
+                  }
+                  placeholder="Event title"
+                  autoFocus
+                />
+
+                <div className="field">
+                  <label className="field-label">Date</label>
+                  <input
+                    type="date"
+                    value={editTask.date ? timestampToInputDate(editTask.date) : ""}
+                    onChange={(e) => {
+                      const [y, m, d] = e.target.value.split("-").map(Number);
+                      setEditTask((prev) => ({
+                        ...prev,
+                        date: new Date(y, m - 1, d).getTime(),
+                      }));
+                    }}
+                  />
+                </div>
+
+                <div className="field">
+                  <label className="field-label">Time</label>
+                  <input
+                    type="time"
+                    value={editTask.time || ""}
+                    onChange={(e) =>
+                      setEditTask((prev) => ({
+                        ...prev,
+                        time: e.target.value,
+                      }))
+                    }
+                  />
+                </div>
+
+                <input
+                  value={editTask.venue || ""}
+                  onChange={(e) =>
+                    setEditTask((prev) => ({
+                      ...prev,
+                      venue: e.target.value,
+                    }))
+                  }
+                  placeholder="Venue"
+                />
+
+                <textarea
+                  value={editTask.notes || ""}
+                  onChange={(e) =>
+                    setEditTask((prev) => ({
+                      ...prev,
+                      notes: e.target.value,
+                    }))
+                  }
+                  placeholder="Notes"
+                />
+
+                <div className="save-row">
+                  <button
+                    className="save"
+                    onClick={() => saveEdit(task.id)}
+                  >
+                    Save
+                  </button>
+                </div>
+              </div>
+            ) : (
+              <>
+                <div className="event-title">{task.title}</div>
+
+                {task.date && (
+                  <div className="event-date">
+                    {formatDateWithDay(task.date)}
+                  </div>
+                )}
+
+                {task.time && (
+                  <div className="event-time">{task.time}</div>
+                )}
+
+                {task.venue && (
+                  <div className="event-venue">{task.venue}</div>
+                )}
+
+                {task.notes && (
+                  <div className="event-notes">{task.notes}</div>
+                )}
+              </>
+            )}
           </div>
-        ))}
-      </div>
+        );
+      })}
+      {recentlyDeleted && (
+        <div className="undo-bar">
+          <span>Event deleted</span>
+          <button onClick={handleUndo}>Undo</button>
+        </div>
+      )}
 
-      <div className="modal-actions" style={{ display: 'flex', justifyContent: 'flex-end', gap: '8px' }}>
-        <button className="cancel-btn" onClick={() => setShowAddCategory(false)}>
-          Cancel
-        </button>
-        <button className="confirm-btn" onClick={handleAddCategory}>
-          Add
-        </button>
-      </div>
-    </div>
-  </div>
-)}
+      {/* ADD CATEGORY MODAL */}
+      {showAddCategory && (
+        <div className="modal-overlay" onClick={() => setShowAddCategory(false)}>
+          <div className="modal-card" onClick={(e) => e.stopPropagation()}>
+            <h3 style={{ marginBottom: '8px' }}>Manage Tabs</h3>
+            <p style={{ fontSize: '14px', marginBottom: '16px', opacity: 0.6 }}>
+              Select up to 2 additional categories to show as tabs:
+            </p>
+
+            <div style={{ display: 'flex', flexWrap: 'wrap', gap: '8px', marginBottom: '24px' }}>
+              {OPTIONAL_POOL.map(opt => (
+                <div
+                  key={opt}
+                  className={`filter-pill ${selectedOptions.includes(opt) ? "active" : ""}`}
+                  style={{ cursor: 'pointer' }}
+                  onClick={() => {
+                    if (selectedOptions.includes(opt)) {
+                      setSelectedOptions(prev => prev.filter(o => o !== opt));
+                    } else {
+                      if (selectedOptions.length < 2) {
+                        setSelectedOptions(prev => [...prev, opt]);
+                      } else {
+                        alert("You can only choose at most two extra categories.");
+                      }
+                    }
+                  }}
+                >
+                  {opt}
+                </div>
+              ))}
+            </div>
+
+            <div className="modal-actions" style={{ display: 'flex', justifyContent: 'flex-end', gap: '8px' }}>
+              <button className="cancel-btn" onClick={() => setShowAddCategory(false)}>
+                Cancel
+              </button>
+              <button className="confirm-btn" onClick={handleAddCategory}>
+                Add
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
 
     </div>
-    
+
   );
 }
 
