@@ -1,4 +1,5 @@
 import './App.css';
+import mixpanel from "./utils/analytics";
 import logo from './assets/logo.png';
 import { useState, useEffect } from "react";
 import Home from "./components/Home";
@@ -9,6 +10,9 @@ import { MdHome, MdEventNote, MdAccessTime, MdChecklist } from "react-icons/md";
 import { FiEdit, FiTrash2 } from "react-icons/fi";
 function App() {
   const [activeTab, setActiveTab] = useState("home");
+  useEffect(() => {
+    mixpanel.track("app_opened");
+  }, []);
 
   return (
     <div className="app-root">
