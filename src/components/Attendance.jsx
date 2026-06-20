@@ -320,7 +320,7 @@ export default function Attendance() {
           dominantBaseline="middle"
           fontSize="11"
           fontWeight="600"
-          fill="#111"
+          fill="currentColor"
         >
           {percentage}%
         </text>
@@ -377,7 +377,7 @@ export default function Attendance() {
             fontFamily: "Inter",
             fontSize: "22px",
             fontWeight: "200",
-            color: "#000",
+            color: "currentColor",
             margin: 0,
           }}
         >

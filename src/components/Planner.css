@@ -1,16 +1,19 @@
-.planner-page{
+.planner-page {
   width: 100%;
-  padding: 16px; /* internal spacing only */
+  padding: 16px;
+  /* internal spacing only */
   box-sizing: border-box;
-  padding-bottom:120px;
+  padding-bottom: 120px;
 }
 
 .top-bar {
-  position: fixed;        /* stick to top */
+  position: fixed;
+  /* stick to top */
   top: 0;
   left: 0;
 
-  width: 100vw;           /* full screen width */
+  width: 100vw;
+  /* full screen width */
   height: 49px;
 
   background-color: #ffffff;
@@ -82,23 +85,30 @@
   color: #4F6EF7;
   font-weight: 600;
 }
+
 .tab-add-button {
-  background: #f1f1f1; /* Match inactive tab background */
-  color: #555;        /* Match inactive tab text color */
+  background: #f1f1f1;
+  /* Match inactive tab background */
+  color: #555;
+  /* Match inactive tab text color */
   border: none;
-  border-radius: 50%; /* Circular shape */
+  border-radius: 50%;
+  /* Circular shape */
   width: 30px;
   height: 30px;
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 20px; /* Plus sign size */
+  font-size: 20px;
+  /* Plus sign size */
   cursor: pointer;
-  transition: 0.2s ease; /* Smooth transition for hover */
+  transition: 0.2s ease;
+  /* Smooth transition for hover */
 }
 
 .tab-add-button:hover {
-  background: #e0e0e0; /* Slightly darker on hover */
+  background: #e0e0e0;
+  /* Slightly darker on hover */
 }
 
 /* Filters */
@@ -126,7 +136,7 @@
   padding: 14px;
   border-radius: 12px;
   margin-top: 15px;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
 }
 
 .task-card h4 {
@@ -137,6 +147,7 @@
   font-size: 12px;
   color: #4F6EF7;
 }
+
 .paste-box {
   background: #ffffff;
   border-radius: 18px;
@@ -155,7 +166,7 @@
 
 .paste-title {
   font-family: 'Inter';
-  font-size: 15px ;
+  font-size: 15px;
   font-weight: 700 !important;
   color: #333;
 }
@@ -183,24 +194,28 @@
   padding: 10px;
   border-radius: 12px;
 }
-.text1{
+
+.text1 {
   font-family: 'Inter', sans-serif;
-  font-size: 24px ;
+  font-size: 24px;
   font-weight: 700 !important;
   color: #333;
   margin-top: 20px;
 }
+
 .tab-container {
   display: flex;
   gap: 10px;
   overflow-x: auto;
   padding: 8px 0;
   margin-top: 12px;
-  scrollbar-width: none; /* Firefox */
+  scrollbar-width: none;
+  /* Firefox */
 }
 
 .tab-container::-webkit-scrollbar {
-  display: none; /* Chrome, Safari */
+  display: none;
+  /* Chrome, Safari */
 }
 
 .tab {
@@ -220,6 +235,7 @@
   color: white;
   font-weight: 600;
 }
+
 .filter-row {
   display: flex;
   gap: 10px;
@@ -248,41 +264,51 @@
   color: #fff;
   font-weight: 700;
   font-family: 'Inter', sans-serif;
-  
+
 }
+
 .task-text {
-  color: #000; /* pure black */
+  color: #000;
+  /* pure black */
   font-weight: 500;
 }
+
 .event-card {
   background: #ffffff;
   border-radius: 14px;
   padding: 14px 16px;
   margin-bottom: 14px;
-  box-shadow: 0 6px 18px rgba(0,0,0,0.06);
-  border-left: 4px solid ;
-   /* category accent */
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.06);
+  border-left: 4px solid;
+  /* category accent */
 }
+
 .event-card.exams {
   border-left-color: #d72828;
 }
+
 .event-card.academic,
 .event-card.academics {
   border-left: 4px solid #ff7a00;
 }
+
 .event-card.clubs {
   border-left: 4px solid #00aaff;
 }
+
 .event-card.projects {
   border-left: 4px solid #8b5cf6;
 }
+
 .event-card.placements,
 .event-card.career {
   border-left: 4px solid #0ea5e9;
 }
+
 .event-card.personal {
   border-left: 4px solid #ec4899;
 }
+
 .event-card.events {
   border-left: 4px solid #32d63d;
 }
@@ -320,34 +346,42 @@
 .event-venue {
   font-size: 14px;
   font-weight: 600;
-  color: #4F6EF7; /* blue like screenshot */
+  color: #4F6EF7;
+  /* blue like screenshot */
 }
+
 .event-date {
   font-size: 14px;
   font-weight: 600;
   color: #444;
   margin-bottom: 4px;
 }
+
 .event-notes {
   font-size: 14px;
   color: #444;
   margin-bottom: 4px;
   font-style: italic;
 }
+
 .bottom-spacer {
-  height:150px;
+  height: 150px;
 }
+
 .event-header-row {
   display: flex;
   align-items: center;
   justify-content: space-between;
   gap: 12px;
 }
+
 .action-icons {
   display: flex;
   align-items: center;
-  gap: 10px; /* space between ✏️ and 🗑️ */
+  gap: 10px;
+  /* space between ✏️ and 🗑️ */
 }
+
 .delete-btn {
   background: transparent;
   border: none;
@@ -356,9 +390,11 @@
   padding: 4px;
   opacity: 0.6;
 }
+
 .delete-btn:hover {
   opacity: 1;
 }
+
 .edit-btn {
   background: transparent;
   border: none;
@@ -367,7 +403,8 @@
   padding: 4px;
   opacity: 0.6;
 }
-.save{
+
+.save {
   background: #4F6EF7;
   color: white;
   border: none;
@@ -376,12 +413,13 @@
   font-size: 14px;
 
 }
-.save-row{
-  display:flex;
-  justify-content: flex-end;
-  margin-top:12px
 
+.save-row {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 12px
 }
+
 /* =========================
    PAST EVENTS (GREYED)
    ========================= */
@@ -405,12 +443,17 @@
 .past-event {
   border-left-color: #d1d5db !important;
 }
+
 .card.confirmation {
-  border-left: 3px solid #FDE68A; /* soft amber */
+  border-left: 3px solid #FDE68A;
+  /* soft amber */
 }
+
 .card.critical {
-  border-left: 4px solid #F59E0B; /* strong amber */
+  border-left: 4px solid #F59E0B;
+  /* strong amber */
 }
+
 .field {
   display: flex;
   flex-direction: column;
@@ -422,6 +465,7 @@
   font-weight: 600;
   color: #6b7280;
 }
+
 .undo-bar {
   position: fixed;
   bottom: 20px;
@@ -435,7 +479,7 @@
   align-items: center;
   gap: 14px;
   font-size: 14px;
-  box-shadow: 0 8px 20px rgba(0,0,0,0.25);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.25);
   z-index: 2000;
 }
 
@@ -445,4 +489,103 @@
   color: #4F6EF7;
   font-weight: 700;
   cursor: pointer;
+}
+
+/* ==========================================================================
+   DARK MODE OVERRIDES
+   ========================================================================= */
+.dark-mode .planner-page {
+  background: var(--bg-app) !important;
+  color: var(--text-primary) !important;
+}
+
+.dark-mode .planner-input-box textarea {
+  background: var(--bg-input) !important;
+  border-color: var(--border-input) !important;
+  color: var(--text-primary) !important;
+}
+
+.dark-mode .paste-box {
+  background: var(--bg-card) !important;
+  box-shadow: 0 4px 10px var(--shadow-nav) !important;
+  border: 1px solid var(--border-color) !important;
+}
+
+.dark-mode .paste-title {
+  color: var(--text-primary) !important;
+}
+
+.dark-mode .paste-input {
+  background: var(--bg-input) !important;
+  border-color: var(--border-input) !important;
+  color: var(--text-primary) !important;
+}
+
+.dark-mode .text1 {
+  color: var(--text-primary) !important;
+}
+
+.dark-mode .tab {
+  background: var(--bg-input) !important;
+  color: var(--text-secondary) !important;
+}
+
+.dark-mode .tab.active {
+  background: #4F6EF7 !important;
+  color: var(--text-secondary) !important;
+}
+
+.dark-mode .tab-add-button {
+  background: var(--bg-input) !important;
+  color: var(--text-primary) !important;
+}
+
+.dark-mode .tab-add-button:hover {
+  background: var(--border-input) !important;
+}
+
+.dark-mode .filter-pill {
+  background: var(--bg-input) !important;
+  color: var(--text-secondary) !important;
+}
+
+.dark-mode .filter-pill.active {
+  background: #ffffff !important;
+  color: #000000 !important;
+  font-weight: 700 !important;
+}
+
+.dark-mode .task-text {
+  color: var(--text-primary) !important;
+}
+
+.dark-mode .event-card {
+  background: var(--bg-card) !important;
+  border-color: var(--border-color) !important;
+  box-shadow: 0 6px 18px var(--shadow-nav) !important;
+}
+
+.dark-mode .event-title {
+  color: var(--text-primary) !important;
+}
+
+.dark-mode .event-date,
+.dark-mode .event-time,
+.dark-mode .event-notes {
+  color: var(--text-secondary) !important;
+}
+
+.dark-mode .event-type {
+  color: var(--text-muted) !important;
+}
+
+.dark-mode .past-event {
+  background: var(--bg-input) !important;
+  opacity: 0.55 !important;
+  border-left-color: var(--border-input) !important;
+  box-shadow: none !important;
+}
+
+.dark-mode .field-label {
+  color: var(--text-secondary) !important;
 }

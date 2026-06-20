@@ -406,7 +406,7 @@ function Planner() {
         <p style={{
           fontSize: "22px",
           fontWeight: "200",
-          color: "#000",
+          color: "currentColor",
           margin: 0,
         }}>Planner</p>
       </header>

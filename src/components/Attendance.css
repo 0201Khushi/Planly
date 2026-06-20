@@ -284,3 +284,94 @@
   font-weight: 700;
   cursor: pointer;
 }
+
+/* ==========================================================================
+   DARK MODE OVERRIDES
+   ========================================================================= */
+.dark-mode .attendance-page {
+  background: var(--bg-app) !important;
+  color: var(--text-primary) !important;
+}
+
+.dark-mode .attendance-summary {
+  background: 
+    linear-gradient(var(--bg-card), var(--bg-card)) padding-box,
+    linear-gradient(135deg, #4F6EF7 0%, #4DB6AC 100%) border-box !important;
+  color: var(--text-primary) !important;
+  border: 2px solid transparent !important;
+  box-shadow: 0 8px 20px var(--shadow-nav) !important;
+}
+
+.dark-mode .attendance-summary p {
+  color: var(--text-secondary) !important;
+}
+
+.dark-mode .subject-card {
+  background: var(--bg-card) !important;
+  color: var(--text-primary) !important;
+  box-shadow: 0 8px 20px var(--shadow-nav) !important;
+}
+
+.dark-mode .subject-name {
+  color: var(--text-primary) !important;
+}
+
+.dark-mode .count,
+.dark-mode .status-text,
+.dark-mode .leave-text {
+  color: var(--text-secondary) !important;
+}
+
+.dark-mode .actions button {
+  background: var(--bg-input) !important;
+  color: var(--text-primary) !important;
+}
+
+.dark-mode .actions button:hover {
+  background: var(--border-input) !important;
+}
+
+.dark-mode .modal-card {
+  background: var(--bg-card) !important;
+  border: 1px solid var(--border-color) !important;
+  box-shadow: 0 12px 30px var(--shadow-nav) !important;
+  color: var(--text-primary) !important;
+}
+
+.dark-mode .modal-card input {
+  background: var(--bg-input) !important;
+  border: 1px solid var(--border-input) !important;
+  color: var(--text-primary) !important;
+}
+
+.dark-mode .modal-card input:focus {
+  border-color: #4F6EF7 !important;
+}
+
+.dark-mode .cancel-btn {
+  color: var(--text-secondary) !important;
+}
+
+.dark-mode .menu {
+  background: var(--bg-card) !important;
+  border: 1px solid var(--border-color) !important;
+  box-shadow: 0 8px 24px var(--shadow-nav) !important;
+}
+
+.dark-mode .menu button {
+  color: var(--text-primary) !important;
+}
+
+.dark-mode .menu button:hover {
+  background: var(--bg-input) !important;
+}
+
+.dark-mode .menu button.danger {
+  color: #ef4444;
+}
+
+.dark-mode .text1 {
+  color: var(--text-primary) !important;
+}
+
+

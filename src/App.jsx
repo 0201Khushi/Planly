@@ -6,13 +6,25 @@ import Home from "./components/Home";
 import Attendance from "./components/Attendance";
 import Planner from "./components/Planner";
 import Timetable from "./components/Timetable";
-import { MdHome, MdEventNote, MdAccessTime, MdChecklist } from "react-icons/md";
+import { MdHome, MdEventNote, MdAccessTime, MdChecklist, MdDarkMode, MdLightMode } from "react-icons/md";
 import { FiEdit, FiTrash2 } from "react-icons/fi";
 function App() {
   const [activeTab, setActiveTab] = useState("home");
+  const [darkMode, setDarkMode] = useState(() => localStorage.getItem("planly_theme") === "dark");
+
   useEffect(() => {
     mixpanel.track("app_opened");
   }, []);
+
+  useEffect(() => {
+    if (darkMode) {
+      document.documentElement.classList.add("dark-mode");
+      localStorage.setItem("planly_theme", "dark");
+    } else {
+      document.documentElement.classList.remove("dark-mode");
+      localStorage.setItem("planly_theme", "light");
+    }
+  }, [darkMode]);
 
   return (
     <div className="app-root">
@@ -33,6 +45,13 @@ function App() {
           {activeTab === "home" && (
             <header className="top-bar">
               <img src={logo} alt="Planly" className="logo" />
+              <button 
+                className="theme-toggle-btn" 
+                onClick={() => setDarkMode(!darkMode)}
+                aria-label="Toggle theme"
+              >
+                {darkMode ? <MdLightMode size={22} /> : <MdDarkMode size={22} />}
+              </button>
             </header>)}
 
           {/* MAIN CONTENT */}

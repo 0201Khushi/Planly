@@ -1,6 +1,42 @@
-/* Force light mode always */
 :root {
-  color-scheme: light;
+  color-scheme: light dark;
+
+  --bg-app: #F4F6FA;
+  --bg-card: #ffffff;
+  --bg-input: #f8f9fb;
+  --border-input: #e0e0e0;
+
+  --text-primary: #0F172A;
+  --text-secondary: #64748B;
+  --text-muted: #94A3B8;
+
+  --border-color: #E2E8F0;
+  --nav-bg: #ffffff;
+  --topbar-bg: #ffffff;
+  --shadow-nav: rgba(0, 0, 0, 0.15);
+  --shadow-top: rgba(0, 0, 0, 0.08);
+}
+
+.dark-mode {
+  --bg-app: #7f7f80;
+  --bg-card: #3f3f43;
+  --bg-input: #2C2C2E;
+  --border-input: #3A3A3C;
+
+  --text-primary: #FFFFFF;
+  --text-secondary: #E5E5EA;
+  --text-muted: #8E8E93;
+
+  --border-color: #2C2C2E;
+  --nav-bg: #1C1C1E;
+  --topbar-bg: #1C1C1E;
+  --shadow-nav: rgba(0, 0, 0, 0.4);
+  --shadow-top: rgba(0, 0, 0, 0.3);
+}
+
+.dark-mode,
+.dark-mode body {
+  background-color: var(--bg-app) !important;
 }
 
 /* 🔥 RESET ALL DEFAULT BROWSER SPACING */
@@ -22,7 +58,8 @@ body,
 
 .app-root {
   height: 100vh;
-  background-color: #F4F6FA;
+  background-color: var(--bg-app);
+  color: var(--text-primary);
   overflow-x: hidden;
 }
 
@@ -55,7 +92,7 @@ body,
 
 .container {
   height: 100vh;
-  background-color: #F4F6FA;
+  background-color: var(--bg-app);
 
   display: flex;
   justify-content: center;
@@ -104,12 +141,12 @@ body,
     /* full screen width */
     height: 49px;
 
-    background-color: #ffffff;
+    background-color: var(--topbar-bg);
     display: flex;
     align-items: center;
     padding: 0 16px;
 
-    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.08);
+    box-shadow: 0 1px 4px var(--shadow-top);
     z-index: 1000;
   }
 
@@ -135,9 +172,9 @@ body,
     width: 90%;
     max-width: 420px;
 
-    background: #ffffff;
+    background: var(--nav-bg);
     border-radius: 16px;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    box-shadow: 0 4px 12px var(--shadow-nav);
 
     display: flex;
     justify-content: space-around;
@@ -227,4 +264,54 @@ body,
 
 
 
+}
+
+.theme-toggle-btn {
+  background: transparent !important;
+  border: none !important;
+  box-shadow: none !important;
+  cursor: pointer;
+  padding: 8px !important;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-left: auto;
+  color: #4F6EF7 !important;
+  /* Cool indigo moon in light mode */
+  border-radius: 50% !important;
+  transition: background-color 0.2s, transform 0.2s;
+  outline: none !important;
+}
+
+.theme-toggle-btn:hover {
+  background-color: rgba(148, 163, 184, 0.15) !important;
+}
+
+.theme-toggle-btn:active {
+  transform: scale(0.9) !important;
+}
+
+.dark-mode .theme-toggle-btn {
+  color: #FBBF24 !important;
+  /* Bright warm yellow sun in dark mode */
+}
+
+.dark-mode .desktop-message p {
+  color: var(--text-secondary);
+}
+
+.dark-mode .nav-item {
+  color: var(--text-muted);
+}
+
+.dark-mode .bottom-nav svg {
+  color: var(--text-muted);
+}
+
+.dark-mode .nav-item.active {
+  color: #4f6df5;
+}
+
+.dark-mode .nav-item.active svg {
+  color: #5b6cff;
 }

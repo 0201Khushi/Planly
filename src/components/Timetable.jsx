@@ -362,7 +362,7 @@ const syncSubjectsToAttendance = (weekSlots) => {
       <h2 style={{
       fontSize: "22px",
       fontWeight: "200",
-      color: "#000",
+      color: "currentColor",
       margin: 0,
     }}>Timetable</h2>
     </header>
@@ -540,7 +540,7 @@ const syncSubjectsToAttendance = (weekSlots) => {
             <div className="top-section">
               <h2 style={{
       fontSize: "22px",
-      color: "#000",
+      color: "currentColor",
       
     }}>Edit {activeDay}</h2>
               <button className="tt-primary-btn" onClick={saveTimetable}>
