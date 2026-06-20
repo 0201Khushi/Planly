@@ -18,6 +18,14 @@
   gap: 6px;
   margin: 0;
   overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
+.tt-days::-webkit-scrollbar {
+  display: none;
 }
 
 .tt-day-btn {
@@ -469,4 +477,5 @@
   padding: 16px;
   padding-bottom: 96px; /* space for bottom nav */
   overflow-y: auto;
+  
 }
