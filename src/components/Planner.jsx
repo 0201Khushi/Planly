@@ -665,8 +665,8 @@ function Planner() {
       {showAddCategory && (
         <div className="modal-overlay" onClick={() => setShowAddCategory(false)}>
           <div className="modal-card" onClick={(e) => e.stopPropagation()}>
-            <h3 style={{ marginBottom: '8px' }}>Manage Tabs</h3>
-            <p style={{ fontSize: '14px', marginBottom: '16px', opacity: 0.6 }}>
+            <h3 style={{color: '#1b1a1a', marginBottom: '8px',fontSize: '18px' }}>Manage Tabs</h3>
+            <p style={{ fontSize: '14px', marginBottom: '16px', opacity: 0.6,color: '#1b1a1a' }}>
               Select up to 2 additional categories to show as tabs:
             </p>
 
