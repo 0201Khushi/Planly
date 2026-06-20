@@ -22,6 +22,21 @@ export default function Attendance() {
   const [undoAction, setUndoAction] = useState(null);
   const undoTimerRef = useRef(null);
 
+  useEffect(() => {
+    const handleDocumentClick = (event) => {
+      if (!event.target.closest(".menu-wrapper") && !event.target.closest(".more")) {
+        setOpenMenuId(null);
+      }
+    };
+
+    if (openMenuId !== null) {
+      document.addEventListener("click", handleDocumentClick);
+      return () => {
+        document.removeEventListener("click", handleDocumentClick);
+      };
+    }
+  }, [openMenuId]);
+
   const todayDate = new Date().toLocaleDateString("en-US", {
     weekday: "short",
     day: "numeric",
@@ -359,9 +374,9 @@ export default function Attendance() {
       <header className="top-bar">
         <h2
           style={{
-            fontFamily: "Jura, sans-serif",
+            fontFamily: "Inter",
             fontSize: "22px",
-            fontWeight: "600",
+            fontWeight: "200",
             color: "#000",
             margin: 0,
           }}
@@ -375,7 +390,7 @@ export default function Attendance() {
         <div>
           <p className="summary-percent" style={{
             fontSize: "16px",
-          }}>Total: {totalAttendance}%</p>
+          }}>Overall: {totalAttendance}%</p>
           <p style={{
             fontSize: "16px",
           }}>Target:  {target}%</p>

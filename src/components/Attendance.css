@@ -18,7 +18,10 @@
 
 /* SUMMARY CARD */
 .attendance-summary {
-  background: #ffffff;
+  background: 
+    linear-gradient(#ffffff, #ffffff) padding-box,
+    linear-gradient(135deg, #4F6EF7 0%, #4DB6AC 100%) border-box;
+  border: 2px solid transparent;
   border-radius: 18px;
   padding: 16px;
   display: flex;

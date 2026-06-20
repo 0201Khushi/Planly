@@ -194,19 +194,52 @@ export default function Home() {
         <p className="greeting">{getGreeting()}</p>
         {userName && <p className="username-display">{userName}</p>}
         <p className="quote">{quote}</p>
-        <p className="date-display">{getFormattedDate()}</p>
+        <p className="date-display">
+          <span className="date-icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="currentColor">
+              <path d="M19 4h-1V2h-2v2H8V2H6v2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 16H5V9h14v11zm0-13H5V6h14v1z" />
+            </svg>
+          </span>
+          {getFormattedDate()}
+        </p>
+        <div className="header-graphics" aria-hidden="true">
+          <svg viewBox="0 0 220 140" xmlns="http://www.w3.org/2000/svg" role="img" aria-hidden="true">
+            <g fill="#ffffff">
+              <circle cx="170" cy="34" r="30" opacity="0.16" />
+              <circle cx="190" cy="70" r="22" opacity="0.14" />
+              <circle cx="150" cy="88" r="16" opacity="0.12" />
+              <circle cx="200" cy="110" r="10" opacity="0.10" />
+              <circle cx="130" cy="46" r="18" opacity="0.13" />
+            </g>
+          </svg>
+        </div>
       </div>
       
 
       {/* STATS */}
       <div className="stats-row">
         <div className="stat-card">
-          <p className="stat-title">Today's Classes</p>
+          <div className="stat-card-header">
+            <span className="stat-icon book-icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" fill="currentColor" aria-hidden="true">
+                <path d="M4 5.5C4 4.12 5.12 3 6.5 3h11C18.88 3 20 4.12 20 5.5v13c0 .83-.67 1.5-1.5 1.5H6.5A1.5 1.5 0 0 1 5 18.5v-13zM6.5 5.5v13h11v-13h-11zm2.75 2.25c.28 0 .5.22.5.5v7.5c0 .28-.22.5-.5.5h-.75a.5.5 0 0 1-.5-.5v-7.5c0-.28.22-.5.5-.5h.75zm8.5 0c.28 0 .5.22.5.5v7.5c0 .28-.22.5-.5.5h-.75a.5.5 0 0 1-.5-.5v-7.5c0-.28.22-.5.5-.5h.75z" />
+              </svg>
+            </span>
+            <p className="stat-title">Today's Classes</p>
+          </div>
           <p className="stat-number">{todayClasses.length}</p>
         </div>
 
         <div className="stat-card">
-          <p className="stat-title">Deadlines Today</p>
+          <div className="stat-card-header">
+            <span className="stat-icon clock-icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+                <circle cx="12" cy="12" r="7.25" />
+                <path d="M12 7.5v4.5h3" />
+              </svg>
+            </span>
+            <p className="stat-title">Deadlines Today</p>
+          </div>
           <p className="stat-number">{todayDeadlines.length}</p>
         </div>
       </div>

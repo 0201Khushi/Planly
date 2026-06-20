@@ -20,6 +20,21 @@
 
   box-shadow: 0 1px 4px rgba(0, 0, 0, 0.08);
   z-index: 1000;
+  font-family: 'Inter', sans-serif;
+  font-weight: 200;
+}
+
+.your-schedule-card {
+  background: linear-gradient(135deg, #4F6EF7 0%, #4DB6AC 100%);
+  border-radius: 18px;
+  padding: 16px;
+  margin-top: 8px;
+  margin-bottom: 12px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+  display: flex;
+  align-items: center;
+  position: relative;
+  overflow: hidden;
 }
 
 .planner-title {
@@ -44,7 +59,7 @@
 }
 
 .add-btn {
-  background: #5b6cff;
+  background: #4F6EF7;
   color: white;
   border: none;
   border-radius: 10px;
@@ -64,7 +79,7 @@
 }
 
 .tab.active {
-  color: #5b6cff;
+  color: #4F6EF7;
   font-weight: 600;
 }
 .tab-add-button {
@@ -102,7 +117,7 @@
 
 .filter.active {
   background: #e7eaff;
-  color: #4f6df5;
+  color: #4F6EF7;
 }
 
 /* Task Card */
@@ -120,7 +135,7 @@
 
 .task-card .tag {
   font-size: 12px;
-  color: #4f6df5;
+  color: #4F6EF7;
 }
 .paste-box {
   background: #ffffff;
@@ -139,14 +154,14 @@
 }
 
 .paste-title {
-  font-family: 'Inter', sans-serif;
+  font-family: 'Inter';
   font-size: 15px ;
   font-weight: 700 !important;
   color: #333;
 }
 
 .add-btn {
-  background: #5b6cff;
+  background: #4F6EF7;
   color: white;
   border: none;
   border-radius: 10px;
@@ -201,7 +216,7 @@
 }
 
 .tab.active {
-  background: #5b6cff;
+  background: #4F6EF7;
   color: white;
   font-weight: 600;
 }
@@ -251,11 +266,22 @@
 .event-card.exams {
   border-left-color: #d72828;
 }
-.event-card.academic {
+.event-card.academic,
+.event-card.academics {
   border-left: 4px solid #ff7a00;
 }
 .event-card.clubs {
   border-left: 4px solid #00aaff;
+}
+.event-card.projects {
+  border-left: 4px solid #8b5cf6;
+}
+.event-card.placements,
+.event-card.career {
+  border-left: 4px solid #0ea5e9;
+}
+.event-card.personal {
+  border-left: 4px solid #ec4899;
 }
 .event-card.events {
   border-left: 4px solid #32d63d;
@@ -294,7 +320,7 @@
 .event-venue {
   font-size: 14px;
   font-weight: 600;
-  color: #3f5cff; /* blue like screenshot */
+  color: #4F6EF7; /* blue like screenshot */
 }
 .event-date {
   font-size: 14px;
@@ -342,7 +368,7 @@
   opacity: 0.6;
 }
 .save{
-  background: #5b6cff;
+  background: #4F6EF7;
   color: white;
   border: none;
   border-radius: 10px;
@@ -416,7 +442,7 @@
 .undo-bar button {
   background: transparent;
   border: none;
-  color: #5b6cff;
+  color: #4F6EF7;
   font-weight: 700;
   cursor: pointer;
 }

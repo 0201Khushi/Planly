@@ -6,8 +6,8 @@ import { FiEdit, FiTrash2 } from "react-icons/fi";
 
 
 const CATEGORIES_KEY = "planly_categories";
-const DEFAULT_CATEGORIES = ["All", "Events", "Academic", "Exams"];
-const OPTIONAL_POOL = ["Placements", "Career", "Clubs", "Friends", "Social"];
+const DEFAULT_CATEGORIES = ["All", "Events", "Academics", "Exams"];
+const OPTIONAL_POOL = ["Projects", "Career", "Clubs", "Personal"];
 const PLANNER_KEY = "planly_planner_data";
 
 
@@ -80,7 +80,12 @@ function Planner() {
     return (
       <div className="planner-page">
         <header className="top-bar">
-          <h2>Planner</h2>
+          <h2 style={{
+            fontSize: "22px",
+            fontWeight: "600",
+            fontFamily: "Inter, sans-serif",
+            margin: 0,
+          }}>Plannr</h2>
         </header>
         <p style={{ padding: "16px", opacity: 0.6 }}>
           Loading your schedule…
@@ -173,12 +178,14 @@ function Planner() {
             inferDateFromText(eventText) ||
             null;
 
-          return {
+            return {
             id: Date.now() + Math.random(),
             ...parsed,
             date: finalDate,
             category: classifyCategory(
-              `${parsed.title || ""} ${parsed.notes || ""}`
+              `${parsed.title || ""} ${parsed.notes || ""}`,
+              // pass only the currently visible categories
+              categories
             ),
           };
         })
@@ -396,14 +403,52 @@ function Planner() {
 
       {/* Header */}
       <header className="top-bar">
-        <h2 style={{
-          fontFamily: "Jura, sans-serif",
+        <p style={{
           fontSize: "22px",
-          fontWeight: "600",
+          fontWeight: "200",
           color: "#000",
           margin: 0,
-        }}>Planner</h2>
+        }}>Planner</p>
       </header>
+
+      {/* Your Schedule Card */}
+      <div className="your-schedule-card">
+        <span style={{
+          fontSize: "20px",
+          fontWeight: "600",
+          color: "#ffffff",
+          fontFamily: "Inter, sans-serif",
+        }}>Your Schedule</span>
+        <svg
+          className="schedule-graphics"
+          width="140"
+          height="70"
+          viewBox="0 0 140 70"
+          style={{
+            position: "absolute",
+            right: -20,
+            top: "50%",
+            transform: "translateY(-50%)",
+            opacity: 0.3,
+          }}
+        >
+          {/* First checkbox */}
+          <rect x="10" y="8" width="14" height="14" fill="none" stroke="#ffffff" strokeWidth="1.5" rx="2" />
+          <path d="M 13 15 L 16 18 L 21 12" stroke="#ffffff" strokeWidth="2" fill="none" strokeLinecap="round" strokeLinejoin="round" />
+          
+          {/* Second checkbox */}
+          <rect x="10" y="28" width="14" height="14" fill="none" stroke="#ffffff" strokeWidth="1.5" rx="2" />
+          <path d="M 13 35 L 16 38 L 21 32" stroke="#ffffff" strokeWidth="2" fill="none" strokeLinecap="round" strokeLinejoin="round" />
+          
+          {/* Third checkbox */}
+          <rect x="10" y="48" width="14" height="14" fill="none" stroke="#ffffff" strokeWidth="1.5" rx="2" />
+          
+          {/* List lines */}
+          <line x1="30" y1="15" x2="55" y2="15" stroke="#ffffff" strokeWidth="1.5" />
+          <line x1="30" y1="35" x2="55" y2="35" stroke="#ffffff" strokeWidth="1.5" />
+          <line x1="30" y1="55" x2="55" y2="55" stroke="#ffffff" strokeWidth="1.5" />
+        </svg>
+      </div>
 
       {/* Input Box */}
       <div className="paste-box">
@@ -412,6 +457,13 @@ function Planner() {
           <button className="add-btn" onClick={handleAdd}>
             Add</button>
         </div>
+
+        <p style={{
+          fontSize: "12px",
+          color: "#94A3B8",
+          margin: "6px 0 12px 0",
+          fontFamily: "Inter, sans-serif",
+        }}>Paste notices, class messages and let Planly organise them</p>
 
         <textarea
           className="paste-input"
@@ -422,7 +474,6 @@ function Planner() {
 
       </div>
 
-      <div className="text1">Your Schedule</div>
       {/* Category Tabs */}
       <div className="tab-container">
         {categories.map((tab) => (
