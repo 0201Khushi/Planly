@@ -1,7 +1,7 @@
 # 🚀 Planly  
 ### A Student Academic Control Panel  
 **Built by Khushi Singh**
-
+https://planly-two.vercel.app/
 ---
 
 ## 📌 Overview
