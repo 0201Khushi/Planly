@@ -129,22 +129,21 @@ body,
 
   .bottom-nav {
     position: fixed;
-    bottom: 12px;
-    left: 50%;
-    transform: translateX(-50%);
-    width: 90%;
-    max-width: 420px;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    width: 100%;
+    max-width: 100%;
 
     background: #ffffff;
-    border-radius: 16px;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.08);
 
     display: flex;
     justify-content: space-around;
     align-items: center;
 
-    padding: 10px 0;
-    z-index: 100;
+    padding: 10px 0 calc(10px + env(safe-area-inset-bottom));
+    z-index: 1000;
   }
 
   .nav-item {

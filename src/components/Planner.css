@@ -25,7 +25,7 @@
 }
 
 .your-schedule-card {
-  background: linear-gradient(135deg, #4F6EF7 0%, #4DB6AC 100%);
+  background: linear-gradient(135deg, #8397ef 0%, #6278cf 60%, #60b0a8 100%);
   border-radius: 18px;
   padding: 16px;
   margin-top: 8px;
@@ -139,18 +139,35 @@
 }
 .paste-box {
   background: #ffffff;
-  border-radius: 18px;
-  padding: 16px;
-  margin: 0px;
-  margin-top: 2px;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+  border-radius: 16px;
+  padding: 10px 12px 12px;
+  margin: 0 8px;
+  box-shadow: none;
+  border: none;
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: 74px;
+  z-index: 900;
+  transition: all 0.2s ease;
+}
+
+.paste-box.collapsed {
+  padding: 10px 12px;
+}
+
+.paste-collapsed-hint {
+  margin-top: 8px;
+  font-size: 13px;
+  color: #64748b;
+  cursor: pointer;
 }
 
 .paste-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 12px;
+  margin-bottom: 6px;
 }
 
 .paste-title {
@@ -164,8 +181,13 @@
   background: #4F6EF7;
   color: white;
   border: none;
-  border-radius: 10px;
-  padding: 6px 14px;
+  border-radius: 50%;
+  width: 36px;
+  height: 36px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
   font-size: 14px;
 }
 
@@ -173,15 +195,13 @@
   width: 100%;
   height: 70px;
   border: none;
-  outline-width: 2px;
-  outline-color: #ddd;
-  border: 1px solid #e0e0e0;
+  outline: none;
   resize: none;
   font-size: 14px;
   color: #444;
-  background: #f8f9fb;
-  padding: 10px;
-  border-radius: 12px;
+  background: transparent;
+  padding: 0;
+  border-radius: 0;
 }
 .text1{
   font-family: 'Inter', sans-serif;
@@ -194,8 +214,8 @@
   display: flex;
   gap: 10px;
   overflow-x: auto;
-  padding: 8px 0;
-  margin-top: 12px;
+  padding: 6px 0;
+  margin-top: 6px;
   scrollbar-width: none; /* Firefox */
 }
 
@@ -299,7 +319,7 @@
 
 .event-title {
   font-size: 17px;
-  font-weight: 700;
+  font-weight: 500;
   color: #111;
   margin-bottom: 6px;
 }
@@ -346,7 +366,28 @@
 .action-icons {
   display: flex;
   align-items: center;
-  gap: 10px; /* space between ✏️ and 🗑️ */
+  gap: 8px;
+}
+
+.complete-btn {
+  background: transparent;
+  border: 1px solid #cbd5e1;
+  color: #64748b;
+  border-radius: 50%;
+  width: 22px;
+  height: 22px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  padding: 0;
+  font-size: 12px;
+}
+
+.complete-btn.completed {
+  background: #4F6EF7;
+  border-color: #4F6EF7;
+  color: white;
 }
 .delete-btn {
   background: transparent;
@@ -391,6 +432,12 @@
   opacity: 0.55;
   filter: grayscale(0.6);
   background: #f9fafb;
+}
+
+.event-card .complete-btn.completed {
+  background: #4F6EF7;
+  border-color: #4F6EF7;
+  color: white;
 }
 
 .past-event .event-title,

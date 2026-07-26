@@ -3,10 +3,11 @@ import { BsChatDots } from "react-icons/bs";
 import { useState, useEffect } from "react";
 import { classifyCategory } from "../utils/classifyCategory";
 import { FiEdit, FiTrash2 } from "react-icons/fi";
+import { FiSend } from "react-icons/fi";
 
 
 const CATEGORIES_KEY = "planly_categories";
-const DEFAULT_CATEGORIES = ["All", "Events", "Academics", "Exams"];
+const DEFAULT_CATEGORIES = ["All", "Events", "Academics", "Classes"];
 const OPTIONAL_POOL = ["Projects", "Career", "Clubs", "Personal"];
 const PLANNER_KEY = "planly_planner_data";
 
@@ -33,6 +34,7 @@ function Planner() {
     return [...DEFAULT_CATEGORIES, "Clubs"];
   });
   const [showAddCategory, setShowAddCategory] = useState(false);
+  const [isComposerExpanded, setIsComposerExpanded] = useState(false);
   const [selectedOptions, setSelectedOptions] = useState(() => {
     const saved = localStorage.getItem(CATEGORIES_KEY);
     if (saved) {
@@ -75,6 +77,20 @@ function Planner() {
   useEffect(() => {
     localStorage.setItem(CATEGORIES_KEY, JSON.stringify(categories));
   }, [categories]);
+
+  useEffect(() => {
+    if (!isComposerExpanded) return;
+
+    const handleClickOutside = (event) => {
+      const composer = document.querySelector('.paste-box');
+      if (composer && !composer.contains(event.target)) {
+        setIsComposerExpanded(false);
+      }
+    };
+
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, [isComposerExpanded]);
 
   if (loading) {
     return (
@@ -130,21 +146,74 @@ function Planner() {
       (t) => t.date && t.date >= todayMidnight
     );
   }
-  if (timeFilter === "All") {
-    timeFilteredTasks = [...timeFilteredTasks].sort((a, b) => {
-      if (!a.date && !b.date) return 0;
-      if (!a.date) return 1;   // no-date tasks go last
-      if (!b.date) return -1;
-      return a.date - b.date;
-    });
-  }
-
   const visibleTasks =
     activeTab === "All"
       ? timeFilteredTasks
       : timeFilteredTasks.filter(
         (t) => t.category === activeTab
       );
+
+  const getTaskSortDate = (task) => {
+    if (!task?.date) return null;
+
+    if (typeof task.date === "number") return task.date;
+    if (task.date instanceof Date) return task.date.getTime();
+
+    const parsed = Date.parse(task.date);
+    return Number.isNaN(parsed) ? null : parsed;
+  };
+
+  const isTaskPast = (task) => {
+    if (task?.completed) return true;
+    const taskDate = getTaskSortDate(task);
+    return taskDate !== null && taskDate < todayMidnight;
+  };
+
+  const sortTasksForDisplay = (tasksToSort) => {
+    return [...tasksToSort].sort((a, b) => {
+      const aIsPastTask = isTaskPast(a);
+      const bIsPastTask = isTaskPast(b);
+
+      if (aIsPastTask === bIsPastTask) {
+        const aDate = getTaskSortDate(a);
+        const bDate = getTaskSortDate(b);
+
+        if (aDate === null && bDate === null) return 0;
+        if (aDate === null) return 1;
+        if (bDate === null) return -1;
+
+        return aDate - bDate;
+      }
+
+      return aIsPastTask ? 1 : -1;
+    });
+  };
+
+  const orderedVisibleTasks = sortTasksForDisplay(visibleTasks);
+  const displayTasks = [
+    ...orderedVisibleTasks.filter((task) => !isTaskPast(task)),
+    ...orderedVisibleTasks.filter((task) => isTaskPast(task)),
+  ];
+
+  function normalizeEventTexts(raw, fallbackText) {
+    if (Array.isArray(raw)) {
+      return raw
+        .map((item) => (typeof item === "string" ? item.trim() : ""))
+        .filter(Boolean);
+    }
+
+    if (Array.isArray(raw?.events)) {
+      return raw.events
+        .map((item) => (typeof item === "string" ? item.trim() : ""))
+        .filter(Boolean);
+    }
+
+    if (typeof raw === "string" && raw.trim()) {
+      return [raw.trim()];
+    }
+
+    return [fallbackText.trim()];
+  }
 
   async function handleAdd() {
     if (!input.trim()) return;
@@ -159,7 +228,8 @@ function Planner() {
         body: JSON.stringify({ text: input }),
       });
 
-      const eventTexts = await splitRes.json(); // array of strings
+      const splitPayload = await splitRes.json();
+      const eventTexts = normalizeEventTexts(splitPayload, input);
 
       // 2️⃣ Parse EACH event separately
       const parsedEvents = await Promise.all(
@@ -227,6 +297,14 @@ function Planner() {
     setRecentlyDeleted(null);
 
     if (undoTimeout) clearTimeout(undoTimeout);
+  }
+
+  function toggleTaskCompletion(id) {
+    setTasks((prev) =>
+      prev.map((task) =>
+        task.id === id ? { ...task, completed: !task.completed } : task
+      )
+    );
   }
 
   function handleAddCategory() {
@@ -411,69 +489,7 @@ function Planner() {
         }}>Planner</p>
       </header>
 
-      {/* Your Schedule Card */}
-      <div className="your-schedule-card">
-        <span style={{
-          fontSize: "20px",
-          fontWeight: "600",
-          color: "#ffffff",
-          fontFamily: "Inter, sans-serif",
-        }}>Your Schedule</span>
-        <svg
-          className="schedule-graphics"
-          width="140"
-          height="70"
-          viewBox="0 0 140 70"
-          style={{
-            position: "absolute",
-            right: -20,
-            top: "50%",
-            transform: "translateY(-50%)",
-            opacity: 0.3,
-          }}
-        >
-          {/* First checkbox */}
-          <rect x="10" y="8" width="14" height="14" fill="none" stroke="#ffffff" strokeWidth="1.5" rx="2" />
-          <path d="M 13 15 L 16 18 L 21 12" stroke="#ffffff" strokeWidth="2" fill="none" strokeLinecap="round" strokeLinejoin="round" />
-          
-          {/* Second checkbox */}
-          <rect x="10" y="28" width="14" height="14" fill="none" stroke="#ffffff" strokeWidth="1.5" rx="2" />
-          <path d="M 13 35 L 16 38 L 21 32" stroke="#ffffff" strokeWidth="2" fill="none" strokeLinecap="round" strokeLinejoin="round" />
-          
-          {/* Third checkbox */}
-          <rect x="10" y="48" width="14" height="14" fill="none" stroke="#ffffff" strokeWidth="1.5" rx="2" />
-          
-          {/* List lines */}
-          <line x1="30" y1="15" x2="55" y2="15" stroke="#ffffff" strokeWidth="1.5" />
-          <line x1="30" y1="35" x2="55" y2="35" stroke="#ffffff" strokeWidth="1.5" />
-          <line x1="30" y1="55" x2="55" y2="55" stroke="#ffffff" strokeWidth="1.5" />
-        </svg>
-      </div>
-
-      {/* Input Box */}
-      <div className="paste-box">
-        <div className="paste-header">
-          <span className="paste-title">< BsChatDots style={{ marginRight: "8px" }} />Paste messages</span>
-          <button className="add-btn" onClick={handleAdd}>
-            Add</button>
-        </div>
-
-        <p style={{
-          fontSize: "12px",
-          color: "#94A3B8",
-          margin: "6px 0 12px 0",
-          fontFamily: "Inter, sans-serif",
-        }}>Paste notices, class messages and let Planly organise them</p>
-
-        <textarea
-          className="paste-input"
-          placeholder="Paste or Type messages in English"
-          value={input}
-          onChange={(e) => setInput(e.target.value)}
-        />
-
-      </div>
-
+    
       {/* Category Tabs */}
       <div className="tab-container">
         {categories.map((tab) => (
@@ -511,8 +527,8 @@ function Planner() {
 
       {/* Sample Card */}
 
-      {visibleTasks.map((task) => {
-        const isPast = task.date && task.date < todayMidnight;
+      {displayTasks.map((task) => {
+        const isPast = isTaskPast(task);
 
         return (
           <div
@@ -526,6 +542,13 @@ function Planner() {
                 {task.category?.toUpperCase() || "EVENT"}
               </div>
               <div className="action-icons">
+                <button
+                  className={`complete-btn ${task.completed ? "completed" : ""}`}
+                  onClick={() => toggleTaskCompletion(task.id)}
+                  aria-label={task.completed ? "Mark as incomplete" : "Mark as complete"}
+                >
+                  ✓
+                </button>
                 <button
                   className="edit-btn"
                   onClick={() => startEdit(task)}
@@ -660,6 +683,44 @@ function Planner() {
           <button onClick={handleUndo}>Undo</button>
         </div>
       )}
+
+      {/* Input Box */}
+      <div className={`paste-box ${isComposerExpanded ? "expanded" : "collapsed"}`} style={{ marginTop: "16px" }}>
+        <div className="paste-header">
+          <span className="paste-title">< BsChatDots style={{ marginRight: "8px" }} />Paste messages</span>
+          <button className="add-btn" onClick={handleAdd} aria-label="Send message">
+            <FiSend size={16} />
+          </button>
+        </div>
+
+        {isComposerExpanded && (
+          <>
+            <p style={{
+              fontSize: "12px",
+              color: "#94A3B8",
+              margin: "6px 0 12px 0",
+              fontFamily: "Inter, sans-serif",
+            }}>Paste notices, class messages and let Planly organise them</p>
+
+            <textarea
+              className="paste-input"
+              placeholder="Paste or Type messages in English"
+              value={input}
+              onFocus={() => setIsComposerExpanded(true)}
+              onChange={(e) => setInput(e.target.value)}
+            />
+          </>
+        )}
+
+        {!isComposerExpanded && (
+          <div
+            className="paste-collapsed-hint"
+            onClick={() => setIsComposerExpanded(true)}
+          >
+            Tap to type a message
+          </div>
+        )}
+      </div>
 
       {/* ADD CATEGORY MODAL */}
       {showAddCategory && (

@@ -8,8 +8,13 @@ import Planner from "./components/Planner";
 import Timetable from "./components/Timetable";
 import { MdHome, MdEventNote, MdAccessTime, MdChecklist } from "react-icons/md";
 import { FiEdit, FiTrash2 } from "react-icons/fi";
+import { useNotifications } from "./utils/useNotifications";
+
 function App() {
   const [activeTab, setActiveTab] = useState("home");
+  
+  useNotifications();
+
   useEffect(() => {
     mixpanel.track("app_opened");
   }, []);

@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { FiClock, FiX, FiRotateCcw, FiEdit, FiMoreVertical } from "react-icons/fi";
+import { FiClock, FiX, FiRotateCcw, FiEdit, FiMoreVertical, FiCheck } from "react-icons/fi";
 import "./Timetable.css";
 
 const DAYS = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"];
@@ -443,19 +443,28 @@ const syncSubjectsToAttendance = (weekSlots) => {
               </button>
             </div>
 
-            {displayClasses.map((cls) => (
+            {displayClasses.map((cls) => {
+              const cardStatus = getClassStatus(
+                cls.start,
+                cls.end,
+                activeDay === getTodayDay()
+              );
+
+              return (
               <div
                 key={cls.originalIndex}
-                className={`tt-class-card ${getClassStatus(
-                  cls.start,
-                  cls.end,
-                  activeDay === getTodayDay()
-                )}`}
+                className={`tt-class-card ${cardStatus}`}
               >
                 <div>
                   <h3 style={{
       fontWeight: "600",fontFamily:"Inter"
-       }} >{cls.subject}</h3>
+       }} >{cls.subject}
+                    {cardStatus === "past" && (
+                      <span className="tt-done-badge" aria-label="Completed class" title="Completed class">
+                        <FiCheck size={12} />
+                      </span>
+                    )}
+                  </h3>
                   <p>
                     {formatTime(cls.start)} – {formatTime(cls.end)}
                   </p>
@@ -526,7 +535,8 @@ const syncSubjectsToAttendance = (weekSlots) => {
                   </div>
                 )}
               </div>
-            ))}
+              );
+            })}
 
             {!savedWeek[activeDay] && (
               <p className="tt-empty-text">No classes scheduled.</p>

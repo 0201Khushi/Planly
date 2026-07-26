@@ -85,6 +85,7 @@ export default function Home() {
   const [todayDeadlines, setTodayDeadlines] = useState([]);
   const [tomorrowDeadlines, setTomorrowDeadlines] = useState([]);
   const [mustAttend, setMustAttend] = useState([]);
+  const [extraClasses, setExtraClasses] = useState([]);
   const [userName, setUserName] = useState("");
   const [tempName, setTempName] = useState("");
   const [showPopup, setShowPopup] = useState(false);
@@ -108,19 +109,38 @@ export default function Home() {
 
     setTodayDeadlines(
       planner.filter(
-        t => t.date >= todayMidnight && t.date < tomorrowMidnight
+        t =>
+          t.category !== "Classes" &&
+          t.date >= todayMidnight &&
+          t.date < tomorrowMidnight
       )
     );
 
     setTomorrowDeadlines(
       planner.filter(
         t =>
+          t.category !== "Classes" &&
           t.date >= tomorrowMidnight &&
           t.date < tomorrowMidnight + 86400000
       )
     );
 
-    const classes = timetable[getTodayDay()] || [];
+    setExtraClasses(
+      planner.filter(
+        t =>
+          t.category === "Classes" &&
+          t.date >= todayMidnight &&
+          t.date < tomorrowMidnight &&
+          t.title
+      )
+    );
+
+    const todayKey = getTodayDay();
+    const todayOverrides = JSON.parse(sessionStorage.getItem("planly_timetableOverrides") || "{}")[
+      new Date().toISOString().slice(0, 10)
+    ] || { cancelled: [], postponed: {} };
+
+    const classes = (timetable[todayKey] || []).filter((_, index) => !todayOverrides.cancelled.includes(index));
     setTodayClasses(classes);
 
     setMustAttend(
@@ -158,6 +178,7 @@ export default function Home() {
 
   const attendanceState =
     mustAttend.length === 0 ? "confirmation" : "critical";
+  const totalTodayClasses = todayClasses.length + extraClasses.length;
 
   return (
     <div className="home">
@@ -227,7 +248,7 @@ export default function Home() {
             </span>
             <p className="stat-title">Today's Classes</p>
           </div>
-          <p className="stat-number">{todayClasses.length}</p>
+          <p className="stat-number">{totalTodayClasses}</p>
         </div>
 
         <div className="stat-card">
@@ -293,6 +314,15 @@ export default function Home() {
         ) : (
           <p className="muted">Attendance is currently within safe limits
 </p>
+        )}
+
+        {extraClasses.length > 0 && (
+          <div className="extra-classes-section">
+            <p className="extra-classes-title">Extra Classes</p>
+            {extraClasses.map((item) => (
+              <p key={item.id} className="extra-class-item">• {item.title}</p>
+            ))}
+          </div>
         )}
       </div>
       {/* HELP & FEEDBACK */}

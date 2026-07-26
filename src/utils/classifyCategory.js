@@ -15,20 +15,15 @@ export function classifyCategory(text, visibleCategories = []) {
     return visible.has(name);
   };
 
-  // Step 1: EXAMS (highest precedence)
-  if (isVisible("Exams")) {
-    if (
-      t.includes("quiz") ||
-      t.includes("exam") ||
-      t.includes("test") ||
-      t.includes("midsem") ||
-      t.includes("endsem")
-    ) {
-      return "Exams";
+
+  // Step 2: CLASSES
+  if (isVisible("Classes")) {
+    if (t.includes("class") || t.includes("classes")) {
+      return "Classes";
     }
   }
 
-  // Step 2: ACADEMIC
+  // Step 3: ACADEMIC
   if (isVisible("Academic") || isVisible("Academics")) {
     // Keep academics keywords focused on coursework-related terms (avoid 'project' and ambiguous 'submission')
     if (
@@ -37,6 +32,11 @@ export function classifyCategory(text, visibleCategories = []) {
       t.includes("lab") ||
       t.includes("practical") ||
       t.includes("lecture") ||
+      t.includes("quiz") ||
+      t.includes("exam") ||
+      t.includes("test") ||
+      t.includes("midsem") ||
+      t.includes("endsem") ||
       t.includes("tutorial")
     ) {
       // return the label as present in visible categories if possible
@@ -46,7 +46,7 @@ export function classifyCategory(text, visibleCategories = []) {
     }
   }
 
-  // Step 3: enabled optional categories (only evaluate those visible)
+  // Step 4: enabled optional categories (only evaluate those visible)
   // Define keywords per optional category
   const optionalChecks = [];
 
@@ -89,7 +89,7 @@ export function classifyCategory(text, visibleCategories = []) {
     }
   }
 
-  // Step 4: If multiple enabled categories match, use deterministic priority
+  // Step 5: If multiple enabled categories match, use deterministic priority
   if (matches.length > 0) {
     const priority = ["Placements", "Career", "Projects", "Clubs", "Personal"];
     for (const p of priority) {
@@ -99,7 +99,7 @@ export function classifyCategory(text, visibleCategories = []) {
     return matches[0];
   }
 
-  // Step 5: default -> Events (ensure Events is visible)
+  // Step 6: default -> Events (ensure Events is visible)
   if (isVisible("Events")) return "Events";
 
   // If Events not visible for some reason, fall back to first visible category

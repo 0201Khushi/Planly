@@ -43,6 +43,29 @@
   color: #555;
 }
 
+.target-editor {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin: 6px 0 4px;
+  font-size: 16px;
+  font-weight: 400;
+  color: #555;
+}
+
+.target-editor input {
+  width: 58px;
+  padding: 4px 6px;
+  border: 1px solid #d1d5db;
+  border-radius: 8px;
+  font-size: 14px;
+  outline: none;
+}
+
+.target-editor input:focus {
+  border-color: #5b5bf0;
+}
+
 /* ADD SUBJECT BUTTON */
 .add-subject-btn {
   background: #5b5bf0;
@@ -122,15 +145,18 @@
 /* ACTION BUTTONS */
 .actions {
   display: flex;
-  gap: 6px;
+  gap: 8px;
 }
 
 .actions button {
   border: none;
   background: #f1f2f6;
-  padding: 4px 8px;
-  border-radius: 8px;
-  font-size: 14px;
+  padding: 8px 10px;
+  border-radius: 10px;
+  font-size: 16px;
+  line-height: 1;
+  min-width: 40px;
+  min-height: 40px;
   cursor: pointer;
 }
 

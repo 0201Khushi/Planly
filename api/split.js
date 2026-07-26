@@ -27,6 +27,47 @@ function normalizeLines(text) {
     .filter(Boolean);
 }
 
+function looksLikeEventChunk(text) {
+  if (!text) return false;
+
+  const trimmed = text.trim();
+  if (!trimmed) return false;
+
+  return (
+    EVENT_KEYWORDS.some(k => trimmed.toLowerCase().includes(k)) ||
+    /\b\d{1,2}(st|nd|rd|th)?\s+(jan|feb|mar|apr|may|jun|jul|aug|sep|oct|nov|dec|january|february|march|april|may|june|july|august|september|october|november|december)\b/i.test(trimmed) ||
+    /\b(jan|feb|mar|apr|may|jun|jul|aug|sep|oct|nov|dec|january|february|march|april|may|june|july|august|september|october|november|december)\s+\d{1,2}(st|nd|rd|th)?\b/i.test(trimmed) ||
+    /\b\d{1,2}:\d{2}\s?(am|pm)\b/i.test(trimmed) ||
+    /\btoday|tomorrow|yesterday\b/i.test(trimmed)
+  );
+}
+
+function splitIntoEventChunks(text) {
+  const trimmed = text.trim();
+  if (!trimmed) return [];
+
+  const lineChunks = normalizeLines(trimmed)
+    .map(chunk => chunk.replace(/^(?:[-•*]|\d+\.)\s*/, "").trim())
+    .filter(Boolean);
+
+  if (lineChunks.length > 1) {
+    const eventChunks = lineChunks.filter(looksLikeEventChunk);
+    if (eventChunks.length > 1) return eventChunks;
+  }
+
+  const candidateChunks = trimmed
+    .split(/\s*(?:\n|;|•|\u2022|\/|,|\band\b|\bthen\b)\s*(?=(?:[A-Z]{2,}\b|[A-Za-z]+\s+(?:quiz|exam|evaluation|deadline|submission|test|meeting|presentation)\b))/i)
+    .map(chunk => chunk.trim())
+    .filter(Boolean);
+
+  const eventChunks = candidateChunks.filter(looksLikeEventChunk);
+  if (eventChunks.length > 1) {
+    return eventChunks;
+  }
+
+  return [];
+}
+
 // Detect "respectively"
 function hasRespectively(text) {
   return /\brespectively\b/i.test(text);
@@ -54,7 +95,8 @@ function isSyllabusEvent(text) {
 // Decide if text is a REAL planner event
 function isPrimaryEvent(text) {
   const hasDate =
-    /\b\d{1,2}(st|nd|rd|th)?\s+(Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec|October|November|December)\b/i.test(text) ||
+    /\b\d{1,2}(st|nd|rd|th)?\s+(Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec|January|February|March|April|May|June|July|August|September|October|November|December)\b/i.test(text) ||
+    /\b(Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec|January|February|March|April|May|June|July|August|September|October|November|December)\s+\d{1,2}(st|nd|rd|th)?\b/i.test(text) ||
     /\btoday|tomorrow\b/i.test(text);
 
   const hasTime =
@@ -88,7 +130,15 @@ export default async function handler(req, res) {
   }
 
   /* =========================
-     1️⃣ NEWLINE / LIST SPLIT
+     1️⃣ HEURISTIC SPLIT
+  ========================= */
+  const heuristicEvents = splitIntoEventChunks(text);
+  if (heuristicEvents.length > 1) {
+    return res.status(200).json(heuristicEvents);
+  }
+
+  /* =========================
+     2️⃣ NEWLINE / LIST SPLIT
   ========================= */
   const lines = normalizeLines(text);
 
@@ -105,7 +155,7 @@ export default async function handler(req, res) {
   }
 
   /* =========================
-     2️⃣ RESPECTIVELY LOGIC
+     3️⃣ RESPECTIVELY LOGIC
   ========================= */
   if (hasRespectively(text)) {
     const subjects = extractSubjects(text);
@@ -121,7 +171,7 @@ export default async function handler(req, res) {
   }
 
   /* =========================
-     3️⃣ LLM FALLBACK (DENSE TEXT)
+     4️⃣ LLM FALLBACK (DENSE TEXT)
   ========================= */
   const groq = new Groq({
     apiKey: process.env.GROQ_API_KEY,
@@ -138,8 +188,9 @@ export default async function handler(req, res) {
 Split the message into individual academic EVENTS only.
 
 Rules:
-- Only return quizzes, exams, evaluations, deadlines, submissions
+- Only return quizzes, exams, evaluations, deadlines, submissions, meetings, presentations, or tests
 - Ignore rules, policies, notes, warnings, links
+- If there are multiple distinct events, return every one of them as separate array items
 - If only one real event exists, return a single-item array
 - Return ONLY valid JSON
 

@@ -9,7 +9,7 @@
 
 /* HEADER */
 .header {
-  background: linear-gradient(135deg, #4F6EF7 0%, #3F5CD6 60%, #4DB6AC 100%);
+  background: linear-gradient(135deg, #8397ef 0%, #6278cf 60%, #60b0a8 100%);
   border-radius: 28px;
   overflow: hidden;
   padding: 20px 16px;
@@ -100,21 +100,23 @@
 .stat-card {
   background: #F1F5F9;
   border-radius: 12px;
-  padding: 16px 14px;
+  padding: 8px 10px;
   text-align: center;
   box-shadow: none;
   border: 1px solid #E2E8F0;
   display: flex;
   flex-direction: column;
   justify-content: center;
+  min-width: 0;
 }
 
 .stat-card-header {
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 10px;
-  margin-bottom: 12px;
+  gap: 6px;
+  margin-bottom: 6px;
+  flex-wrap: wrap;
 }
 
 .stat-icon {
@@ -141,19 +143,22 @@
 .clock-icon {
   color: #14B8A6;
 }.stat-title {
-  font-size: 11px;
+  font-size: 10px;
   font-weight: 600;
   color: #94A3B8;
   text-transform: uppercase;
   letter-spacing: 0.04em;
+  line-height: 1.2;
+  overflow-wrap: anywhere;
 }
 
 .stat-number {
-  font-size: 20px !important;
+  font-size: 18px !important;
   font-weight: 700;
   color: #475569;
-  margin-top: 6px;
+  margin-top: 1px;
   line-height: 1.05;
+  overflow-wrap: anywhere;
 }
 
 .stat-sub {
@@ -230,6 +235,24 @@
   border-radius: 999px;
 }
 
+.extra-classes-section {
+  margin-top: 12px;
+  padding-top: 10px;
+  border-top: 1px solid #f1f5f9;
+}
+
+.extra-classes-title {
+  font-size: 13px;
+  font-weight: 600;
+  color: #4F46E5;
+  margin: 0 0 6px;
+}
+
+.extra-class-item {
+  font-size: 13px;
+  color: #475569;
+  margin: 4px 0;
+}
 
 /* UTIL */
 .muted {

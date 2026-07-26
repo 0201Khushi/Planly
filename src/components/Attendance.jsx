@@ -7,11 +7,18 @@ const normalize = (s) => s.trim().toLowerCase();
 
 const SUBJECTS_KEY = "planly_subjects";
 const ATTENDANCE_KEY = "planly_attendance";
+const TARGET_KEY = "planly_attendance_target";
 
 
 export default function Attendance() {
   const [subjects, setSubjects] = useState([]);
-  const [target, setTarget] = useState(75); // ✅ user-defined target (percentage)
+  const [target, setTarget] = useState(() => {
+    const storedTarget = Number(localStorage.getItem(TARGET_KEY));
+    if (Number.isFinite(storedTarget) && storedTarget >= 0 && storedTarget <= 100) {
+      return storedTarget;
+    }
+    return 75;
+  });
 
   const [showModal, setShowModal] = useState(false);
   const [newSubjectName, setNewSubjectName] = useState("");
@@ -64,6 +71,10 @@ export default function Attendance() {
 
   /* SAVE */
   useEffect(() => {
+    localStorage.setItem(TARGET_KEY, String(target));
+  }, [target]);
+
+  useEffect(() => {
     const attendanceObj = {};
 
     subjects.forEach((s) => {
@@ -79,6 +90,15 @@ export default function Attendance() {
     );
   }, [subjects]);
 
+
+  const handleTargetChange = (event) => {
+    const value = Number(event.target.value);
+
+    if (!Number.isFinite(value)) return;
+
+    const clampedValue = Math.min(100, Math.max(0, value));
+    setTarget(clampedValue);
+  };
 
   const updateSubject = (id, updated) => {
     setSubjects(prev =>
@@ -391,9 +411,17 @@ export default function Attendance() {
           <p className="summary-percent" style={{
             fontSize: "16px",
           }}>Overall: {totalAttendance}%</p>
-          <p style={{
-            fontSize: "16px",
-          }}>Target:  {target}%</p>
+          <label className="target-editor">
+            <span>Target</span>
+            <input
+              type="number"
+              min="0"
+              max="100"
+              value={target}
+              onChange={handleTargetChange}
+            />
+            <span>%</span>
+          </label>
           <p style={{
             fontSize: "16px",
           }}>{todayDate}</p>
