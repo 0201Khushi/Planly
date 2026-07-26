@@ -92,7 +92,12 @@ export default function Attendance() {
 
 
   const handleTargetChange = (event) => {
-    const value = Number(event.target.value);
+    const rawValue = event.target.value;
+    if (rawValue === "") {
+      setTarget("");
+      return;
+    }
+    const value = Number(rawValue);
 
     if (!Number.isFinite(value)) return;
 
@@ -167,26 +172,30 @@ export default function Attendance() {
 
 
   const getStatusText = (attended, total) => {
+    const t = Number(target) || 0;
     if (total === 0) return "No classes yet";
 
     const percentage = (attended / total) * 100;
 
-    if (percentage >= target) return "On Track";
+    if (percentage >= t) return "On Track";
+
+    if (t === 100) return "Attend all remaining classes to get back on track";
 
     const needed = Math.ceil(
-      ((target / 100) * total - attended) / (1 - target / 100)
+      ((t / 100) * total - attended) / (1 - t / 100)
     );
 
     return `Attend next ${needed} classes to get back on track`;
   };
   const getLeaveMessage = (attended, total) => {
+    const t = Number(target) || 0;
     if (total === 0) return "";
-    if ((attended / total) * 100 < target) {
+    if ((attended / total) * 100 < t || t === 0) {
       return "";
     }
 
     const maxLeaves = Math.floor(
-      (attended * 100) / target - total
+      (attended * 100) / t - total
     );
 
     if (maxLeaves <= 0) {
@@ -202,8 +211,9 @@ export default function Attendance() {
 
 
   const getStatusClass = (attended, total) => {
+    const t = Number(target) || 0;
     if (total === 0) return "safe";
-    return (attended / total) * 100 >= target ? "safe" : "danger";
+    return (attended / total) * 100 >= t ? "safe" : "danger";
   };
 
   const totalAttendance = (() => {
@@ -417,6 +427,7 @@ export default function Attendance() {
               type="number"
               min="0"
               max="100"
+              placeholder="Enter attendance target"
               value={target}
               onChange={handleTargetChange}
             />

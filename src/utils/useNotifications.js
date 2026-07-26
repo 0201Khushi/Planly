@@ -72,7 +72,7 @@ export function useNotifications() {
 
         for (const key of sortedThresholdKeys) {
           const thresholdTime = thresholds[key];
-          
+
           // If we have passed this threshold
           if (now >= thresholdTime) {
             // If we haven't notified for this threshold yet
@@ -84,7 +84,7 @@ export function useNotifications() {
                   const title = `Reminder: ${task.title}`;
                   let body = "";
                   const daysLeft = Math.round((deadlineTime - now) / (24 * 60 * 60 * 1000));
-                  
+
                   if (key === "1_week") {
                     body = `Due in ${daysLeft > 1 ? daysLeft : 7} days`;
                   } else if (key === "2_days") {
@@ -138,11 +138,11 @@ export function useNotifications() {
         if (!notifiedState[classId]) {
           notifiedState[classId] = [];
         }
-        
+
         const classStartTime = midnightMs + Number(cls.start) * 60 * 60 * 1000;
         const classEndTime = midnightMs + Number(cls.end) * 60 * 60 * 1000;
         const thresholdTime = classStartTime - 15 * 60 * 1000;
-        
+
         if (now >= thresholdTime) {
           if (!notifiedState[classId].includes("15_mins")) {
             // Valid as long as the class hasn't ended yet
@@ -151,7 +151,7 @@ export function useNotifications() {
               const diffMins = Math.round((classStartTime - now) / 60000);
               const timeString = formatTime(cls.start);
               let body = "";
-              
+
               if (diffMins > 0) {
                 body = `Starts in ${diffMins} minutes (${timeString})${cls.venue ? ` at ${cls.venue}` : ""}`;
               } else if (diffMins === 0) {
@@ -159,7 +159,7 @@ export function useNotifications() {
               } else {
                 body = `Started ${Math.abs(diffMins)} minutes ago (${timeString})${cls.venue ? ` at ${cls.venue}` : ""}`;
               }
-              
+
               new Notification(title, { body, tag: classId });
             }
             notifiedState[classId].push("15_mins");
