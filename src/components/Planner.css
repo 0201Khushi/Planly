@@ -1,3 +1,5 @@
+@import url('https://fonts.googleapis.com/css2?family=Caveat:wght@400;500;600;700&display=swap');
+
 .planner-page {
   width: 100%;
   padding: 16px;
@@ -214,9 +216,16 @@
   resize: none;
   font-size: 14px;
   color: #444;
-  background: transparent;
-  padding: 0;
-  border-radius: 0;
+  background-color: #f1f5f9;
+  padding: 12px;
+  border-radius: 12px;
+  box-sizing: border-box;
+}
+
+.paste-input::placeholder {
+  font-family: 'Inter', sans-serif;
+  font-size: 15px;
+  color: #94A3B8;
 }
 
 .text1 {
