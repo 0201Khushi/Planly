@@ -15,6 +15,7 @@ const formatTime = (hour) => {
 };
 
 export function useNotifications() {
+  /*
   useEffect(() => {
     // Check if browser supports notifications
     if (!("Notification" in window)) {
@@ -190,4 +191,5 @@ export function useNotifications() {
 
     return () => clearInterval(intervalId);
   }, []);
+  */
 }
